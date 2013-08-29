@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import javax.swing.*;
 
@@ -43,9 +42,7 @@ public class gui {
 		password.setFont(login_font);
 		password.setHorizontalAlignment(4);
 		login_info.add(password);
-		
-		
-		//Textfield for username and password panel
+
 		JPanel login_txtfield = new JPanel();
 		login_txtfield.setPreferredSize(new Dimension(100,70));
 		login.add(login_txtfield, BorderLayout.CENTER);
