@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Class-Path: sqlite-jdbc-3.7.2.jar
+Main-Class: edu.cs408.vormund.gui.SomeClassName
+
+Name: edu/cs408/vormund/
+Sealed: true
+Specification-Title: Vormund Protection Classes
+Specification-Version: 1.0
+Specification-Vendor: CS408 Team 6
+Implementation-Title: edu.cs408.vormund
+Implementation-Version: build1
+Implementation-Vendor: CS408 Team 6
+
+Name: edu/cs408/vormund/gui/
+Sealed: true
+Specification-Title: Vormund Protection GUI Classes
+Specification-Version: 1.0
+Specification-Vendor: CS408 Team 6
+Implementation-Title: edu.cs408.vormund.gui
+Implementation-Version: build1
+Implementation-Vendor: CS408 Team 6
