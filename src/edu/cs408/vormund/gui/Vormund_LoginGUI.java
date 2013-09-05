@@ -3,7 +3,7 @@ package edu.cs408.vormund.gui;
 import java.awt.*;
 import javax.swing.*;
 
-public class gui {
+public class Vormund_LoginGUI {
 
 	private static void LoginWindow()
 	{

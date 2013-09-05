@@ -1,0 +1,52 @@
+## Promiscuous
+MAINCLASS=edu.cs408.vormund.gui.LoginWindow
+LIBDEPS=sqlite-jdboc-3.7.2.jar
+JARNAME=Vormund.jar
+
+## Directories
+SRCDIR=src/
+BUILDDIR=build/
+OUTDIR=output/
+LIBDIR=libs/
+
+## Binaries
+JJ=/usr/bin/java
+JC=/usr/bin/javac
+JAR=/usr/bin/jar
+
+## Gobals [do not edit]
+BUILDLIST=${BUILDDIR}build.txt
+MOVELIST=${BUILDDIR}move.txt
+SRCDIRESCAPED=${SRCDIR:/=\/}
+BUILDDIRESCAPED=${BUILDDIR:/=\/}
+CLASSPATH=.:../${LIBDIR}${LIBDEPS}
+
+all: compile jar
+
+compile:
+	find ${SRCDIR} -name "*.java" -print > ${BUILDLIST}
+	${JC} -d ${BUILDDIR} @${BUILDLIST}
+	find ${SRCDIR} -type f \( -iname "*" ! -iname "*.java" ! -iname "*.md" \) > ${MOVELIST}
+	sed -i "s/${SRCDIRESCAPED}//g" ${MOVELIST}
+	cat ${MOVELIST} | xargs -I FL cp ${SRCDIR}FL ${BUILDDIR}FL
+	rm -f ${MOVELIST} ${BUILDLIST}
+
+jar:
+	#find ${BUILDDIR} -type f \( -iname "*" ! -iname "*.md" ! -iname "build.txt" ! -iname "Manifest.txt" \) -print > ${BUILDLIST}
+	#sed -i "s/${BUILDDIRESCAPED}//g" ${BUILDLIST}
+	cp Manifest.txt ${OUTDIR}
+	sed -i "s/\[CLASSPATH\]/${LIBDEPS}/g" ${OUTDIR}Manifest.txt
+	sed -i "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
+	cp ${LIBDIR}*.jar ${OUTDIR}
+	${JAR} -cfmv ${OUTDIR}${JARNAME} ${OUTDIR}Manifest.txt -C ${BUILDDIR} .
+
+run:
+	cd ${BUILDDIR} && ${JJ} -cp ${CLASSPATH} ${MAINCLASS}
+
+runjar:
+	cd ${OUTDIR} && ${JJ} -jar ${JARNAME}
+
+clean:
+	find ${BUILDDIR} \( -iname "*" ! -iname "*.md" ! -iname "build" \) -print0 | xargs -0 -I file rm -rf file
+	find ${OUTDIR} \( -iname "*" ! -iname "*.md" ! -iname "output" \) -print0 | xargs -0 -I file rm -rf file
+
