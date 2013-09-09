@@ -1,6 +1,6 @@
 package edu.cs408.vormund;
 
-public class dbHelpers {
+public class DBHelpers {
 	//Creates new user for the system and returns the generated userID
 	public static int newUser() {
 		return 0;
