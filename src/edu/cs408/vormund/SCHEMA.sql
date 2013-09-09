@@ -21,27 +21,30 @@ DROP TABLE IF EXISTS user_data;
 CREATE TABLE user_data (
   user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   user_name TEXT NOT NULL UNIQUE,
+  password TEXT NOT NULL,
   name TEXT NOT NULL
 ); /** I am uncertain the values that we need to store, since we'll store only one row **/
 
 CREATE TABLE data_type (
   type_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  type_name TEXT NOT NULL UNIQUE,
-  type_value TEXT NOT NULL DEFAULT "text"
+  type_name TEXT NOT NULL UNIQUE, /* SSN, Bank Number, Routing Number, File, Note, etc. */
+  type_value TEXT NOT NULL DEFAULT "text" /* Or file, text, number, etc */
 );
 
 CREATE TABLE encrypted_data (
   data_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
   category TEXT NOT NULL,
   type_id INTEGER NOT NULL,
   encrypted_data BLOB NOT NULL,
   note TEXT NOT NULL,
-  UNIQUE(category, type_id),
+  UNIQUE(user_id, category, type_id),
+  FOREIGN KEY(user_id) REFERENCES user_data(user_id),
   FOREIGN KEY(type_id) REFERENCES data_type(type_id)
 );
 
-INSERT INTO data_type(type_name, type_value) VALUES('username', 'text');
-INSERT INTO data_type(type_name, type_value) VALUES('password', 'text');
-INSERT INTO data_type(type_name, type_value) VALUES('file', 'file');
-INSERT INTO data_type(type_name, type_value) VALUES('routing_number', 'integer');
-INSERT INTO data_type(type_name, type_value) VALUES('account_number', 'number');
+INSERT INTO data_type(type_name, type_value) VALUES('Username', 'text');
+INSERT INTO data_type(type_name, type_value) VALUES('Password', 'text');
+INSERT INTO data_type(type_name, type_value) VALUES('File', 'file');
+INSERT INTO data_type(type_name, type_value) VALUES('Routing Number', 'integer');
+INSERT INTO data_type(type_name, type_value) VALUES('Account Number', 'number');
