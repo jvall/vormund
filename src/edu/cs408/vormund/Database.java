@@ -13,11 +13,13 @@ public class Database {
   private Connection conn = null;
   private Statement stmnt = null;
 
+  /**
+   * Class constructor.
+   */
   public Database() {
+    this.makeConnection();
+    this.createStatement();
     try {
-      Class.forName("org.sqlite.JDBC");
-      this.conn = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_FILE);
-      this.stmnt = this.conn.createStatement();
       ResultSet rslt = this.stmnt.executeQuery("select count(name) as count from sqlite_master where type='table'");
       if( rslt.next() ) {
         if( rslt.getInt("count") == 0 ) {
@@ -30,6 +32,9 @@ public class Database {
     }
   }
 
+  /**
+   * Drops, then creates tables and inserts default data for Vormund.
+   */
   private void setupNewDatabaseInstance() {
     BufferedReader br = new BufferedReader(new InputStreamReader(
         this.getClass().getResourceAsStream(SCHEMA_FILE)));
@@ -53,33 +58,103 @@ public class Database {
     }
   }
 
-  public boolean hasConnection() { return this.conn==null; }
+  /**
+   * Returns if a connection exists and is open.
+   * @return <code>true</code> if connection exists and is open,
+   *         <code>false</code> otherwise.
+   */
+  public boolean hasConnection() { return this.conn!=null && !this.conn.isClosed(); }
 
-  public int executeUpdate(String query) {
-    int result=-1;
+  /**
+   * Returns if a statement exists and is open.
+   * @return <code>true</code> if statement exists and is open,
+   *         <code>false</code> otherwise.
+   */
+  public boolean hasStatement() { return this.stmnt!=null && !this.stmnt.isClosed(); }
+
+  public void makeConnection() {
+    if( this.hasConnection() ) return;
     try {
-      if( this.stmnt==null ) this.stmnt = this.conn.createStatement();
-      result = this.stmnt.executeUpdate(query);
+      Class.forName("org.sqlite.JDBC");
+      this.conn = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_FILE);
+    } catch(SQLException e) {
+      this.conn = null;
+    }
+  }
+
+  /**
+   * Creates an internal Statement object if one does not exist or is not open.
+   */
+  public void createStatement() {
+    if( !this.hasConnection() || this.hasStatement() ) return;
+    try {
+      this.stmnt = this.conn.CreateStatement();
+    } catch(SQLException e) {
+      this.stmnt = null;
+    }
+  }
+
+  /**
+   * Runs a query that will update the database through the internal Statement
+   * object. These stateents are normally <code>CREATE</code>,
+   * <code>UPDATE</code>, <code>DELETE</code>, and <code>DROP</code>.
+   *
+   * @param query The query to alter the database.
+   * @return      <code>-1</code> if a failure occurs.
+   *              <code>\>=0</code> for the # of affected rows.
+   */
+  public int updateQuery(String query) {
+    int ret=-1;
+    if( !this.hasConnection() ) this.makeConnection();
+    if( !this.hasStatement() ) this.createStatement();
+    try {
+      ret = this.stmnt.executeUpdate(query);
     } catch(SQLException e) {
       System.out.println("ERROR: " + e.getMessage());
-      result=-1;
+      ret=-1;
     }
     return result;
   }
 
+  /**
+   * Runs a query to pull information from the database.
+   *
+   * @param query The query to select information from the database.
+   * @return      The {@link ResultSet} of results from the query.
+   * @see ResultSet
+   */
+  public ResultSet query(String query) {
+    ResultSet ret = null;
+    if( !this.hasConnection() ) this.makeConnection();
+    if( !this.hasStatement() ) this.createStatement();
+    try {
+      ret = this.stmnt.execute(query);
+    } catch(SQLException e) {
+      ret = null;
+    }
+    return ret;
+  }
+
+  /**
+   * Closes the internal connection and statement objects.
+   * @see Connection#close
+   * @see Statement#close
+   */
   public void close() {
     if( this.conn != null ) {
       try {
         this.conn.close();
-      } catch(Exception e) {
+      } catch(SQLException e) {
       } finally {
         this.conn = null;
       }
     }
+    if( this.statement != null ) {
+      try {
+        this.stmnt.close();
+      } catch(SQLException e) {
+      } finally {
+        this.stmnt = null;
+    }
   }
-
-  /*public static void main(String[] args) {
-    Database db = new Database();
-    db.close();
-  }*/
 }
