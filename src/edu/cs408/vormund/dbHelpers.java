@@ -2,27 +2,27 @@ package edu.cs408.vormund;
 
 public class dbHelpers {
 	//Creates new user for the system and returns the generated userID
-	public static int newUser() {
+	public static int newUser(String userName, String password) {
 		return 0;
 	}
 	
 	//Creates new entry for bank information and returns the ID of the generated data table entry
-	public static int newBank() {
+	public static int newBank(String name, String accountNumber, String routingNumber, String bankAddress, boolean isCheckingAccount, boolean isSavingsAccount) {
 		return 0;
 	}
 	
 	//Creates new entry for web account information and returns the ID of the generated data table entry
-	public static int newWeb() {
+	public static int newWeb(String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
 		return 0;
 	}
 	
 	//Creates new note and returns the ID of the generated data table entry
-	public static int newNote() {
+	public static int newNote(String name, String text) {
 		return 0;
 	}
 	
 	//Creates new entry for SSN and returns ID of data table entry
-	public static int newSocial() {
+	public static int newSocial(String name, String ssn) {
 		return 0;
 	}
 	
