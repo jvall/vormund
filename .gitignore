@@ -1,2 +1,4 @@
 # Java binary files #
 *.class
+build/*
+output/*
