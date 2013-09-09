@@ -1,6 +1,5 @@
 ## Promiscuous
-#MAINCLASS=edu.cs408.vormund.gui.LoginWindow
-MAINCLASS=edu.cs408.vormund.Database
+MAINCLASS=edu.cs408.vormund.gui.LoginWindow
 LIBDEPS=sqlite-jdboc-3.7.2.jar
 JARNAME=Vormund.jar
 
@@ -28,7 +27,6 @@ compile:
 	cp ${LIBDIR}*.jar ${BUILDDIR}
 	cd ${BUILDDIR} && find ./ -type f -name "*.jar" | xargs -I file ${JAR} -xf file
 	rm ${BUILDDIR}*.jar
-	rm -r ${BUILDDIR}META-INF
 	find ${SRCDIR} -name "*.java" -print > ${BUILDLIST}
 	${JC} -d ${BUILDDIR} @${BUILDLIST}
 	find ${SRCDIR} -type f \( -iname "*" ! -iname "*.java" ! -iname "*.md" \) > ${MOVELIST}
