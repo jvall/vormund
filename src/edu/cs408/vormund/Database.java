@@ -1,6 +1,7 @@
 package edu.cs408.vormund;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.sql.*;
@@ -12,6 +13,7 @@ public class Database {
 
   private Connection conn = null;
   private Statement stmnt = null;
+  private PreparedStatement prpstmnt = null;
 
   /**
    * Class constructor.
@@ -178,6 +180,40 @@ public class Database {
       } finally {
         this.stmnt = null;
       }
+    }
+  }
+
+  /**
+   * Inserts rows into the encrypted_data table.
+   *
+   * @param user_id ID of the user the data belongs to
+   * @param category Category of the data being stored (ie. Facebook, Purdue Federal Bank, etc.)
+   * @param type_id ID of the type of data being stored
+   * @param data Unencrypted data that will be stored in the database
+   * @param encryption_key Key that will be used to encrypt the data
+   * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
+   */
+  public int insertBLOB(int user_id, String category, int type_id, String note, byte[] data, String encryption_key) {
+    ret = -1;
+    byte enc_data[] = data; // Needs to run through encryption process
+    ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
+    try {
+      this.prpstmnt = this.conn.createPreparedStatement("INSERT INTO " +
+          "encrypted_data(user_id, category, type_id, note, encrypted_data) " +
+          "VALUES(?, ?, ?, ?, ?)");
+      this.prpstmnt.setInt(1, user_id);
+      this.prpstmnt.setString(2, category);
+      this.prpstmnt.setInt(3, type_id);
+      this.prpstmnt.setString(4, note);
+      this.prpstmnt.setBlob(5, bais, enc_data.length);
+      ret = this.prpstmnt.executeUpdate();
+      this.prpstmnt.close();
+    } catch(SQLException e) {
+      System.out.println("Error inserting BLOB to encrypted_data table:\n\t" + e.getMessage());
+      ret = -1;
+    } finally {
+      this.prpstmnt = null;
+      return ret;
     }
   }
 
