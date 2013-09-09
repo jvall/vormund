@@ -7,8 +7,8 @@ import java.sql.*;
 
 public class Database {
   private static final String SCHEMA_FILE = "/edu/cs408/vormund/SCHEMA.sql";
-  private static final String DATABASE_FILE = ":resource:/edu/cs408/vormund/lib-common2.3.2.jar";
-  //private static final String DATABASE_FILE = "test.db";
+  //private static final String DATABASE_FILE = ":resource:/edu/cs408/vormund/lib-common2.3.2.jar";
+  private static final String DATABASE_FILE = "test.db";
 
   private Connection conn = null;
   private Statement stmnt = null;
@@ -19,6 +19,18 @@ public class Database {
   public Database() {
     this.makeConnection();
     this.createStatement();
+    if( !this.hasConnection() ) {
+      System.err.println("Failed to create connection.");
+      System.err.println("  Connection: " + this.conn);
+      try{System.err.println("  IsClosed: " + this.conn.isClosed());}catch(Exception e){}
+      System.err.println("  HasConn: " + this.hasConnection());
+      try{System.err.println("  HasConn: " + (this.conn!=null && !this.conn.isClosed()));}catch(Exception e){}
+      return;
+    }
+    if( !this.hasStatement() ) {
+      System.err.println("Failed to create statement.");
+      return;
+    }
     try {
       ResultSet rslt = this.stmnt.executeQuery("select count(name) as count from sqlite_master where type='table'");
       if( rslt.next() ) {
@@ -52,7 +64,7 @@ public class Database {
       return;
     }
     for(String query : schema.split("\n")) {
-      if( this.executeUpdate(query) < 0 ) {
+      if( this.updateQuery(query) < 0 ) {
         System.out.println("Error in query: " + query);
       }
     }
@@ -63,21 +75,31 @@ public class Database {
    * @return <code>true</code> if connection exists and is open,
    *         <code>false</code> otherwise.
    */
-  public boolean hasConnection() { return this.conn!=null && !this.conn.isClosed(); }
+  public boolean hasConnection() {
+    boolean ret = false;
+    try { ret = this.conn!=null && !this.conn.isClosed(); }
+    catch(SQLException e) {}
+    return ret;
+  }
 
   /**
    * Returns if a statement exists and is open.
    * @return <code>true</code> if statement exists and is open,
    *         <code>false</code> otherwise.
    */
-  public boolean hasStatement() { return this.stmnt!=null && !this.stmnt.isClosed(); }
+  public boolean hasStatement() {
+    boolean ret = false;
+    ret = this.stmnt!=null;
+    return ret;
+  }
 
   public void makeConnection() {
     if( this.hasConnection() ) return;
     try {
       Class.forName("org.sqlite.JDBC");
       this.conn = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_FILE);
-    } catch(SQLException e) {
+    } catch(ClassNotFoundException | SQLException e) {
+      System.err.println("Error Making DB Connection: " + e.getMessage());
       this.conn = null;
     }
   }
@@ -88,7 +110,7 @@ public class Database {
   public void createStatement() {
     if( !this.hasConnection() || this.hasStatement() ) return;
     try {
-      this.stmnt = this.conn.CreateStatement();
+      this.stmnt = this.conn.createStatement();
     } catch(SQLException e) {
       this.stmnt = null;
     }
@@ -113,7 +135,7 @@ public class Database {
       System.out.println("ERROR: " + e.getMessage());
       ret=-1;
     }
-    return result;
+    return ret;
   }
 
   /**
@@ -128,7 +150,7 @@ public class Database {
     if( !this.hasConnection() ) this.makeConnection();
     if( !this.hasStatement() ) this.createStatement();
     try {
-      ret = this.stmnt.execute(query);
+      ret = this.stmnt.executeQuery(query);
     } catch(SQLException e) {
       ret = null;
     }
@@ -149,12 +171,17 @@ public class Database {
         this.conn = null;
       }
     }
-    if( this.statement != null ) {
+    if( this.stmnt != null ) {
       try {
         this.stmnt.close();
       } catch(SQLException e) {
       } finally {
         this.stmnt = null;
+      }
     }
+  }
+
+  public static void main(String[] args) {
+    Database db = new Database();
   }
 }
