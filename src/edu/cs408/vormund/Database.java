@@ -141,6 +141,34 @@ public class Database {
   }
 
   /**
+   * Runs a query that will <code>INSERT</code> a row into the database.
+   *
+   * @param query The query to <code>INSERT</code> a row
+   * @return      The id of the primary key from the row created
+   */
+  public int insertQuery(String query) {
+    int ret=-1;
+    if( !this.hasConnection() ) this.makeConnection();
+    if( !this.hasStatement() ) this.createStatement();
+    try {
+      ret = this.stmnt.executeUpdate(query);
+      ResultSet autoGen = this.stmnt.getGeneratedKeys();
+      if(autoGen.next()==true) {
+        ret = autoGen.getInt(1);
+      } else {
+        ret = -1;
+      }
+      autoGen.close();
+    } catch(SQLException e) {
+      System.out.println("MySQL Insert Error: " + e.getMessage());
+      ret=-1;
+    } catch(SQLFeatureNotSupportedException e) {
+      System.err.println("Error: Get Generated Keys feature is not supported.");
+    }
+    return ret;
+  }
+
+  /**
    * Runs a query to pull information from the database.
    *
    * @param query The query to select information from the database.
@@ -194,11 +222,11 @@ public class Database {
    * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
    */
   public int insertBLOB(int user_id, String category, int type_id, String note, byte[] data, String encryption_key) {
-    ret = -1;
+    int ret = -1;
     byte enc_data[] = data; // Needs to run through encryption process
     ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
-      this.prpstmnt = this.conn.createPreparedStatement("INSERT INTO " +
+      this.prpstmnt = this.conn.prepareStatement("INSERT INTO " +
           "encrypted_data(user_id, category, type_id, note, encrypted_data) " +
           "VALUES(?, ?, ?, ?, ?)");
       this.prpstmnt.setInt(1, user_id);
@@ -217,7 +245,67 @@ public class Database {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws SQLException {
     Database db = new Database();
+    assert db.hasConnection();
+    assert db.hasStatement();
+    db.close();
+    assert !db.hasConnection();
+    assert !db.hasStatement();
+
+    db.makeConnection();
+    assert db.hasConnection();
+
+    db.createStatement();
+    assert db.hasStatement();
+
+    assert db.insertQuery("INSERT INTO data_type(type_name, type_value) VALUES('SSN', 'text')")==1;
+    ResultSet result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
+    assert result.next();
+    assert result.getInt("type_id")==6;
+    assert result.getString("type_name").compareTo("SSN")==0;
+    assert result.getString("type_value").compareTo("text")==0;
+    assert !result.next();
+    result.close();
+    assert result.isClosed();
+
+    assert db.updateQuery("DELETE FROM data_type WHERE type_id=6")==1;
+    result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
+    assert !result.next();
+    result.close();
+    assert result.isClosed();
+
+    assert db.insertQuery("INSERT INTO user_data(user_name, password, name) VALUES('test_user', 'test', 'Test McTester')") == 1;
+    byte test_array[] = "Hello World".getBytes();
+    assert db.insertBLOB(1, "Facebook", 1, "Facebook Username", test_array, "test_pass") == 1;
+    result = db.query("SELECT * FROM encrypted_data");
+    assert result.next();
+    assert result.getInt("data_id")==1;
+    assert result.getInt("user_id")==1;
+    assert result.getString("category").compareTo("Facebook") == 0;
+    assert result.getInt("type_id")==1;
+    assert result.getString("note").compareTo("Facebook Username") == 0;
+    Blob test_blob = result.getBlob("encrypted_data");
+    assert (new String(test_blob.getBytes((long)0, (int)test_blob.length()))).compareTo("Hello World") == 0;
+    test_blob.free();
+    assert !result.next();
+    result.close();
+    assert result.isClosed();
+
+    result = db.query("SELECT * FROM user_data INNER JOIN encrypted_data ON " +
+        "user_data.user_id=encrypted_data.user_id INNER JOIN data_type ON " +
+        "encrypted_data.type_id=data_type.type_id");
+    assert result.next();
+    assert result.getInt("user_data.user_id") == 1;
+    assert result.getString("user_data.user_name").compareTo("test_user") == 0;
+    assert result.getInt("encrypted_data.data_id") == 1;
+    assert result.getString("encrypted_data.category").compareTo("Facebook") == 0;
+    assert result.getInt("encrypted_data.type_id") == 1;
+    assert result.getString("data_type.type_name").compareTo("Username") == 0;
+    test_blob = result.getBlob("encrypted_data");
+    assert (new String(test_blob.getBytes((long)0, (int)test_blob.length()))).compareTo("Hello World") == 0;
+    test_blob.free();
+    result.close();
+    assert result.isClosed();
   }
 }
