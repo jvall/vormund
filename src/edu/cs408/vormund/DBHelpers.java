@@ -35,7 +35,7 @@ public class DBHelpers {
 	}
 
 	//Creates new entry for bank information and returns the ID of the generated data table entry. Will return -1 if account number already exists
-	public int newBank(String name, String accountNumber, String routingNumber, String bankAddress, boolean isCheckingAccount, boolean isSavingsAccount) throws SQLException {
+	public int newBank(String name, String accountNumber, String routingNumber, String bankAddress, String type) throws SQLException {
 		//Check to see if accountNumber is already taken
 		boolean accountExists = false;
 		
@@ -64,10 +64,10 @@ public class DBHelpers {
 			return -1;
 		
 		//Have now shown accountNumber to not already exist in database and can proceed with the insert
-		String encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + isCheckingAccount + ", " + isSavingsAccount);
+		String encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
 		
 		//The user_id should be stored and accessible somewhere
-		dbObj.updateQuery("INSERT INTO encrypted_data (user_id, type_id, encrypted_data) VALUES ('" + user_id + "', '" + bankType + "', '" + encryptedBankData + "')");
+		dbObj.updateQuery("INSERT INTO encrypted_data (user_id, type_id, encrypted_data, note) VALUES ('" + user_id + "', '" + bankType + "', '" + encryptedBankData + "', '" + name + "')");
 		
 		//Get the data_id of the inserted row somehow?
 		
@@ -76,7 +76,36 @@ public class DBHelpers {
 	}
 
 	//Creates new entry for web account information and returns the ID of the generated data table entry
-	public int newWeb(String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
+	public int newWeb(String name, String url, String email, String userName, String password, String[][] securityQAPairs) throws SQLException {
+		//Check to see if name email pair is already taken
+		boolean accountExists = false;
+		
+		//get the type_id of Bank Account
+		ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Web Account'");
+		dataTypeQuery.first();
+		int webType = dataTypeQuery.getInt(1);
+		
+		ResultSet webEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + webType + "' AND user_id='" + user_id + "'");
+		if(webEntries.first())
+		{
+			while(!webEntries.isAfterLast())
+			{
+				int data_id = webEntries.getInt(1);
+				WebInfo tmpWeb = getWeb(data_id);
+				if(tmpWeb.getEmail().equals(email))
+				{
+					accountExists = true;
+					break;
+				}
+				webEntries.next();
+			}
+		}
+		
+		if(accountExists)
+			return -1;
+		
+		//Need to build out and insert new web blob
+		
 		return 0;
 	}
 
@@ -139,7 +168,7 @@ public class DBHelpers {
         // key should be an instance variable of this class
         //data = Encryption.decryptBlob(key, data);
         // data should now be plaintext CSV
-        return new BankInfo("");
+        return new BankInfo(""); //tmp
 	}
 
 	//Returns a listing of all data entries of type web account including their name/label and ID
@@ -148,8 +177,8 @@ public class DBHelpers {
 	}
 
 	//Used to retrieve the encryped data of a web account entry
-	public void getWeb(int webID) {
-
+	public WebInfo getWeb(int webID) {
+		return new WebInfo("");	//tmp
 	}
 
 	//Returns a listing of all notes stored by the user including their name and ID
@@ -178,8 +207,12 @@ public class DBHelpers {
 	}
 
 	//Will overwrite data previously written for entry with given bankID
-	public void updateBank(int bankID) {
-
+	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String type) {
+		//We can make the assumption that the user is editing a pre-existing entry and can go directly to the update function
+		String encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
+		
+		//The user_id should be stored and accessible somewhere
+		dbObj.updateQuery("UPDATE encrypted_data SET encrypted_data = '" + encryptedBankData + "', note='" + name + "' WHERE data_id='" + bankID + "'");
 	}
 
 	//Will overwrite data previously written for entry with given webID
