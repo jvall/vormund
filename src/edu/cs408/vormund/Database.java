@@ -194,6 +194,7 @@ public class Database {
    * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
    */
   public int insertBLOB(int user_id, String category, int type_id, String note, byte[] data, String encryption_key) {
+	  /*
     ret = -1;
     byte enc_data[] = data; // Needs to run through encryption process
     ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
@@ -215,6 +216,8 @@ public class Database {
       this.prpstmnt = null;
       return ret;
     }
+    */
+	  return 0;
   }
 
   public static void main(String[] args) {

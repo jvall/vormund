@@ -7,6 +7,7 @@ public class DBHelpers {
 	//Where the user key will be stored upon successful login to the system. Used by functions to pass key to decryption algorithm
 	String key;
 	Database dbObj;
+	int user_id = 1; //Setting this manually for now, but will have to be accessed from somewhere in the future
 	
 	public DBHelpers()
 	{
@@ -43,14 +44,14 @@ public class DBHelpers {
 		dataTypeQuery.first();
 		int bankType = dataTypeQuery.getInt(1);
 		
-		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + bankType + "'");
+		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + bankType + "' AND user_id='" + user_id + "'");
 		if(bankEntries.first())
 		{
 			while(!bankEntries.isAfterLast())
 			{
 				int data_id = bankEntries.getInt(1);
 				BankInfo tmpBank = getBank(data_id);
-				if(tmpBank.getAccountNumber() == Integer.parseInt(accountNumber))
+				if(tmpBank.getAccountNumber().equals(accountNumber))
 				{
 					accountExists = true;
 					break;
@@ -84,8 +85,40 @@ public class DBHelpers {
 		return 0;
 	}
 
-	//Creates new entry for SSN and returns ID of data table entry
-	public int newSocial(String name, String ssn) {
+	//Creates new entry for SSN and returns ID of data table entry. Is the user allowed to store more than one SSN for themselves? I guess they can... hmmm
+	public int newSocial(String name, String ssn) throws SQLException {
+		//Check to see if SSN is already taken
+		boolean ssnExists = false;
+		
+		//get the type_id of SSN
+		ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Social'");
+		dataTypeQuery.first();
+		int ssnType = dataTypeQuery.getInt(1);
+		
+		ResultSet ssnEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + ssnType + "' AND user_id='" + user_id + "'");
+		if(ssnEntries.first())
+		{
+			while(!ssnEntries.isAfterLast())
+			{
+				/* WORK IN PROGRESS
+				int data_id = ssnEntries.getInt(1);
+				SSNInfo tmpSSN = getSocial(data_id);
+				if(tmpSSN.getSSN().equals(ssn))
+				{
+					ssnExists = true;
+					break;
+				}
+				ssnEntries.next();
+				*/
+			}
+		}
+		
+		if(ssnExists)
+			return -1;
+		
+		//Have now shown ssn to not already exist in database and can proceed with the insert
+		
+		
 		return 0;
 	}
 
@@ -104,9 +137,9 @@ public class DBHelpers {
 		// I have no idea how SQLite data is returned in Java
         ResultSet data = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + bankID + "'");
         // key should be an instance variable of this class
-        data = Encryption.decryptBlog(key, data);
+        //data = Encryption.decryptBlob(key, data);
         // data should now be plaintext CSV
-        return new BankInfo(data);
+        return new BankInfo("");
 	}
 
 	//Returns a listing of all data entries of type web account including their name/label and ID
@@ -135,8 +168,8 @@ public class DBHelpers {
 	}
 
 	//Used to retrieve a specific SSN
-	public int getSocial(int socialID) {
-		return 0;
+	public String getSocial(int socialID) {
+		return null;
 	}
 
 	//Will overwrite data previously written for entry with given userID
