@@ -243,6 +243,7 @@ public class Database {
       this.prpstmnt = null;
       return ret;
     }
+	  return 0;
   }
 
   public static void main(String[] args) throws SQLException {

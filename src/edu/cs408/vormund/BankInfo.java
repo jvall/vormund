@@ -1,37 +1,36 @@
 package edu.cs408.vormund;
 
 public class BankInfo {
-    private int accountNumber;
-    private int routingNumber;
     private String bankName;
-    private String bankLocation;
-    private String type;
+    private String accountNumber;
+    private String routingNumber;
+    private String bankAddress;
+    private String type; //Used to denote checking vs savings. A standard for this will need to be set
 
     public BankInfo(BankInfo b) {
         this.accountNumber = b.accountNumber;
         this.routingNumber = b.routingNumber;
         this.bankName = b.bankName;
-        this.bankLocation = b.bankLocation;
+        this.bankAddress = b.bankAddress;
         this.type = b.type;
     }
 
-    public BankInfo(int actNum, int rtNum, String bkNm,
-                    String bkLoc, String t) {
-        this.accountNumber = actNum;
-        this.routingNumber = rtNum;
-        this.bankName = bkNm;
-        this.bankLocation = bkLoc;
-        this.type = t;
+    public BankInfo(String accountNumber, String routingNumber, String bankName, String bankAddress, String type) {
+        this.accountNumber = accountNumber;
+        this.routingNumber = routingNumber;
+        this.bankName = bankName;
+        this.bankAddress = bankAddress;
+        this.type = type;
     }
 
     public BankInfo(String csvBankVals) {
     }
 
-    public int getAccountNumber() {
+    public String getAccountNumber() {
         return this.accountNumber;
     }
 
-    public int getRoutingNumber() {
+    public String getRoutingNumber() {
         return this.routingNumber;
     }
 
@@ -39,8 +38,8 @@ public class BankInfo {
         return this.bankName;
     }
 
-    public String getBankLocation() {
-        return this.bankLocation;
+    public String getBankAddress() {
+        return this.bankAddress;
     }
 
     public String getAccountType() {
@@ -50,15 +49,8 @@ public class BankInfo {
     public static BankInfo serializeCSVDump(String csvBankVals) {
         // MUST be in same order as above constructor
         String vals[] = csvBankVals.split(",");
-        int actNum = -1, rtNum = -1;
-        try {
-            actNum = Integer.parseInt(vals[0]);
-            rtNum = Integer.parseInt(vals[1]);
-        } catch (Exception e) {
-            System.err.println("Formatting exception occurred: " + e);
-        }
 
-        return new BankInfo(actNum, rtNum, vals[2], vals[3], vals[4]);
+        return new BankInfo(vals[0], vals[1], vals[2], vals[3], vals[4]);
     }
 }
 
