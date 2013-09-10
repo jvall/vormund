@@ -2,6 +2,7 @@ package edu.cs408.vormund;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.sql.*;
@@ -159,11 +160,11 @@ public class Database {
         ret = -1;
       }
       autoGen.close();
+    } catch(SQLFeatureNotSupportedException e) {
+      System.err.println("Error: Get Generated Keys feature is not supported.");
     } catch(SQLException e) {
       System.out.println("MySQL Insert Error: " + e.getMessage());
       ret=-1;
-    } catch(SQLFeatureNotSupportedException e) {
-      System.err.println("Error: Get Generated Keys feature is not supported.");
     }
     return ret;
   }
@@ -182,6 +183,7 @@ public class Database {
     try {
       ret = this.stmnt.executeQuery(query);
     } catch(SQLException e) {
+      System.err.println("Error Executing Query: " + e.getMessage());
       ret = null;
     }
     return ret;
@@ -224,7 +226,7 @@ public class Database {
   public int insertBLOB(int user_id, String category, int type_id, String note, byte[] data, String encryption_key) {
     int ret = -1;
     byte enc_data[] = data; // Needs to run through encryption process
-    ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
+    //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
       this.prpstmnt = this.conn.prepareStatement("INSERT INTO " +
           "encrypted_data(user_id, category, type_id, note, encrypted_data) " +
@@ -233,17 +235,32 @@ public class Database {
       this.prpstmnt.setString(2, category);
       this.prpstmnt.setInt(3, type_id);
       this.prpstmnt.setString(4, note);
-      this.prpstmnt.setBlob(5, bais, enc_data.length);
+      this.prpstmnt.setBytes(5, enc_data);
+      //this.prpstmnt.setBinaryStream(5, bais, enc_data.length);
       ret = this.prpstmnt.executeUpdate();
       this.prpstmnt.close();
+    } catch(SQLFeatureNotSupportedException e) {
+      System.err.println("Error Function Not Supported: " + e.getMessage());
+      ret = -1;
     } catch(SQLException e) {
-      System.out.println("Error inserting BLOB to encrypted_data table:\n\t" + e.getMessage());
+      System.err.println("Error inserting BLOB to encrypted_data table:\n\t" + e.getMessage());
       ret = -1;
     } finally {
       this.prpstmnt = null;
       return ret;
     }
-	  return 0;
+  }
+
+  /**
+   * Reads data from a BLOB in a {@link ResultSet} to a byte array.
+   *
+   * @param queryResult The {@link ResultSet} from a query
+   * @param column Name of the column of the BLOB
+   * @return byte array of the data stored in the BLOB.
+   * @see ResultSet
+   */
+  public byte[] readFromBLOB(ResultSet queryResult, String column) throws SQLException {
+    return queryResult.getBytes(column);
   }
 
   public static void main(String[] args) throws SQLException {
@@ -260,7 +277,7 @@ public class Database {
     db.createStatement();
     assert db.hasStatement();
 
-    assert db.insertQuery("INSERT INTO data_type(type_name, type_value) VALUES('SSN', 'text')")==1;
+    assert db.insertQuery("INSERT INTO data_type(type_name, type_value) VALUES('SSN', 'text')")==6;
     ResultSet result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
     assert result.next();
     assert result.getInt("type_id")==6;
@@ -268,13 +285,11 @@ public class Database {
     assert result.getString("type_value").compareTo("text")==0;
     assert !result.next();
     result.close();
-    assert result.isClosed();
 
     assert db.updateQuery("DELETE FROM data_type WHERE type_id=6")==1;
     result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
     assert !result.next();
     result.close();
-    assert result.isClosed();
 
     assert db.insertQuery("INSERT INTO user_data(user_name, password, name) VALUES('test_user', 'test', 'Test McTester')") == 1;
     byte test_array[] = "Hello World".getBytes();
@@ -286,27 +301,28 @@ public class Database {
     assert result.getString("category").compareTo("Facebook") == 0;
     assert result.getInt("type_id")==1;
     assert result.getString("note").compareTo("Facebook Username") == 0;
-    Blob test_blob = result.getBlob("encrypted_data");
-    assert (new String(test_blob.getBytes((long)0, (int)test_blob.length()))).compareTo("Hello World") == 0;
-    test_blob.free();
+    byte[] test_blob = result.getBytes("encrypted_data");
+    assert (new String(test_blob)).compareTo("Hello World") == 0;
     assert !result.next();
     result.close();
-    assert result.isClosed();
 
-    result = db.query("SELECT * FROM user_data INNER JOIN encrypted_data ON " +
+    result = db.query("SELECT user_data.user_id AS user_id, user_data.user_name AS user_name, " +
+        "encrypted_data.data_id AS data_id, encrypted_data.category AS category, " +
+        "encrypted_data.type_id AS type_id, data_type.type_name AS type_name, " +
+        "encrypted_data.encrypted_data AS encrypted_data FROM user_data INNER JOIN encrypted_data ON " +
         "user_data.user_id=encrypted_data.user_id INNER JOIN data_type ON " +
         "encrypted_data.type_id=data_type.type_id");
     assert result.next();
-    assert result.getInt("user_data.user_id") == 1;
-    assert result.getString("user_data.user_name").compareTo("test_user") == 0;
-    assert result.getInt("encrypted_data.data_id") == 1;
-    assert result.getString("encrypted_data.category").compareTo("Facebook") == 0;
-    assert result.getInt("encrypted_data.type_id") == 1;
-    assert result.getString("data_type.type_name").compareTo("Username") == 0;
-    test_blob = result.getBlob("encrypted_data");
-    assert (new String(test_blob.getBytes((long)0, (int)test_blob.length()))).compareTo("Hello World") == 0;
-    test_blob.free();
+    assert result.getInt("user_id") == 1;
+    assert result.getString("user_name").compareTo("test_user") == 0;
+    assert result.getInt("data_id") == 1;
+    assert result.getString("category").compareTo("Facebook") == 0;
+    assert result.getInt("type_id") == 1;
+    assert result.getString("type_name").compareTo("Username") == 0;
+    test_blob = db.readFromBLOB(result, "encrypted_data");
+    assert (new String(test_blob)).compareTo("Hello World") == 0;
     result.close();
-    assert result.isClosed();
+    File f = new File(DATABASE_FILE);
+    assert f.delete();
   }
 }
