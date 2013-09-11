@@ -223,19 +223,18 @@ public class Database {
    * @param encryption_key Key that will be used to encrypt the data
    * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
    */
-  public int insertBLOB(int user_id, String category, int type_id, String note, byte[] data, String encryption_key) {
+  public int insertBLOB(int user_id, String category, int type_id, String name, String data, String encryption_key) {
     int ret = -1;
-    byte enc_data[] = data; // Needs to run through encryption process
+    byte enc_data[] = data.getBytes(); // Needs to run through encryption process
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
       this.prpstmnt = this.conn.prepareStatement("INSERT INTO " +
-          "encrypted_data(user_id, category, type_id, note, encrypted_data) " +
-          "VALUES(?, ?, ?, ?, ?)");
+          "encrypted_data(user_id, category, name, encrypted_data) " +
+          "VALUES(?, ?, ?, ?)");
       this.prpstmnt.setInt(1, user_id);
       this.prpstmnt.setString(2, category);
-      this.prpstmnt.setInt(3, type_id);
-      this.prpstmnt.setString(4, note);
-      this.prpstmnt.setBytes(5, enc_data);
+      this.prpstmnt.setString(3, name);
+      this.prpstmnt.setBytes(4, enc_data);
       //this.prpstmnt.setBinaryStream(5, bais, enc_data.length);
       ret = this.prpstmnt.executeUpdate();
       this.prpstmnt.close();
@@ -255,12 +254,26 @@ public class Database {
    * Reads data from a BLOB in a {@link ResultSet} to a byte array.
    *
    * @param queryResult The {@link ResultSet} from a query
-   * @param column Name of the column of the BLOB
-   * @return byte array of the data stored in the BLOB.
+   * @param column number of the column with the BLOB
+   * @return string of the data stored in the BLOB.
    * @see ResultSet
    */
-  public byte[] readFromBLOB(ResultSet queryResult, String column) throws SQLException {
-    return queryResult.getBytes(column);
+  public String readFromBLOB(ResultSet queryResult, int column) throws SQLException {
+    byte[] blob = queryResult.getBytes(column);
+    // Decryption stuff
+    return new String(blob);
+  }
+
+  /**
+   * Reads data from a BLOB in a {@link ResultSet} to a byte array.
+   *
+   * @param queryResult The {@link ResultSet} from a query
+   * @param column Name of the column of the BLOB
+   * @return string of the data stored in the BLOB.
+   * @see ResultSet
+   */
+  public String readFromBLOB(ResultSet queryResult, String column) throws SQLException {
+    return readFromBLOB(queryResult, queryResult.findColumn(column));
   }
 
   public static void main(String[] args) throws SQLException {
@@ -292,8 +305,7 @@ public class Database {
     result.close();
 
     assert db.insertQuery("INSERT INTO user_data(user_name, password, name) VALUES('test_user', 'test', 'Test McTester')") == 1;
-    byte test_array[] = "Hello World".getBytes();
-    assert db.insertBLOB(1, "Facebook", 1, "Facebook Username", test_array, "test_pass") == 1;
+    assert db.insertBLOB(1, "Facebook", 1, "Facebook Username", "Hello World", "test_pass") == 1;
     result = db.query("SELECT * FROM encrypted_data");
     assert result.next();
     assert result.getInt("data_id")==1;
@@ -301,8 +313,8 @@ public class Database {
     assert result.getString("category").compareTo("Facebook") == 0;
     //assert result.getInt("type_id")==1;
     assert result.getString("note").compareTo("Facebook Username") == 0;
-    byte[] test_blob = result.getBytes("encrypted_data");
-    assert (new String(test_blob)).compareTo("Hello World") == 0;
+    String test_blob = db.readFromBLOB(result, "encrypted_data");
+    assert (test_blob).compareTo("Hello World") == 0;
     assert !result.next();
     result.close();
 
