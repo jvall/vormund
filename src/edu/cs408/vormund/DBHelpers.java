@@ -7,7 +7,7 @@ public class DBHelpers {
 	//Where the user key will be stored upon successful login to the system. Used by functions to pass key to decryption algorithm
 	private String key;
 	private Database dbObj;
-	private int user_id = 1; //Setting this manually for now, but will have to be accessed from somewhere in the future
+	private int user_id = 0; //Setting this manually for now, but will have to be accessed from somewhere in the future
 	
 	public DBHelpers()
 	{
@@ -27,16 +27,12 @@ public class DBHelpers {
 		}
 		
 		//Perform the insert
-		dbObj.updateQuery("INSERT INTO user_data (user_name, password, name) VALUES ('" + userName + "', '" + password + "', '" + name + "')");
+		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password, name) VALUES ('" + userName + "', '" + password + "', '" + name + "')");
 		
-		//Get the user_id of the just inserted row
-		userNameCheck = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "'");
-		//Move cursor to first row
-		userNameCheck.first();
-		return userNameCheck.getInt(1);
+		return user_id;
 	}
 
-	//Creates new entry for bank information and returns the ID of the generated data table entry. Will return -1 if account number already exists
+	//Creates new entry for bank information. Will return -1 if account number already exists or upon other error, and 0 if successful 
 	public int newBank(String name, String accountNumber, String routingNumber, String bankAddress, String accountType) throws SQLException {
 		//Check to see if accountNumber is already taken
 		boolean accountExists = false;
@@ -62,34 +58,26 @@ public class DBHelpers {
 			return -1;
 		
 		//Have now shown accountNumber to not already exist in database and can proceed with the insert
-		//dbObj.insertBLOB(user_id, "Bank Account", "", name, key);
+		String dataString = accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType;
+		int insertStatus = dbObj.insertBLOB(user_id, "Bank Account", name, dataString, key);
 		
-		
-		//The user_id should be stored and accessible somewhere
-		//dbObj.updateQuery("INSERT INTO encrypted_data (user_id, category, encrypted_data, name) VALUES ('" + user_id + "', 'Bank Account', '" + encryptedBankData + "', '" + name + "')");
-		
-		//Get the data_id of the inserted row somehow?
-		
+		if(insertStatus == -1)
+			return -1;
 		
 		return 0;
 	}
 
-	//Creates new entry for web account information and returns the ID of the generated data table entry
+	//Creates new entry for web account. Returns -1 if name and email pair is already taken or upon other error, and will return 0 otherwise
 	public int newWeb(String name, String url, String email, String userName, String password, String[][] securityQAPairs) throws SQLException {
 		//Check to see if name email pair is already taken
 		boolean accountExists = false;
 		
-		//get the type_id of Bank Account
-		ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Web Account'");
-		dataTypeQuery.first();
-		int webType = dataTypeQuery.getInt(1);
-		
-		ResultSet webEntries = dbObj.query("SELECT data_id, note FROM encryped_data WHERE type_id='" + webType + "' AND user_id='" + user_id + "'");
+		ResultSet webEntries = dbObj.query("SELECT data_id, note FROM encryped_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
 		if(webEntries.first())
 		{
 			while(!webEntries.isAfterLast())
 			{
-				int data_id = webEntries.getInt(1);
+				int data_id = webEntries.getInt(webEntries.findColumn("data_id"));
 				WebInfo tmpWeb = getWeb(data_id);
 				if(tmpWeb.getEmail().equals(email) && name.equals(webEntries.getString(2)))
 				{
@@ -103,13 +91,35 @@ public class DBHelpers {
 		if(accountExists)
 			return -1;
 		
-		//Need to build out and insert new web blob
+		//Need to build out and insert new web blob. Start by building the csv style delimited data string
+		String dataString = url + ";" + email + ";" + userName + ";" + password;
+		
+		//Dynamically add the security QA pairs into the dataString for encryption
+		for(int i = 0; i < securityQAPairs.length; i++)
+		{
+			dataString += ";";
+			dataString += securityQAPairs[i][0];
+			dataString += ";";
+			dataString += securityQAPairs[i][1];
+		}
+		
+		int insertStatus = dbObj.insertBLOB(user_id, "Web Account", name, dataString, key);
+		
+		if(insertStatus == -1)
+			return -1;
 		
 		return 0;
 	}
 
-	//Creates new note and returns the ID of the generated data table entry
+	//Creates new note
 	public int newNote(String name, String text) {
+		//Notes should be able to occur more than once with the same name (i.e. grocery list), so jump right into the insert
+		
+		int insertStatus = dbObj.insertBLOB(user_id, "Note", name, text, key);
+		
+		if(insertStatus == -1)
+			return -1;
+		
 		return 0;
 	}
 
@@ -118,26 +128,19 @@ public class DBHelpers {
 		//Check to see if SSN is already taken
 		boolean ssnExists = false;
 		
-		//get the type_id of SSN
-		ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Social'");
-		dataTypeQuery.first();
-		int ssnType = dataTypeQuery.getInt(1);
-		
-		ResultSet ssnEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + ssnType + "' AND user_id='" + user_id + "'");
+		ResultSet ssnEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
 		if(ssnEntries.first())
 		{
 			while(!ssnEntries.isAfterLast())
 			{
-				/* WORK IN PROGRESS
-				int data_id = ssnEntries.getInt(1);
-				SSNInfo tmpSSN = getSocial(data_id);
-				if(tmpSSN.getSSN().equals(ssn))
+				int data_id = ssnEntries.getInt(ssnEntries.findColumn("data_id"));
+				String tmpSSN = getSocial(data_id);
+				if(tmpSSN.equals(ssn))
 				{
 					ssnExists = true;
 					break;
 				}
 				ssnEntries.next();
-				*/
 			}
 		}
 		
@@ -145,7 +148,10 @@ public class DBHelpers {
 			return -1;
 		
 		//Have now shown ssn to not already exist in database and can proceed with the insert
+		int insertStatus = dbObj.insertBLOB(user_id, "SSN", name, ssn, key);
 		
+		if(insertStatus == -1)
+			return -1;
 		
 		return 0;
 	}
@@ -217,36 +223,45 @@ public class DBHelpers {
 
 	//Used to retrieve a specific SSN
 	public String getSocial(int socialID) {
-		return null;
+		return "";
 	}
 
 	//Will overwrite data previously written for entry with given userID
-	public void updateUser(int userID) {
-
+	public void updateUser(int userID, String userName, String password, String name) {
+		String query = "UPDATE user_data SET user_name='" + userName + "', password='" + password + "', name='" + name + "' WHERE user_id='" + userID + "'";
+		dbObj.updateQuery(query);
 	}
 
 	//Will overwrite data previously written for entry with given bankID
-	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String type) {
-		//We can make the assumption that the user is editing a pre-existing entry and can go directly to the update function
-		byte encryptedBankData[] = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
-		
-		//The user_id should be stored and accessible somewhere
-		dbObj.updateQuery("UPDATE encrypted_data SET encrypted_data = '" + encryptedBankData + "', note='" + name + "' WHERE data_id='" + bankID + "'");
+	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String accountType) {
+		String dataString = accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType;
+		dbObj.updateBLOB(bankID, name, dataString, key);
 	}
 
 	//Will overwrite data previously written for entry with given webID
-	public void updateWeb(int webID) {
-
+	public void updateWeb(int webID, String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
+		String dataString = url + ";" + email + ";" + userName + ";" + password;
+		
+		//Dynamically add the security QA pairs into the dataString for encryption
+		for(int i = 0; i < securityQAPairs.length; i++)
+		{
+			dataString += ";";
+			dataString += securityQAPairs[i][0];
+			dataString += ";";
+			dataString += securityQAPairs[i][1];
+		}
+		
+		dbObj.updateBLOB(webID, name, dataString, key);
 	}
 
 	//Will overwrite data previously written for entry with given noteID
-	public void updateNote(int noteID) {
-
+	public void updateNote(int noteID, String name, String text) {
+		dbObj.updateBLOB(noteID, name, text, key);
 	}
 
 	//Will overwrite data previously written for entry with given socialID
-	public void updateSocial(int socialID) {
-
+	public void updateSocial(int socialID, String name, String ssn) {
+		dbObj.updateBLOB(socialID, name, ssn, key);
 	}
 
 	//Will remove entry with given userID
