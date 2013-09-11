@@ -37,16 +37,17 @@ public class DBHelpers {
 	}
 
 	//Creates new entry for bank information and returns the ID of the generated data table entry. Will return -1 if account number already exists
-	public int newBank(String name, String accountNumber, String routingNumber, String bankAddress, String type) throws SQLException {
+	public int newBank(String name, String accountNumber, String routingNumber, String bankAddress, String accountType) throws SQLException {
 		//Check to see if accountNumber is already taken
 		boolean accountExists = false;
 		
 		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE category LIKE 'Bank Account' AND user_id=" + user_id);
 		if(bankEntries.first())
 		{
+			//I think that this will work as a way to loop through 
 			while(!bankEntries.isAfterLast())
 			{
-				int data_id = bankEntries.getInt(1);
+				int data_id = bankEntries.getInt(bankEntries.findColumn("data_id"));
 				BankInfo tmpBank = getBank(data_id);
 				if(tmpBank.getAccountNumber().equals(accountNumber))
 				{
@@ -61,10 +62,10 @@ public class DBHelpers {
 			return -1;
 		
 		//Have now shown accountNumber to not already exist in database and can proceed with the insert
-		byte[] encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
+		byte[] encryptedBankData = Encryption.encryptBlob(key, accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType + "'");
 		
 		//The user_id should be stored and accessible somewhere
-		dbObj.updateQuery("INSERT INTO encrypted_data (user_id, type_id, encrypted_data, note) VALUES ('" + user_id + "', '" + bankType + "', '" + encryptedBankData + "', '" + name + "')");
+		//dbObj.updateQuery("INSERT INTO encrypted_data (user_id, category, encrypted_data, name) VALUES ('" + user_id + "', 'Bank Account', '" + encryptedBankData + "', '" + name + "')");
 		
 		//Get the data_id of the inserted row somehow?
 		
@@ -286,5 +287,9 @@ public class DBHelpers {
 			System.err.println("Database error: " + e);
 		}
 		return numType;
+	}
+	
+	public void close() {
+		dbObj.close();
 	}
 }
