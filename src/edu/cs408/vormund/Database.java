@@ -7,6 +7,11 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.sql.*;
 
+// TODO: Add encryption to insert/updateBLOB functions
+// TODO: Add decryption to readBLOB functions
+// TODO: Fix DATABASE_FILE location to work with resource files
+// TODO: Modify updateBLOB function to properly dynamically create PreparedStatement SQL query (there is a right way)
+// TODO: Fix unittests
 public class Database {
   private static final String SCHEMA_FILE = "/edu/cs408/vormund/SCHEMA.sql";
   //private static final String DATABASE_FILE = ":resource:/edu/cs408/vormund/lib-common2.3.2.jar";
@@ -138,6 +143,7 @@ public class Database {
       System.out.println("ERROR: " + e.getMessage());
       ret=-1;
     }
+    this.closeStatement();
     return ret;
   }
 
@@ -166,6 +172,7 @@ public class Database {
       System.out.println("MySQL Insert Error: " + e.getMessage());
       ret=-1;
     }
+    this.closeStatement();
     return ret;
   }
 
@@ -186,7 +193,23 @@ public class Database {
       System.err.println("Error Executing Query: " + e.getMessage());
       ret = null;
     }
+    this.closeStatement();
     return ret;
+  }
+
+  /**
+   * Closes the internal statement object
+   * @see Statement#close
+   */
+  private void closeStatement() {
+    if( this.stmnt == null ) return;
+    try {
+      this.stmnt.close();
+    } catch(SQLException e) {
+      System.err.println("Error closing statement: " + e.getMessage());
+    } finally {
+      this.stmnt = null;
+    }
   }
 
   /**
@@ -225,6 +248,7 @@ public class Database {
    */
   public int insertBLOB(int user_id, String category, String name, String data, String encryption_key) {
     int ret = -1;
+    if( !this.hasConnection() ) { this.makeConnection(); }
     byte enc_data[] = data.getBytes(); // Needs to run through encryption process
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
@@ -262,6 +286,7 @@ public class Database {
    */
   public int updateBLOB(int data_id, String new_name, String new_data, String encryption_key) {
     int ret = -1;
+    if( !this.hasConnection() ) { this.makeConnection(); }
     byte enc_data[] = new_data.getBytes(); // Needs to run through encryption process
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
