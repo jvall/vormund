@@ -218,12 +218,11 @@ public class Database {
    *
    * @param user_id ID of the user the data belongs to
    * @param category Category of the data being stored (ie. Facebook, Purdue Federal Bank, etc.)
-   * @param type_id ID of the type of data being stored
    * @param data Unencrypted data that will be stored in the database
    * @param encryption_key Key that will be used to encrypt the data
    * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
    */
-  public int insertBLOB(int user_id, String category, int type_id, String name, String data, String encryption_key) {
+  public int insertBLOB(int user_id, String category, String name, String data, String encryption_key) {
     int ret = -1;
     byte enc_data[] = data.getBytes(); // Needs to run through encryption process
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
@@ -305,7 +304,7 @@ public class Database {
     result.close();
 
     assert db.insertQuery("INSERT INTO user_data(user_name, password, name) VALUES('test_user', 'test', 'Test McTester')") == 1;
-    assert db.insertBLOB(1, "Facebook", 1, "Facebook Username", "Hello World", "test_pass") == 1;
+    assert db.insertBLOB(1, "Facebook", "Facebook Username", "Hello World", "test_pass") == 1;
     result = db.query("SELECT * FROM encrypted_data");
     assert result.next();
     assert result.getInt("data_id")==1;
