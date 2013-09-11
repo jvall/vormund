@@ -277,9 +277,9 @@ public class Database {
     db.createStatement();
     assert db.hasStatement();
 
-    /*assert db.insertQuery("INSERT INTO data_type(type_name, type_value) VALUES('SSN', 'text')")==6;
-    ResultSet result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
-    assert result.next();
+    //assert db.insertQuery("INSERT INTO data_type(type_name, type_value) VALUES('SSN', 'text')")==6;
+    ResultSet result = null;//db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
+    /*assert result.next();
     assert result.getInt("type_id")==6;
     assert result.getString("type_name").compareTo("SSN")==0;
     assert result.getString("type_value").compareTo("text")==0;
