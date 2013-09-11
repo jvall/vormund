@@ -29,7 +29,7 @@ CREATE TABLE encrypted_data (
   user_id INTEGER NOT NULL,
   category TEXT NOT NULL,
   encrypted_data BLOB NOT NULL,
-  note TEXT,
+  name TEXT NOT NULL,
   UNIQUE(user_id, category),
   FOREIGN KEY(user_id) REFERENCES user_data(user_id)
 );
