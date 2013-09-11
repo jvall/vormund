@@ -227,32 +227,41 @@ public class DBHelpers {
 	}
 
 	//Will overwrite data previously written for entry with given userID
-	public void updateUser(int userID) {
-
+	public void updateUser(int userID, String userName, String password, String name) {
+		String query = "UPDATE user_data SET user_name='" + userName + "', password='" + password + "', name='" + name + "' WHERE user_id='" + userID + "'";
+		dbObj.updateQuery(query);
 	}
 
 	//Will overwrite data previously written for entry with given bankID
-	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String type) {
-		//We can make the assumption that the user is editing a pre-existing entry and can go directly to the update function
-		byte encryptedBankData[] = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
-		
-		//The user_id should be stored and accessible somewhere
-		dbObj.updateQuery("UPDATE encrypted_data SET encrypted_data = '" + encryptedBankData + "', note='" + name + "' WHERE data_id='" + bankID + "'");
+	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String accountType) {
+		String dataString = accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType;
+		dbObj.updateBLOB(bankID, name, dataString, key);
 	}
 
 	//Will overwrite data previously written for entry with given webID
-	public void updateWeb(int webID) {
-
+	public void updateWeb(int webID, String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
+		String dataString = url + ";" + email + ";" + userName + ";" + password;
+		
+		//Dynamically add the security QA pairs into the dataString for encryption
+		for(int i = 0; i < securityQAPairs.length; i++)
+		{
+			dataString += ";";
+			dataString += securityQAPairs[i][0];
+			dataString += ";";
+			dataString += securityQAPairs[i][1];
+		}
+		
+		dbObj.updateBLOB(webID, name, dataString, key);
 	}
 
 	//Will overwrite data previously written for entry with given noteID
-	public void updateNote(int noteID) {
-
+	public void updateNote(int noteID, String name, String text) {
+		dbObj.updateBLOB(noteID, name, text, key);
 	}
 
 	//Will overwrite data previously written for entry with given socialID
-	public void updateSocial(int socialID) {
-
+	public void updateSocial(int socialID, String name, String ssn) {
+		dbObj.updateBLOB(socialID, name, ssn, key);
 	}
 
 	//Will remove entry with given userID
