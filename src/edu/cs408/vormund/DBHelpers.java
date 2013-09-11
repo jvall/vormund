@@ -12,6 +12,8 @@ public class DBHelpers {
 	public DBHelpers()
 	{
 		dbObj = new Database();
+		if(!dbObj.hasConnection() || !dbObj.hasStatement())
+			System.exit(1);
 	}
 	
 	//Creates new user for the system and returns the generated userID. Returns -1 if user already in system
@@ -39,12 +41,7 @@ public class DBHelpers {
 		//Check to see if accountNumber is already taken
 		boolean accountExists = false;
 		
-		//get the type_id of Bank Account
-		ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Bank Account'");
-		dataTypeQuery.first();
-		int bankType = dataTypeQuery.getInt(1);
-		
-		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + bankType + "' AND user_id='" + user_id + "'");
+		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE category LIKE 'Bank Account' AND user_id=" + user_id);
 		if(bankEntries.first())
 		{
 			while(!bankEntries.isAfterLast())
