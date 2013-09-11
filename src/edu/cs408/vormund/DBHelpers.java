@@ -62,7 +62,8 @@ public class DBHelpers {
 			return -1;
 		
 		//Have now shown accountNumber to not already exist in database and can proceed with the insert
-		byte[] encryptedBankData = Encryption.encryptBlob(key, accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType + "'");
+		//dbObj.insertBLOB(user_id, "Bank Account", "", name, key);
+		
 		
 		//The user_id should be stored and accessible somewhere
 		//dbObj.updateQuery("INSERT INTO encrypted_data (user_id, category, encrypted_data, name) VALUES ('" + user_id + "', 'Bank Account', '" + encryptedBankData + "', '" + name + "')");
