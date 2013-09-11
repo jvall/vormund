@@ -1,13 +1,13 @@
 package edu.cs408.vormund;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class DBHelpers {
 	//Where the user key will be stored upon successful login to the system. Used by functions to pass key to decryption algorithm
-	String key;
-	Database dbObj;
-	int user_id = 1; //Setting this manually for now, but will have to be accessed from somewhere in the future
+	private String key;
+	private Database dbObj;
+	private int user_id = 1; //Setting this manually for now, but will have to be accessed from somewhere in the future
 	
 	public DBHelpers()
 	{
@@ -64,7 +64,7 @@ public class DBHelpers {
 			return -1;
 		
 		//Have now shown accountNumber to not already exist in database and can proceed with the insert
-		String encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
+		byte[] encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
 		
 		//The user_id should be stored and accessible somewhere
 		dbObj.updateQuery("INSERT INTO encrypted_data (user_id, type_id, encrypted_data, note) VALUES ('" + user_id + "', '" + bankType + "', '" + encryptedBankData + "', '" + name + "')");
@@ -157,8 +157,28 @@ public class DBHelpers {
 	}
 
 	//Return a listing of all data entries of type bank including their name/label and ID
-	public void getBanks(int userID) {
+	public ArrayList<BankInfo> getBanks(int userID) {
+		//get the type_id of Bank Account
+		ArrayList<BankInfo> banks = new ArrayList<BankInfo>();
 
+		try {
+			ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("Bank Account") + "' AND user_id='" + userID + "'");
+			if(entries.first())
+			{
+				while(!entries.isAfterLast())
+				{
+					byte bank_info[] = entries.getBytes("encrypted_data");
+					String decrypt = Encryption.decryptBlob(key, bank_info);
+					banks.add(BankInfo.serializeCSVDump(decrypt));
+					entries.next();
+				}
+			}
+		} catch (SQLException e) {
+			//TODO: replace with error logging
+			System.err.println("Database error: " + e);
+		}
+
+		return banks;
 	}
 
 	//Used to retrieve the encrypted data of a bank entry
@@ -209,7 +229,7 @@ public class DBHelpers {
 	//Will overwrite data previously written for entry with given bankID
 	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String type) {
 		//We can make the assumption that the user is editing a pre-existing entry and can go directly to the update function
-		String encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
+		byte encryptedBankData[] = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
 		
 		//The user_id should be stored and accessible somewhere
 		dbObj.updateQuery("UPDATE encrypted_data SET encrypted_data = '" + encryptedBankData + "', note='" + name + "' WHERE data_id='" + bankID + "'");
@@ -253,5 +273,21 @@ public class DBHelpers {
 	//Will remove entry with given socialID
 	public void deleteSocial(int socialID) {
 
+	}
+
+	/*********************
+	*	Helper Methods   *
+	*********************/
+
+	private int getRecordType(String type) {
+		int numType = -1;
+		try {
+			ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='" + type + "'");
+			dataTypeQuery.first();
+			numType = dataTypeQuery.getInt(1);
+		} catch (SQLException e) {
+			System.err.println("Database error: " + e);
+		}
+		return numType;
 	}
 }
