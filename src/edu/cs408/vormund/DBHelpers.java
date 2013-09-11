@@ -85,14 +85,14 @@ public class DBHelpers {
 		dataTypeQuery.first();
 		int webType = dataTypeQuery.getInt(1);
 		
-		ResultSet webEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + webType + "' AND user_id='" + user_id + "'");
+		ResultSet webEntries = dbObj.query("SELECT data_id, note FROM encryped_data WHERE type_id='" + webType + "' AND user_id='" + user_id + "'");
 		if(webEntries.first())
 		{
 			while(!webEntries.isAfterLast())
 			{
 				int data_id = webEntries.getInt(1);
 				WebInfo tmpWeb = getWeb(data_id);
-				if(tmpWeb.getEmail().equals(email))
+				if(tmpWeb.getEmail().equals(email) && name.equals(webEntries.getString(2)))
 				{
 					accountExists = true;
 					break;
