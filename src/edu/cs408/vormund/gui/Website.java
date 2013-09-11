@@ -2,8 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package vormund;
-
+package edu.cs408.vormund;
 /**
  *
  * @author isabellee
