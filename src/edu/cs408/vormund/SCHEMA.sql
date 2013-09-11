@@ -28,8 +28,8 @@ CREATE TABLE encrypted_data (
   data_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   user_id INTEGER NOT NULL,
   category TEXT NOT NULL,
-  encrypted_data BLOB NOT NULL,
   name TEXT NOT NULL,
-  UNIQUE(user_id, category),
+  encrypted_data BLOB NOT NULL,
+  UNIQUE(user_id, category, name),
   FOREIGN KEY(user_id) REFERENCES user_data(user_id)
 );

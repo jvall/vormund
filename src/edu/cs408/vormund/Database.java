@@ -217,7 +217,8 @@ public class Database {
    * Inserts rows into the encrypted_data table.
    *
    * @param user_id ID of the user the data belongs to
-   * @param category Category of the data being stored (ie. Facebook, Purdue Federal Bank, etc.)
+   * @param category Category of the data being stored (ie. Website, Bank, etc.)
+   * @param name Name that the data belongs to (ie. Bank of America, Facebook, etc.)
    * @param data Unencrypted data that will be stored in the database
    * @param encryption_key Key that will be used to encrypt the data
    * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
@@ -234,6 +235,47 @@ public class Database {
       this.prpstmnt.setString(2, category);
       this.prpstmnt.setString(3, name);
       this.prpstmnt.setBytes(4, enc_data);
+      //this.prpstmnt.setBinaryStream(5, bais, enc_data.length);
+      ret = this.prpstmnt.executeUpdate();
+      this.prpstmnt.close();
+    } catch(SQLFeatureNotSupportedException e) {
+      System.err.println("Error Function Not Supported: " + e.getMessage());
+      ret = -1;
+    } catch(SQLException e) {
+      System.err.println("Error inserting BLOB to encrypted_data table:\n\t" + e.getMessage());
+      ret = -1;
+    } finally {
+      this.prpstmnt = null;
+      return ret;
+    }
+  }
+
+  /**
+   * Updatess rows into the encrypted_data table.
+   *
+   * @param data_id ID of the encrypted data being updated
+   * @param new_name Name that the data belongs to (ie. Bank of America, Facebook, etc.)
+   *             <code>NULL</code> if not being updated
+   * @param new_data Unencrypted data that will be replace the old data in the database
+   * @param encryption_key Key that will be used to encrypt the data
+   * @return Number of rows affected. <code>-1</code> if the query was unsuccessful
+   */
+  public int updateBLOB(int data_id, String new_name, String new_data, String encryption_key) {
+    int ret = -1;
+    byte enc_data[] = new_data.getBytes(); // Needs to run through encryption process
+    //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
+    try {
+      if( new_name!=null ) {
+        this.prpstmnt = this.conn.prepareStatement("UPDATE encrypted_data SET " +
+            "encrypted_data=?, name=? WHERE data_id=?");
+        this.prpstmnt.setString(2, new_name);
+        this.prpstmnt.setInt(3, data_id);
+      } else {
+        this.prpstmnt = this.conn.prepareStatement("UPDATE encrypted_data SET " +
+            "encrypted_data=? WHERE data_id=?");
+        this.prpstmnt.setInt(2, data_id);
+      }
+      this.prpstmnt.setBytes(1, enc_data);
       //this.prpstmnt.setBinaryStream(5, bais, enc_data.length);
       ret = this.prpstmnt.executeUpdate();
       this.prpstmnt.close();
