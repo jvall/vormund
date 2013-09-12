@@ -48,7 +48,7 @@ public class BankInfo {
 
     public static BankInfo serializeCSVDump(String csvBankVals) {
         // MUST be in same order as above constructor
-        String vals[] = csvBankVals.split(",");
+        String vals[] = csvBankVals.split(";");
 
         return new BankInfo(vals[0], vals[1], vals[2], vals[3], vals[4]);
     }

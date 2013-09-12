@@ -8,12 +8,12 @@ public class DBHelpers {
     private String key;
     private Database dbObj;
     private int user_id = 1; //Setting this manually for now, but will have to be accessed from somewhere in the future
-    
+
     public DBHelpers()
     {
         dbObj = new Database();
     }
-    
+
     //Creates new user for the system and returns the generated userID. Returns -1 if user already in system
     public int newUser(String userName, String password, String name) throws SQLException {
         //Check to see if userName is already taken
@@ -23,10 +23,10 @@ public class DBHelpers {
         {
             return -1;
         }
-        
+
         //Perform the insert
         dbObj.updateQuery("INSERT INTO user_data (user_name, password, name) VALUES ('" + userName + "', '" + password + "', '" + name + "')");
-        
+
         //Get the user_id of the just inserted row
         userNameCheck = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "'");
         //Move cursor to first row
@@ -38,12 +38,12 @@ public class DBHelpers {
     public int newBank(String name, String accountNumber, String routingNumber, String bankAddress, String type) throws SQLException {
         //Check to see if accountNumber is already taken
         boolean accountExists = false;
-        
+
         //get the type_id of Bank Account
         ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Bank Account'");
         dataTypeQuery.first();
         int bankType = dataTypeQuery.getInt(1);
-        
+
         ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + bankType + "' AND user_id='" + user_id + "'");
         if(bankEntries.first())
         {
@@ -59,19 +59,19 @@ public class DBHelpers {
                 bankEntries.next();
             }
         }
-        
+
         if(accountExists)
             return -1;
-        
+
         //Have now shown accountNumber to not already exist in database and can proceed with the insert
         byte[] encryptedBankData = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
-        
+
         //The user_id should be stored and accessible somewhere
         dbObj.updateQuery("INSERT INTO encrypted_data (user_id, type_id, encrypted_data, note) VALUES ('" + user_id + "', '" + bankType + "', '" + encryptedBankData + "', '" + name + "')");
-        
+
         //Get the data_id of the inserted row somehow?
-        
-        
+
+
         return 0;
     }
 
@@ -79,12 +79,12 @@ public class DBHelpers {
     public int newWeb(String name, String url, String email, String userName, String password, String[][] securityQAPairs) throws SQLException {
         //Check to see if name email pair is already taken
         boolean accountExists = false;
-        
+
         //get the type_id of Bank Account
         ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Web Account'");
         dataTypeQuery.first();
         int webType = dataTypeQuery.getInt(1);
-        
+
         ResultSet webEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + webType + "' AND user_id='" + user_id + "'");
         if(webEntries.first())
         {
@@ -100,12 +100,12 @@ public class DBHelpers {
                 webEntries.next();
             }
         }
-        
+
         if(accountExists)
             return -1;
-        
+
         //Need to build out and insert new web blob
-        
+
         return 0;
     }
 
@@ -118,12 +118,12 @@ public class DBHelpers {
     public int newSocial(String name, String ssn) throws SQLException {
         //Check to see if SSN is already taken
         boolean ssnExists = false;
-        
+
         //get the type_id of SSN
         ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='Social'");
         dataTypeQuery.first();
         int ssnType = dataTypeQuery.getInt(1);
-        
+
         ResultSet ssnEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE type_id='" + ssnType + "' AND user_id='" + user_id + "'");
         if(ssnEntries.first())
         {
@@ -141,13 +141,13 @@ public class DBHelpers {
                 */
             }
         }
-        
+
         if(ssnExists)
             return -1;
-        
+
         //Have now shown ssn to not already exist in database and can proceed with the insert
-        
-        
+
+
         return 0;
     }
 
@@ -186,8 +186,6 @@ public class DBHelpers {
         BankInfo bank = null;
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + bankEntryID + "' AND user_id='" + user_id + "'");
-            if (resultsCount(entries) == 0)
-                throw new EntryNotExistException("The bank with the specified ID number does not exist.");
             entries.first();
             byte bankInfo[] = entries.getBytes("encrypted_data");
             String decrypt = Encryption.decryptBlob(key, bankInfo);
@@ -201,7 +199,7 @@ public class DBHelpers {
     }
 
     //Returns a listing of all data entries of type web account including their name/label and ID
-    public ArrayList<WebInfo> getWebs(int userID) {
+    public ArrayList<WebInfo> getWebs() {
         ArrayList<WebInfo> webs = new ArrayList<WebInfo>();
 
         try {
@@ -229,8 +227,6 @@ public class DBHelpers {
         WebInfo web = null;
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + webID + "' AND user_id='" + user_id + "'");
-            if (resultsCount(entries) == 0)
-                throw new EntryNotExistException("The web info with the specified ID number does not exist.");
             entries.first();
             byte webInfo[] = entries.getBytes("encrypted_data");
             String decrypt = Encryption.decryptBlob(key, webInfo);
@@ -244,23 +240,85 @@ public class DBHelpers {
     }
 
     //Returns a listing of all notes stored by the user including their name and ID
-    public void getNotes(int userID) {
+    public ArrayList<NoteInfo> getNotes() {
+        ArrayList<NoteInfo> notes = new ArrayList<NoteInfo>();
 
+        try {
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("Note") + "' AND user_id='" + user_id + "'");
+            if(entries.first())
+            {
+                while(!entries.isAfterLast())
+                {
+                    byte noteInfo[] = entries.getBytes("encrypted_data");
+                    String decrypt = Encryption.decryptBlob(key, noteInfo);
+                    notes.add(NoteInfo.serializeCSVDump(decrypt));
+                    entries.next();
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: replace with error logging
+            System.err.println("Database error: " + e);
+        }
+
+        return notes;
     }
 
     //Used to retrieve the contents of a note
-    public void getNote(int noteID) {
+    public NoteInfo getNote(int noteID) {
+        NoteInfo note = null;
+        try {
+            ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + noteID + "' AND user_id='" + user_id + "'");
+            entries.first();
+            byte noteInfo[] = entries.getBytes("encrypted_data");
+            String decrypt = Encryption.decryptBlob(key, noteInfo);
+            note = NoteInfo.serializeCSVDump(decrypt);
+        } catch (SQLException e) {
+            //TODO: replace with error logging
+            System.err.println("Database error: " + e);
+        }
 
+        return note;
     }
 
     //Used to retrieve a listing of SSNs stored including their ID and the name (person they are associated with)
-    public void getSocials(int userID) {
+    public ArrayList<SSNInfo> getSocials() {
+        ArrayList<SSNInfo> ssns = new ArrayList<SSNInfo>();
 
+        try {
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("SSN") + "' AND user_id='" + user_id + "'");
+            if(entries.first())
+            {
+                while(!entries.isAfterLast())
+                {
+                    byte ssnInfo[] = entries.getBytes("encrypted_data");
+                    String decrypt = Encryption.decryptBlob(key, ssnInfo);
+                    ssns.add(SSNInfo.serializeCSVDump(decrypt));
+                    entries.next();
+                }
+            }
+        } catch (SQLException e) {
+            //TODO: replace with error logging
+            System.err.println("Database error: " + e);
+        }
+
+        return ssns;
     }
 
     //Used to retrieve a specific SSN
-    public String getSocial(int socialID) {
-        return null;
+    public SSNInfo getSocial(int socialID) {
+        SSNInfo ssn = null;
+        try {
+            ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + socialID + "' AND user_id='" + user_id + "'");
+            entries.first();
+            byte ssnInfo[] = entries.getBytes("encrypted_data");
+            String decrypt = Encryption.decryptBlob(key, ssnInfo);
+            ssn = SSNInfo.serializeCSVDump(decrypt);
+        } catch (SQLException e) {
+            //TODO: replace with error logging
+            System.err.println("Database error: " + e);
+        }
+
+        return ssn;
     }
 
     //Will overwrite data previously written for entry with given userID
@@ -272,7 +330,7 @@ public class DBHelpers {
     public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String type) {
         //We can make the assumption that the user is editing a pre-existing entry and can go directly to the update function
         byte encryptedBankData[] = Encryption.encryptBlob(key, accountNumber + ", " + routingNumber + ", " + bankAddress + ", " + type + "'");
-        
+
         //The user_id should be stored and accessible somewhere
         dbObj.updateQuery("UPDATE encrypted_data SET encrypted_data = '" + encryptedBankData + "', note='" + name + "' WHERE data_id='" + bankID + "'");
     }
@@ -334,9 +392,14 @@ public class DBHelpers {
     }
 
     private int resultsCount(ResultSet r) {
-        r.last();
-        int numRows = r.getRow();
-        r.beforeFirst();
+        int numRows = 0;
+        try {
+            r.last();
+            numRows = r.getRow();
+            r.beforeFirst();
+        } catch (SQLException e) {
+            System.err.println("Database error: " + e);
+        }
         return numRows;
     }
 }
