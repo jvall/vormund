@@ -148,21 +148,21 @@ public class UserAccount extends javax.swing.JFrame {
         // TODO add your handling code here:
 	
 	String temp = MainCB.getSelectedItem().toString();
-        switch(temp)
-        {
-            case "Bank":
-                new NewBank().setVisible(true);
-                break;
-            case "Website":
-                new Website().setVisible(true);
-                break;
-            case "Notes":
+        if(temp.compareTo("Bank")
+	{
+		new NewBank().setVisible(true);
+	}
+        else if(temp.compareTo("Website")
+	{
+		new Website().setVisible(true);
+	}
+        else if(temp.compareTo("Notes")
+	{
                 new Notes().setVisible(true);
-                break;
-            case "SSN":
-                new Notes().setVisible(true);
-                break;
-
+	}
+	else if(temp.compareTo("SSN")
+	{
+                new SSN().setVisible(true);
         }
     }//GEN-LAST:event_addbuttonMouseClicked
 
@@ -187,27 +187,28 @@ public class UserAccount extends javax.swing.JFrame {
     private void MainCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MainCBItemStateChanged
         // TODO add your handling code here:
 	
-	String temp =MainCB.getSelectedItem().toString();
-        
-        switch(temp)
-        {
-                case "Bank":
+	String temp = MainCB.getSelectedItem().toString();
+        if(temp.compareTo("Bank")
+	{
                     repaint();
                     SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank 1", "Bank 2"}));
-                    break;
-                case "Website":
+	}
+        else if(temp.compareTo("Website")
+	{
                     repaint();
-                    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Website 1", "Website 2"}));
-                    break;
-                case "Notes":
+                    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Website 1"}));
+	}
+        else if(temp.compareTo("Notes")
+	{
                     repaint();
-                    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Note 1", "Note 2"}));
-                    break;
-                case "SSN":
+                    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notes 1"}));
+	}
+	else if(temp.compareTo("SSN")
+	{
                     repaint();
                     SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SSN"}));
-                    break;
-        }
+	}
+        
     }//GEN-LAST:event_MainCBItemStateChanged
 
     /**
