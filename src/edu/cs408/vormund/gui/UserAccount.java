@@ -191,7 +191,7 @@ public class UserAccount extends javax.swing.JFrame {
         if(temp.compareTo("Bank"))
 	{
                     repaint();
-                    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank 1", "Bank 2"});
+                    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank 1", "Bank 2"}));
 	}
         else if(temp.compareTo("Website"))
 	{
