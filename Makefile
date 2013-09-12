@@ -28,7 +28,7 @@ compile:
 	cd ${BUILDDIR} && find ./ -type f -name "*.jar" | xargs -I file ${JAR} -xf file
 	rm ${BUILDDIR}*.jar
 	find ${SRCDIR} -name "*.java" -print > ${BUILDLIST}
-	${JC} -d ${BUILDDIR} @${BUILDLIST}
+	${JC} -d ${BUILDDIR} -cp .:libs/swing-layout-1.0.jar @${BUILDLIST}
 	find ${SRCDIR} -type f \( -iname "*" ! -iname "*.java" ! -iname "*.md" \) > ${MOVELIST}
 	sed -i "s/${SRCDIRESCAPED}//g" ${MOVELIST}
 	cat ${MOVELIST} | xargs -I FL cp ${SRCDIR}FL ${BUILDDIR}FL
