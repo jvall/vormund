@@ -20,6 +20,7 @@ MOVELIST=${BUILDDIR}move.txt
 SRCDIRESCAPED=${SRCDIR:/=\/}
 BUILDDIRESCAPED=${BUILDDIR:/=\/}
 CLASSPATH=.:../${LIBDIR}${LIBDEPS}
+DISPOSE=${BUILDDIR}dispose.tmp
 
 all: compile jar
 
@@ -30,22 +31,27 @@ compile:
 	find ${SRCDIR} -name "*.java" -print > ${BUILDLIST}
 	${JC} -d ${BUILDDIR} -cp .:libs/swing-layout-1.0.jar @${BUILDLIST}
 	find ${SRCDIR} -type f \( -iname "*" ! -iname "*.java" ! -iname "*.md" \) > ${MOVELIST}
-	sed -i "s/${SRCDIRESCAPED}//g" ${MOVELIST}
+	touch ${DISPOSE}
+	sed -i '${DISPOSE}' -e "s/${SRCDIRESCAPED}//g" ${MOVELIST}
 	cat ${MOVELIST} | xargs -I FL cp ${SRCDIR}FL ${BUILDDIR}FL
-	rm -f ${MOVELIST} ${BUILDLIST}
+	rm -f ${MOVELIST} ${DISPOSE} ${BUILDLIST}
 
 jarwlib:
 	#find ${BUILDDIR} -type f \( -iname "*" ! -iname "*.md" ! -iname "build.txt" ! -iname "Manifest.txt" \) -print > ${BUILDLIST}
 	#sed -i "s/${BUILDDIRESCAPED}//g" ${BUILDLIST}
 	cp Manifest.txt ${OUTDIR}
-	sed -i "s/\[CLASSPATH\]/${LIBDEPS}/g" ${OUTDIR}Manifest.txt
-	sed -i "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
+	touch ${DISPOSE}
+	sed -i "${DISPOSE}" -e "s/\[CLASSPATH\]/${LIBDEPS}/g" ${OUTDIR}Manifest.txt
+	sed -i "${DISPOSE}" -e "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
+	rm ${DISPOSE}
 	cp ${LIBDIR}*.jar ${OUTDIR}
 	${JAR} -cfmv ${OUTDIR}${JARNAME} ${OUTDIR}Manifest.txt -C ${BUILDDIR} .
 
 jar:
 	cp Manifest.txt ${OUTDIR}
-	sed -i "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
+	touch ${DISPOSE}
+	sed -i "${DISPOSE}" -e "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
+	rm ${DISPOSE}
 	${JAR} -cfmv ${OUTDIR}${JARNAME} ${OUTDIR}Manifest.txt -C ${BUILDDIR} .
 
 run:
