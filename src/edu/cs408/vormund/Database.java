@@ -101,7 +101,10 @@ public class Database {
     try {
       Class.forName("org.sqlite.JDBC");
       this.conn = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_FILE);
-    } catch(ClassNotFoundException | SQLException e) {
+    } catch(ClassNotFoundException e) {
+      System.err.println("Error Making DB Connection: " + e.getMessage());
+      this.conn = null;
+    } catch(SQLException e) {
       System.err.println("Error Making DB Connection: " + e.getMessage());
       this.conn = null;
     }
