@@ -148,19 +148,19 @@ public class UserAccount extends javax.swing.JFrame {
         // TODO add your handling code here:
 	
 	String temp = MainCB.getSelectedItem().toString();
-        if(temp.compareTo("Bank"))
+        if(temp.compareTo("Bank") == 0)
 	{
 		new NewBank().setVisible(true);
 	}
-        else if(temp.compareTo("Website"))
+        else if(temp.compareTo("Website") == 0)
 	{
 		new Website().setVisible(true);
 	}
-        else if(temp.compareTo("Notes"))
+        else if(temp.compareTo("Notes") == 0)
 	{
                 new Notes().setVisible(true);
 	}
-	else if(temp.compareTo("SSN"))
+	else if(temp.compareTo("SSN") == 0)
 	{
                 new SSN().setVisible(true);
         }
@@ -188,22 +188,22 @@ public class UserAccount extends javax.swing.JFrame {
         // TODO add your handling code here:
 	
 	String temp = MainCB.getSelectedItem().toString();
-        if(temp.compareTo("Bank"))
+        if(temp.compareTo("Bank") == 0)
 	{
                     repaint();
                     SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank 1", "Bank 2"}));
 	}
-        else if(temp.compareTo("Website"))
+        else if(temp.compareTo("Website") == 0)
 	{
                     repaint();
                     SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Website 1"}));
 	}
-        else if(temp.compareTo("Notes"))
+        else if(temp.compareTo("Notes") == 0)
 	{
                     repaint();
                     SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notes 1"}));
 	}
-	else if(temp.compareTo("SSN"))
+	else if(temp.compareTo("SSN") == 0)
 	{
                     repaint();
                     SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SSN"}));
