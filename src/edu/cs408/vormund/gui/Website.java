@@ -52,7 +52,8 @@ public class Website extends javax.swing.JFrame {
 
         email.setText("Email:");
 
-        donebutton2.setText("Done");
+        //change from done to next name
+        donebutton2.setText("Next");
         donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 donebutton2MouseClicked(evt);
@@ -128,6 +129,9 @@ public class Website extends javax.swing.JFrame {
         //Check info
         //Add to database
 
+    	//open next window
+    	new Website2().setVisible(true);
+    	
         //dispose
         dispose();
     }//GEN-LAST:event_donebutton2MouseClicked
