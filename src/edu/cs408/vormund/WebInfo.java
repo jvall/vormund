@@ -6,7 +6,7 @@ public class WebInfo {
     private String email;
     private String userName;
     private String password;
-    String [][] securityQAPairs;
+    private String [][] securityQAPairs;
 
     public WebInfo(WebInfo w) {
         this.name = w.name;
@@ -28,39 +28,39 @@ public class WebInfo {
 
     public WebInfo(String csvWebVals) {
     }
-    
+
     public String getName() {
     	return this.name;
     }
-    
+
     public String getUrl() {
     	return this.url;
     }
-    
+
     public String getEmail() {
     	return this.email;
     }
-    
+
     public String getUserName() {
     	return this.userName;
     }
-    
+
     public String getPassword() {
     	return this.password;
     }
-    
+
     public String[][] getSecurityQs() {
     	return this.securityQAPairs;
     }
 
     public static WebInfo serializeCSVDump(String csvWebVals) {
         // MUST be in same order as above constructor
-        String vals[] = csvWebVals.split(",");
-        
+        String vals[] = csvWebVals.split(";");
+
         int numQAs = (vals.length - 5) / 2;
-        
+
         String [][] QAPairs = new String [numQAs][2];
-        
+
         //This NEEDS testing.
         for(int i = 0; i < numQAs; i++)
         {
