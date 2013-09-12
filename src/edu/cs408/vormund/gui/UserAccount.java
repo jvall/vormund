@@ -20,7 +20,7 @@ public class UserAccount extends javax.swing.JFrame {
     //SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " "}));
 
     public UserAccount() {
-        initComponents();        
+        initComponents();
     }
 
     /**
@@ -146,7 +146,7 @@ public class UserAccount extends javax.swing.JFrame {
 
     private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
         // TODO add your handling code here:
-        
+
         switch(MainCB.getSelectedItem().toString())
         {
             case "Bank":
@@ -161,7 +161,7 @@ public class UserAccount extends javax.swing.JFrame {
             case "SSN":
                 new Notes().setVisible(true);
                 break;
-            
+
         }
     }//GEN-LAST:event_addbuttonMouseClicked
 
@@ -172,14 +172,14 @@ public class UserAccount extends javax.swing.JFrame {
 
     private void showbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showbuttonMouseClicked
         // TODO add your handling code here:
-        
+
         //Do an compare the sub-combox selected item with the correct info
         //in the database
-        
+
         //if(SubCB.getSelectedItem().toString().Equals(bank in database)
         //then print out all the info of that bank
         userinfotext.setText("Name: " + SubCB.getSelectedItem().toString()+"\n"
-                + "Address: " + "\nAccount #: " + "\nRouting #: " 
+                + "Address: " + "\nAccount #: " + "\nRouting #: "
                 + "\nAccount type: ");
     }//GEN-LAST:event_showbuttonMouseClicked
 
@@ -213,7 +213,7 @@ public class UserAccount extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

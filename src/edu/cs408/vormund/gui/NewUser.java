@@ -12,10 +12,10 @@ public class NewUser extends javax.swing.JFrame {
     /**
      * Creates new form NewUser
      */
-    
+
     //String st = "Type your username and password. \nMake sure username has to be longer than 5 characters. \nPassword has to be 8 character long.";
     public NewUser() {
-        
+
         initComponents();
         //infolabel.setText(st);
     }
@@ -106,18 +106,18 @@ public class NewUser extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+
         //Check to make sure neither username or password are blank and fullfil
         //The requirement for each text field.
-        
+
         //If username is shorter than 5 characters
-                
+
         //If password is shorter than 8 characters
-        
+
         //Add check to see if the username is in the database, if not
         //Then add it to the database.
         //Add Password with the respective username into database
-        
+
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -128,7 +128,7 @@ public class NewUser extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
