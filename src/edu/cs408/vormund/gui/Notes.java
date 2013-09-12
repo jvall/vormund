@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.cs408.vormund;
+package edu.cs408.vormund.gui;
 
 /**
  *
