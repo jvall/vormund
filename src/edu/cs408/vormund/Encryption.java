@@ -5,10 +5,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 
 public class Encryption {
@@ -57,7 +60,36 @@ public class Encryption {
 	}
 	
 	public static String decryptBlob(String key, byte[] dataBlob){
-	    return null;
+		Cipher cipher=null;
+		try {
+			cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
+	    try {
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		} catch (InvalidKeyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+	    String decrypted = null;
+	    
+	    try {
+			decrypted = new String(cipher.doFinal(Base64.decode(new String(dataBlob))));
+		} catch (IllegalBlockSizeException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (BadPaddingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return decrypted;
 	}
 	
 }
