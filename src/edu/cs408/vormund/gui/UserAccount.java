@@ -146,8 +146,9 @@ public class UserAccount extends javax.swing.JFrame {
 
     private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
         // TODO add your handling code here:
-
-        switch(MainCB.getSelectedItem().toString())
+	
+	String temp = MainCB.getSelectedItem().toString();
+        switch(temp)
         {
             case "Bank":
                 new NewBank().setVisible(true);
@@ -185,7 +186,10 @@ public class UserAccount extends javax.swing.JFrame {
 
     private void MainCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MainCBItemStateChanged
         // TODO add your handling code here:
-                switch(MainCB.getSelectedItem().toString())
+	
+	String temp =MainCB.getSelectedItem().toString();
+        
+        switch(temp)
         {
                 case "Bank":
                     repaint();
