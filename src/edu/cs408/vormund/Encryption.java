@@ -94,10 +94,7 @@ public class Encryption {
 		}
 	    return decrypted;
 	}
-
-<<<<<<< HEAD
-}
-=======
+	
 	public static String byteArrayToHexString(byte[] b) {
 		String result = "";
 		for (int i=0; i < b.length; i++) {
@@ -107,4 +104,3 @@ public class Encryption {
 		return result;
 	}
 }
->>>>>>> 6048be1502bce3dd2f2fd2ae24623a9410c9cfb8
