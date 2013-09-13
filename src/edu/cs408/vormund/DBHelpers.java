@@ -364,29 +364,10 @@ public class DBHelpers {
 		dbObj.updateBLOB(socialID, name, ssn, key);
 	}
 
-	//Will remove entry with given userID
-	public void deleteUser(int userID) {
-
-	}
-
-	//Will remove entry with given bankID
-	public void deleteBank(int bankID) {
-
-	}
-
-	//Will remove entry with given webID
-	public void deleteWeb(int webID) {
-
-	}
-
-	//Will remove entry with given noteID
-	public void deleteNote(int noteID) {
-
-	}
-
-	//Will remove entry with given socialID
-	public void deleteSocial(int socialID) {
-
+	//Will remove entry with given ID
+	public void delete(int ID) {
+		String query = "DELETE FROM encrypted_data WHERE data_id='" + ID + "'";
+		dbObj.updateQuery(query);
 	}
 
 	/*********************
