@@ -4,6 +4,8 @@
  */
 package edu.cs408.vormund.gui;
 
+import edu.cs408.vormund.DBHelpers;
+
 /**
  *
  * @author isabellee
@@ -17,6 +19,8 @@ public class UserAccount extends javax.swing.JFrame {
 	boolean website = false;
 	boolean ssn = false;
 	boolean notes = false;
+//	DBHelpers DBHelp = new DBHelpers();
+	public static boolean updating = false;
 	//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " "}));
 
 	public UserAccount() {
@@ -173,13 +177,88 @@ public class UserAccount extends javax.swing.JFrame {
 
 	private void removebuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removebuttonMouseClicked
 		// TODO add your handling code here:
+		String mcb = MainCB.getSelectedItem().toString();
+		String scb = SubCB.getSelectedItem().toString();
+		
+		if(mcb.compareTo("Bank") == 0)
+		{
+			//if scb == getBank(id)
+			//delete
+			;
+		}
+		else if(mcb.compareTo("Website") == 0)
+		{
+			//if scb == getWebsite(id)
+			;		
+		}
+		else if(mcb.compareTo("Notes") == 0)
+		{
+			//if scb == getNote(id)
+			//delete
+			;
+		}
+		else if(mcb.compareTo("SSN") == 0)
+		{
+			//if scb == getSocial(id)
+			//delete
+			;
+		}
 		SubCB.removeItem(SubCB.getSelectedItem());
 	}//GEN-LAST:event_removebuttonMouseClicked
 
+    private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {                                       
+        // TODO add your handling code here:
+		String secd_cat = SubCB.getSelectedItem().toString();
+		
+		
+		//DO: Bank 1 replace with bankid
+		if(secd_cat.compareTo("Bank 1") == 0)
+		{
+			
+			//getBank(); info and setText on userinfotext with the bank info
+			/*userinfotext.setText("Name: " + bank +"\n"
+	                + "Address: " + addrs + "\nAccount #: " + acc_n + "\nRouting #: " 
+	                + rout_n + "\nAccount type: " + acc_type);
+			*/
+		}
+		else if(secd_cat.compareTo("Website 1") == 0)
+		{
+		;
+		}
+		else if(secd_cat.compareTo("Notes 1") == 0)
+		{
+		;
+		}
+		else if(secd_cat.compareTo("SSN 1") == 0)
+		{
+		;
+		}
+    } 
+    
 	//showbutton is updatebutton
 	private void showbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_showbuttonMouseClicked
 		// TODO add your handling code here:
-
+		updating = true;
+		String main = MainCB.getSelectedItem().toString();
+		String sub = SubCB.getSelectedItem().toString();
+		if(main.compareTo("Bank") == 0)
+		{
+			new NewBank().setVisible(true);
+		}
+		if(main.compareTo("Website") == 0)
+		{
+			new Website().setVisible(true);
+		}
+		if(main.compareTo("Notes") == 0)
+		{
+			new Notes().setVisible(true);
+		}
+		if(main.compareTo("SSN") == 0)
+		{
+			new SSN().setVisible(true);
+		}
+		dispose();
+		
 	}//GEN-LAST:event_showbuttonMouseClicked
 
 	private void MainCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MainCBItemStateChanged
@@ -244,8 +323,8 @@ public class UserAccount extends javax.swing.JFrame {
 		});
 	}
 	// Variables declaration - do not modify//GEN-BEGIN:variables
-	private javax.swing.JComboBox MainCB;
-	private javax.swing.JComboBox SubCB;
+	public javax.swing.JComboBox MainCB;
+	public javax.swing.JComboBox SubCB;
 	private javax.swing.JButton addbutton;
 	private javax.swing.JLabel jLabel1;
 	private javax.swing.JScrollPane jScrollPane1;

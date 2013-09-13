@@ -4,6 +4,10 @@
  */
 package edu.cs408.vormund.gui;
 
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
+
 /**
  *
  * @author isabellee
@@ -13,6 +17,8 @@ public class SSN extends javax.swing.JFrame {
     /**
      * Creates new form LoginWindow
      */
+	
+	//DBHelpers DBHelp = new DBHelpers();
     public SSN() {
         initComponents();
     }
@@ -97,9 +103,40 @@ public class SSN extends javax.swing.JFrame {
 
         //Check name and ssn
         //Add to database
-
-        //Close
-        dispose();
+    	UserAccount user_acc = new UserAccount();
+    	String user_name = name.getText().toString();
+		String social = ssnfield.getText().toString();
+		Boolean done = true;
+		/*
+    	if(user_name.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
+    		done = false;
+    	}
+    	else if(social.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the SSN field!");
+    		done = false;
+    		
+    	}
+    	*/
+        //Add to database
+    	if(user_acc.updating == true)
+    	{        	
+    		//DBHelp.updateSocial(socialid, user_name, social);
+    		user_acc.updating = false;
+    	}
+    	else
+    	{
+    		//DBHelp.newSocial(user_name,social);
+    		;
+    	}
+    	if(done == true)
+    	{
+    		new UserAccount().setVisible(true);
+    		//Close
+    		dispose();
+    	}
     }//GEN-LAST:event_doneMouseClicked
 
     /**
@@ -138,10 +175,10 @@ public class SSN extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton done;
-    private javax.swing.JLabel name;
+    public javax.swing.JLabel name;
     private javax.swing.JTextField namefield;
     private javax.swing.JLabel snn;
-    private javax.swing.JPasswordField ssnfield;
+    public javax.swing.JPasswordField ssnfield;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 }

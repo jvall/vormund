@@ -4,6 +4,10 @@
  */
 package edu.cs408.vormund.gui;
 
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
+
 /**
  *
  * @author isabellee
@@ -13,6 +17,9 @@ public class NewBank extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
+	
+	//DBHelpers DBHelp = new DBHelpers();
+	
     public NewBank() {
         initComponents();
     }
@@ -127,10 +134,59 @@ public class NewBank extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         //Check title
+    	UserAccount user_acc = new UserAccount();
+    	String bank = namefield.getText().toString();
+		String add = addressfield.getText().toString();
+		String accnum = accountfield.getText().toString();
+		String rou_bal = routingfield.getText().toString();
+		String acctype = acctypefield.getText().toString();
+		Boolean done = true;
+		/*
+    	if(bank.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the bank name field!");
+    		done = false;
+    	}
+    	else if(add.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the address field!");
+    		done = false;
+    	}
+    	else if(accnum.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the account # field!");
+    		done = false;
+    	}
+    	else if(rou_bal.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the rounting # field!");    
+    		done = false;
+    	}
+    	else if(acctype.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the account type field!");
+    		done = false;
+    	}*/
+    
         //Add to database
-
-        //dispose
-        dispose();
+    	if(user_acc.updating == true)
+    	{    			
+    		//DBHelp.updateBank(bankid,bank,add,accnum,rou_bal,acctype);
+    		user_acc.updating = false;
+    	}
+    	else
+    	{
+    		//DBHelp.newBank(bank,add,accnum,rou_bal,acctype);
+    		;
+    	}
+    	
+    	if(done == true)
+    	{
+    		new UserAccount().setVisible(true);
+        
+    		//dispose
+    		dispose();
+    	}
     }//GEN-LAST:event_donebutton2MouseClicked
 
     /**
@@ -169,16 +225,16 @@ public class NewBank extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField accountfield;
-    private javax.swing.JLabel accountnum;
-    private javax.swing.JLabel accounttype;
+    public javax.swing.JLabel accountnum;
+    public javax.swing.JLabel accounttype;
     private javax.swing.JTextField acctypefield;
-    private javax.swing.JLabel address;
+    public javax.swing.JLabel address;
     private javax.swing.JTextField addressfield;
-    private javax.swing.JLabel bankname;
+    public javax.swing.JLabel bankname;
     private javax.swing.JButton donebutton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField namefield;
     private javax.swing.JTextField routingfield;
-    private javax.swing.JLabel routinglab;
+    public javax.swing.JLabel routinglab;
     // End of variables declaration//GEN-END:variables
 }

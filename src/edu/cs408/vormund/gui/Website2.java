@@ -4,6 +4,10 @@
  */
 package edu.cs408.vormund.gui;
 
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
+
 /**
  *
  * @author isabellee
@@ -13,6 +17,7 @@ public class Website2 extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
+	//DBHelpers DBHelp = new DBHelpers();
     public Website2() {
         initComponents();
     }
@@ -143,14 +148,67 @@ public class Website2 extends javax.swing.JFrame {
         
         //Check info
         //Add Q/A to database
-        
+    	UserAccount usacc = new UserAccount();
+    	Website web = new Website();
+		String q1 = q1field.getText().toString();
+		String a1 = an1field.getText().toString();
+		String q2 = q2field.getText().toString();
+		String a2 = an2field.getText().toString();
+		String q3 = q3field.getText().toString();
+		String a3 = an3field.getText().toString();
+		Boolean done = true;
+		/*
+    	if(q1.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the question 1 field!");
+    		done = false;
+    	}
+    	else if(a1.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the answer 1 field!");
+    		done = false;
+    	}
+    	if(q2.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the question 2 field!");
+    		done = false;
+    	}
+    	else if(a2.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the answer 2 field!");
+    		done = false;
+    	}
+
+    	if(q3.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the question 3 field!");
+    		done = false;
+    	}
+    	else if(a3.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the answer 3 field!");
+    		done = false;
+    	}
+    	
+    	if(usacc.updating == true){
+        	//Need to add the questions in an array
+    		//DBHelp.updateWeb(webid,web.name,web.user,web.u,web.em,array[][]);
+        	usacc.updating = false;
+		}
+    	else
+    	{
+    		;
+    		//Fix the array thing
+    		//DBHelp.newWebsite(web.name,web.user,web.u,web.em,array[][]);
+    	}*/
         
         //go back to user account window
+        if(done == true){
+        	new UserAccount().setVisible(true);
         
-        new UserAccount().setVisible(true);
-        
-        //dispose
-        dispose();
+        	//dispose
+        	dispose();
+        }
     }//GEN-LAST:event_donebuttonMouseClicked
 
     /**
