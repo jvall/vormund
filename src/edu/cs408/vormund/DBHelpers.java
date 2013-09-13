@@ -28,12 +28,9 @@ public class DBHelpers {
 		}
 
 		//Perform the insert
-<<<<<<< HEAD
+
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + password + "')");
-=======
-		// TODO: hash password?!
-		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password, name) VALUES ('" + userName + "', '" + password + "', '" + name + "')");
->>>>>>> 8144145e09b5f113f0ea3162c8fd45c3b15564e4
+
 
 		return user_id;
 	}
