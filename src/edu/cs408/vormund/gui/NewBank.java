@@ -4,6 +4,8 @@
  */
 package edu.cs408.vormund.gui;
 
+import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
 
 import edu.cs408.vormund.DBHelpers;
@@ -23,6 +25,8 @@ public class NewBank extends javax.swing.JFrame {
     public NewBank() {
         initComponents();
     }
+    
+    DBHelpers dbHelper;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,6 +49,8 @@ public class NewBank extends javax.swing.JFrame {
         routingfield = new javax.swing.JTextField();
         acctypefield = new javax.swing.JTextField();
         donebutton2 = new javax.swing.JButton();
+        
+        dbHelper = new DBHelpers();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,7 +69,12 @@ public class NewBank extends javax.swing.JFrame {
         donebutton2.setText("Done");
         donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                donebutton2MouseClicked(evt);
+                try {
+					donebutton2MouseClicked(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -130,7 +141,7 @@ public class NewBank extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_donebutton2MouseClicked
+    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_donebutton2MouseClicked
         // TODO add your handling code here:
 
         //Check title
@@ -141,43 +152,43 @@ public class NewBank extends javax.swing.JFrame {
 		String rou_bal = routingfield.getText().toString();
 		String acctype = acctypefield.getText().toString();
 		Boolean done = true;
-		/*
+    	
     	if(bank.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the bank name field!");
+    		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
     		done = false;
     	}
     	else if(add.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the address field!");
+    		JOptionPane.showMessageDialog(null,"Please enter an address");
     		done = false;
     	}
     	else if(accnum.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the account # field!");
+    		JOptionPane.showMessageDialog(null,"Please enter an account number");
     		done = false;
     	}
     	else if(rou_bal.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the rounting # field!");    
+    		JOptionPane.showMessageDialog(null,"Please enter a routing number");    
     		done = false;
     	}
     	else if(acctype.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the account type field!");
+    		JOptionPane.showMessageDialog(null,"Please enter an account type");
     		done = false;
-    	}*/
-    
-        //Add to database
-    	if(user_acc.updating == true)
-    	{    			
-    		//DBHelp.updateBank(bankid,bank,add,accnum,rou_bal,acctype);
-    		user_acc.updating = false;
     	}
-    	else
-    	{
-    		//DBHelp.newBank(bank,add,accnum,rou_bal,acctype);
-    		;
+    	
+    	if(user_acc.updating){
+    		int result = dbHelper.newBank(bank, accnum, rou_bal, add, acctype);
+    		if(result == -1)
+    		{
+    			JOptionPane.showMessageDialog(null,"An entry with the given account number already exists");
+    			return;
+    		}
+    		
+    		user_acc.updating = false;
+    		done = true;
     	}
     	
     	if(done == true)
