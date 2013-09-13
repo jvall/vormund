@@ -17,7 +17,7 @@ public class DBHelpers {
 	}
 
 	//Creates new user for the system and returns the generated userID. Returns -1 if user already in system
-	public int newUser(String userName, String password, String name) throws SQLException {
+	public int newUser(String userName, String password) throws SQLException {
 		//Check to see if userName is already taken
 		ResultSet userNameCheck = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "'");
 		//If the result set is not empty
@@ -27,7 +27,7 @@ public class DBHelpers {
 		}
 
 		//Perform the insert
-		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password, name) VALUES ('" + userName + "', '" + password + "', '" + name + "')");
+		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + password + "')");
 
 		return user_id;
 	}
