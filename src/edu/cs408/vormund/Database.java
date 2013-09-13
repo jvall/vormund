@@ -228,7 +228,7 @@ public class Database {
    */
   public int insertBLOB(int user_id, String category, String name, String data, String encryption_key) {
     int ret = -1;
-    byte enc_data[] = data.getBytes(); // Needs to run through encryption process
+    byte enc_data[] = Encryption.encryptBlob(encryption_key, data); // Needs to run through encryption process
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
       this.prpstmnt = this.conn.prepareStatement("INSERT INTO " +
@@ -265,7 +265,7 @@ public class Database {
    */
   public int updateBLOB(int data_id, String new_name, String new_data, String encryption_key) {
     int ret = -1;
-    byte enc_data[] = new_data.getBytes(); // Needs to run through encryption process
+    byte enc_data[] = Encryption.encryptBlob(encryption_key, new_data); // Needs to run through encryption process
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
       if( new_name!=null ) {
@@ -299,13 +299,14 @@ public class Database {
    *
    * @param queryResult The {@link ResultSet} from a query
    * @param column number of the column with the BLOB
+   * @param encryption_key Key that will be used to encrypt the data
    * @return string of the data stored in the BLOB.
    * @see ResultSet
    */
-  public String readFromBLOB(ResultSet queryResult, int column) throws SQLException {
+  public String readFromBLOB(ResultSet queryResult, int column, String encrypted_key) throws SQLException {
     byte[] blob = queryResult.getBytes(column);
     // Decryption stuff
-    return new String(blob);
+    return Encryption.decryptBlob(encrypted_key, blob);
   }
 
   /**
@@ -313,11 +314,12 @@ public class Database {
    *
    * @param queryResult The {@link ResultSet} from a query
    * @param column Name of the column of the BLOB
+   * @param encryption_key Key that will be used to encrypt the data
    * @return string of the data stored in the BLOB.
    * @see ResultSet
    */
-  public String readFromBLOB(ResultSet queryResult, String column) throws SQLException {
-    return readFromBLOB(queryResult, queryResult.findColumn(column));
+  public String readFromBLOB(ResultSet queryResult, String column, String encrypted_key) throws SQLException {
+    return readFromBLOB(queryResult, queryResult.findColumn(column), encrypted_key);
   }
 
   public static void main(String[] args) throws SQLException {
@@ -357,8 +359,8 @@ public class Database {
     assert result.getString("category").compareTo("Facebook") == 0;
     //assert result.getInt("type_id")==1;
     assert result.getString("note").compareTo("Facebook Username") == 0;
-    String test_blob = db.readFromBLOB(result, "encrypted_data");
-    assert (test_blob).compareTo("Hello World") == 0;
+    /*String test_blob = db.readFromBLOB(result, "encrypted_data");
+    assert (test_blob).compareTo("Hello World") == 0;*/
     assert !result.next();
     result.close();
 
