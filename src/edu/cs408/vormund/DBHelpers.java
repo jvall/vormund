@@ -18,18 +18,21 @@ public class DBHelpers {
 	}
 
 	//Creates new user for the system and returns the generated userID. Returns -1 if user already in system
-	public int newUser(String userName, String password) throws SQLException {
+	public int newUser(String userName, String password) throws SQLException, NoSuchAlgorithmException {
 		//Check to see if userName is already taken
 		ResultSet userNameCheck = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "'");
 		//If the result set is not empty
-		if(userNameCheck.first())
+		if(userNameCheck.next())
 		{
 			return -1;
 		}
 
 		//Perform the insert
+		
+		String userPassword = Encryption.encryptHashString(password);
 
-		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + password + "')");
+		System.out.println("userName = " + userName + ", and password encrypted= " + userPassword);
+		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
 
 
 		return user_id;

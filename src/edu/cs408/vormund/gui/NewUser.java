@@ -4,6 +4,7 @@
  */
 package edu.cs408.vormund.gui;
 
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
@@ -68,6 +69,9 @@ public class NewUser extends javax.swing.JFrame {
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
             }
         });
@@ -121,7 +125,7 @@ public class NewUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException, NoSuchAlgorithmException {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
         //Check to make sure neither username or password are blank and fullfil
