@@ -3,6 +3,13 @@
  * and open the template in the editor.
  */
 package edu.cs408.vormund.gui;
+
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
+
 /**
  *
  * @author isabellee
@@ -19,6 +26,8 @@ public class NewUser extends javax.swing.JFrame {
         initComponents();
         //infolabel.setText(st);
     }
+    
+    DBHelpers dbHelper;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -36,6 +45,9 @@ public class NewUser extends javax.swing.JFrame {
         usernamefield2 = new javax.swing.JTextField();
         passwordfield2 = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        
+        //init instance of DBHelpers
+        dbHelper = new DBHelpers();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -51,7 +63,12 @@ public class NewUser extends javax.swing.JFrame {
         jButton1.setText("Done");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                try {
+					jButton1ActionPerformed(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -104,19 +121,33 @@ public class NewUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
 
         //Check to make sure neither username or password are blank and fullfil
         //The requirement for each text field.
 
         //If username is shorter than 5 characters
+    	if((usernamefield2.getText()).length() < 5) {
+    		JOptionPane.showMessageDialog(null, "Please use a username at least 5 characters in length");
+    		return;
+    	}
 
         //If password is shorter than 8 characters
+    	if((passwordfield2.getPassword().length) < 8) {
+    		JOptionPane.showMessageDialog(null, "Please use a password of at least 8 characters"); 
+    		return;
+    	}
 
         //Add check to see if the username is in the database, if not
         //Then add it to the database.
         //Add Password with the respective username into database
+    	String password = new String(passwordfield2.getPassword());
+    	int result = dbHelper.newUser(usernamefield2.getText(), password);
+    	if(result == -1) {
+    		JOptionPane.showMessageDialog(null, "Username already taken");
+    		return;
+    	}
 
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
