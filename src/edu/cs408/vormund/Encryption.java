@@ -11,11 +11,9 @@ import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 
 public class Encryption {
-	
+
 	public static byte[] encryptHash(String userPassword) throws NoSuchAlgorithmException {
 		MessageDigest sha1 = MessageDigest.getInstance("SHA-256");
 		byte[] bytes=null;
@@ -25,14 +23,14 @@ public class Encryption {
 			e.printStackTrace();
 		}
 		byte[] hashed = sha1.digest(bytes);
-		
+
 		return hashed;
 	}
-	
+
 	public static byte[] encryptBlob(String key, String dataBlob){
 		byte[] keyBytes = key.getBytes();
 		byte[] blobBytes = dataBlob.getBytes();
-		
+
 		Cipher cipher=null;
 		try {
 			cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
@@ -55,10 +53,10 @@ public class Encryption {
 		} catch (BadPaddingException e) {
 			e.printStackTrace();
 		}
-		
+
         return encryptedString.getBytes();
 	}
-	
+
 	public static String decryptBlob(String key, byte[] dataBlob){
 		Cipher cipher=null;
 		try {
@@ -77,9 +75,9 @@ public class Encryption {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    
+
 	    String decrypted = null;
-	    
+
 	    try {
 			decrypted = new String(cipher.doFinal(Base64.decode(new String(dataBlob))));
 		} catch (IllegalBlockSizeException e) {
@@ -91,5 +89,5 @@ public class Encryption {
 		}
 	    return decrypted;
 	}
-	
+
 }
