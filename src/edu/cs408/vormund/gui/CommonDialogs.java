@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class CommonDialogs {
 	public static void displayError(String header, String msg) {
-		JOptionPane.showMessageDialog(this,
+		JOptionPane.showMessageDialog(null,
 		    msg, header, JOptionPane.ERROR_MESSAGE);
 	}
 }

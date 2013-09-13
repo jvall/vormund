@@ -182,7 +182,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
                     banks.add(BankInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -201,7 +201,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + bankEntryID + "' AND user_id='" + user_id + "'");
             entries.first();
-            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             bank = BankInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
@@ -221,7 +221,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
                     webs.add(WebInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -240,7 +240,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + webID + "' AND user_id='" + user_id + "'");
             entries.first();
-            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             web = WebInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
@@ -260,7 +260,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
                     notes.add(NoteInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -279,7 +279,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + noteID + "' AND user_id='" + user_id + "'");
             entries.first();
-            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             note = NoteInfo.serializeCSVDump(decrypt);
  
         } catch (SQLException e) {
@@ -300,7 +300,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
                     ssns.add(SSNInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -319,7 +319,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + socialID + "' AND user_id='" + user_id + "'");
             entries.first();
-            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             ssn = SSNInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
