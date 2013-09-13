@@ -346,13 +346,14 @@ public class Database {
     result.close();*/
 
     //assert db.updateQuery("DELETE FROM data_type WHERE type_id=6")==1;
-    result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
+    /*result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
     assert !result.next();
-    result.close();
+    result.close();*/
 
-    assert db.insertQuery("INSERT INTO user_data(user_name, password, name) VALUES('test_user', 'test', 'Test McTester')") == 1;
-    assert db.insertBLOB(1, "Facebook", "Facebook Username", "Hello World", "test_pass") == 1;
-    result = db.query("SELECT * FROM encrypted_data");
+    assert db.insertQuery("INSERT INTO user_data(user_name, password) VALUES('test_user', 'test')") == 1;
+    assert db.insertQuery("INSERT INTO user_data(user_name, password) VALUES('thisisatest', '2d7c559efe13d4be1c656e79649f8548f8b302ddab7c445c2a1c42a2ed249c57')") == 2;
+    //assert db.insertBLOB(1, "Facebook", "Facebook Username", "Hello World", "test_pass") == 1;
+    /*result = db.query("SELECT * FROM encrypted_data");
     assert result.next();
     assert result.getInt("data_id")==1;
     assert result.getInt("user_id")==1;
@@ -361,8 +362,8 @@ public class Database {
     assert result.getString("note").compareTo("Facebook Username") == 0;
     /*String test_blob = db.readFromBLOB(result, "encrypted_data");
     assert (test_blob).compareTo("Hello World") == 0;*/
-    assert !result.next();
-    result.close();
+    //assert !result.next();
+    //result.close();
 
     /*result = db.query("SELECT user_data.user_id AS user_id, user_data.user_name AS user_name, " +
         "encrypted_data.data_id AS data_id, encrypted_data.category AS category, " +
