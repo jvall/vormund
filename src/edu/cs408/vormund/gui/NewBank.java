@@ -4,6 +4,12 @@
  */
 package edu.cs408.vormund.gui;
 
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
+
 /**
  *
  * @author isabellee
@@ -13,9 +19,14 @@ public class NewBank extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
+	
+	//DBHelpers DBHelp = new DBHelpers();
+	
     public NewBank() {
         initComponents();
     }
+    
+    DBHelpers dbHelper;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,6 +49,8 @@ public class NewBank extends javax.swing.JFrame {
         routingfield = new javax.swing.JTextField();
         acctypefield = new javax.swing.JTextField();
         donebutton2 = new javax.swing.JButton();
+        
+        dbHelper = new DBHelpers();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,7 +69,12 @@ public class NewBank extends javax.swing.JFrame {
         donebutton2.setText("Done");
         donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                donebutton2MouseClicked(evt);
+                try {
+					donebutton2MouseClicked(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -123,14 +141,69 @@ public class NewBank extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_donebutton2MouseClicked
+    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_donebutton2MouseClicked
         // TODO add your handling code here:
 
         //Check title
-        //Add to database
-
-        //dispose
-        dispose();
+    	UserAccount user_acc = new UserAccount();
+    	String bank = namefield.getText().toString();
+		String add = addressfield.getText().toString();
+		String accnum = accountfield.getText().toString();
+		String rou_bal = routingfield.getText().toString();
+		String acctype = acctypefield.getText().toString();
+		Boolean done = true;
+    	
+    	if(bank.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
+    		done = false;
+    	}
+    	else if(add.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter an address");
+    		done = false;
+    	}
+    	else if(accnum.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter an account number");
+    		done = false;
+    	}
+    	else if(rou_bal.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter a routing number");    
+    		done = false;
+    	}
+    	else if(acctype.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter an account type");
+    		done = false;
+    	}
+    	
+    	if(!user_acc.updating){
+    		int result = dbHelper.newBank(bank, accnum, rou_bal, add, acctype);
+    		if(result == -1)
+    		{
+    			JOptionPane.showMessageDialog(null,"An entry with the given account number already exists");
+    			return;
+    		}
+    		
+    		user_acc.updating = false;
+    		done = true;
+    	}
+    	else
+    	{
+    		//Isabel needs to find a way of tracking the id of the data items
+    		//dbHelper.updateBank(?, bank, accnum, rou, add, acctype);
+    		done = true;
+    	}
+    	
+    	if(done == true)
+    	{
+    		new UserAccount().setVisible(true);
+        
+    		//dispose
+    		dispose();
+    	}
     }//GEN-LAST:event_donebutton2MouseClicked
 
     /**
@@ -169,16 +242,16 @@ public class NewBank extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField accountfield;
-    private javax.swing.JLabel accountnum;
-    private javax.swing.JLabel accounttype;
+    public javax.swing.JLabel accountnum;
+    public javax.swing.JLabel accounttype;
     private javax.swing.JTextField acctypefield;
-    private javax.swing.JLabel address;
+    public javax.swing.JLabel address;
     private javax.swing.JTextField addressfield;
-    private javax.swing.JLabel bankname;
+    public javax.swing.JLabel bankname;
     private javax.swing.JButton donebutton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField namefield;
     private javax.swing.JTextField routingfield;
-    private javax.swing.JLabel routinglab;
+    public javax.swing.JLabel routinglab;
     // End of variables declaration//GEN-END:variables
 }
