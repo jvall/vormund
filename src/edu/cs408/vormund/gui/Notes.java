@@ -21,6 +21,8 @@ public class Notes extends javax.swing.JFrame {
 	public Notes() {
 		initComponents();
 	}
+	
+	DBHelpers dbHelper;
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -37,6 +39,8 @@ public class Notes extends javax.swing.JFrame {
 		donebutton2 = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		notearea = new javax.swing.JTextArea();
+		
+		dbHelper = new DBHelpers();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,28 +109,39 @@ public class Notes extends javax.swing.JFrame {
 		String n_text = notearea.getText().toString();
 		String n_title = notetitle.getText().toString();
 		Boolean done = true;
-		/*
+		
     	if(n_text.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the title field!");
+    		JOptionPane.showMessageDialog(null,"Please enter a title for the note");
     	}
     	else if(n_title.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the text field!");
-
+    		JOptionPane.showMessageDialog(null,"Please enter a note");
     	}
-		 */
+		
 		//Add to database
-		if(user_acc.updating == true)
+		if(!user_acc.updating)
 		{        	
+    		int result = dbHelper.newNote(n_title, n_text);
+    		if(result == -1)
+    		{
+    			JOptionPane.showMessageDialog(null,"New note creation failed");
+    			return;
+    		}
+			
+			
+			
 			//DBHelp.updateNote(socialid, n_title, n_text);
 			user_acc.updating = false;
+			done = true;
 		}
 		else
 		{
-			;
-			//DBHelp.newNote(n_title,n_text);
+			//Isabel needs to find a way of tracking the data id
+			//dbHelper.updateNote(?, n_title, n_text);
+			done = true;
 		}
+		
 		if(done == true){
 			new UserAccount().setVisible(true);
 			//dispose

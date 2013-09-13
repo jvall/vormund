@@ -4,6 +4,8 @@
  */
 package edu.cs408.vormund.gui;
 
+import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
 
 import edu.cs408.vormund.DBHelpers;
@@ -22,6 +24,8 @@ public class SSN extends javax.swing.JFrame {
     public SSN() {
         initComponents();
     }
+    
+    DBHelpers dbHelper;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -38,6 +42,8 @@ public class SSN extends javax.swing.JFrame {
         namefield = new javax.swing.JTextField();
         ssnfield = new javax.swing.JPasswordField();
         done = new javax.swing.JButton();
+        
+        dbHelper = new DBHelpers();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,7 +56,12 @@ public class SSN extends javax.swing.JFrame {
         done.setText("Done");
         done.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                doneMouseClicked(evt);
+                try {
+					doneMouseClicked(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -98,7 +109,7 @@ public class SSN extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void doneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneMouseClicked
+    private void doneMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_doneMouseClicked
         // TODO add your handling code here:
 
         //Check name and ssn
@@ -107,7 +118,7 @@ public class SSN extends javax.swing.JFrame {
     	String user_name = name.getText().toString();
 		String social = ssnfield.getText().toString();
 		Boolean done = true;
-		/*
+		
     	if(user_name.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
@@ -119,22 +130,30 @@ public class SSN extends javax.swing.JFrame {
     		done = false;
     		
     	}
-    	*/
-        //Add to database
-    	if(user_acc.updating == true)
-    	{        	
-    		//DBHelp.updateSocial(socialid, user_name, social);
+    	
+    	if(!user_acc.updating){
+    		int result = dbHelper.newSocial(user_name, social);
+    		if(result == -1)
+    		{
+    			JOptionPane.showMessageDialog(null,"An entry with the given SSN already exists");
+    			return;
+    		}
+    		
     		user_acc.updating = false;
+    		done = true;
     	}
     	else
     	{
-    		//DBHelp.newSocial(user_name,social);
-    		;
+    		//Isabel needs to find a way of tracking the id of the data items
+    		//dbHelper.updateSocial(?, user_name, social);
+    		done = true;
     	}
+    	
     	if(done == true)
     	{
     		new UserAccount().setVisible(true);
-    		//Close
+        
+    		//dispose
     		dispose();
     	}
     }//GEN-LAST:event_doneMouseClicked

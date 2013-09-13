@@ -179,7 +179,7 @@ public class NewBank extends javax.swing.JFrame {
     		done = false;
     	}
     	
-    	if(user_acc.updating){
+    	if(!user_acc.updating){
     		int result = dbHelper.newBank(bank, accnum, rou_bal, add, acctype);
     		if(result == -1)
     		{
@@ -188,6 +188,12 @@ public class NewBank extends javax.swing.JFrame {
     		}
     		
     		user_acc.updating = false;
+    		done = true;
+    	}
+    	else
+    	{
+    		//Isabel needs to find a way of tracking the id of the data items
+    		//dbHelper.updateBank(?, bank, accnum, rou, add, acctype);
     		done = true;
     	}
     	
