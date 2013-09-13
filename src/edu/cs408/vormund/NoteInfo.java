@@ -27,6 +27,10 @@ public class NoteInfo {
         return note;
     }
 
+    public String toString() {
+        return name + ";" + note.toString();
+    }
+
     public static NoteInfo serializeCSVDump(String val) {
         String split[] = val.split(";");
         return new NoteInfo(split[0], split[1]);

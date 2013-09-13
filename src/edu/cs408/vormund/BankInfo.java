@@ -46,6 +46,10 @@ public class BankInfo {
         return this.type;
     }
 
+    public String toString() {
+        return accountNumber + ";" + routingNumber + ";" + bankName + ";" + bankAddress + ";" + type;
+    }
+
     public static BankInfo serializeCSVDump(String csvBankVals) {
         // MUST be in same order as above constructor
         String vals[] = csvBankVals.split(";");

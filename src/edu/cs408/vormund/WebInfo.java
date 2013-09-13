@@ -26,9 +26,6 @@ public class WebInfo {
         this.securityQAPairs = securityQAPairs;
     }
 
-    public WebInfo(String csvWebVals) {
-    }
-
     public String getName() {
     	return this.name;
     }
@@ -51,6 +48,14 @@ public class WebInfo {
 
     public String[][] getSecurityQs() {
     	return this.securityQAPairs;
+    }
+
+    public String toString() {
+        String deserializedStr =  name + ";" + url + ";" + email + ";" + userName + ";" + password;
+        for (int i = 0; i < securityQAPairs.length; i++) {
+            deserializedStr += ";" + securityQAPairs[i][0] + ";" + securityQAPairs[i][1];
+        }
+        return deserializedStr;
     }
 
     public static WebInfo serializeCSVDump(String csvWebVals) {

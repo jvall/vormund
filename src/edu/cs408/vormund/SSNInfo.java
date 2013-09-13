@@ -25,6 +25,10 @@ public class SSNInfo {
     	return this.ssn;
     }
 
+    public String toString() {
+        return name + ";" + ssn;
+    }
+
     public static SSNInfo serializeCSVDump(String csvSSNVals) {
         // MUST be in same order as above constructor
         String vals[] = csvSSNVals.split(";");
