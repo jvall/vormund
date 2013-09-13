@@ -11,8 +11,6 @@ import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 
 public class Encryption {
 	
@@ -27,6 +25,11 @@ public class Encryption {
 		byte[] hashed = sha1.digest(bytes);
 		
 		return hashed;
+	}
+
+	public static String encryptHashString(String userPassword) throws NoSuchAlgorithmException {
+			
+		return byteArrayToHexString(encryptHash(userPassword));
 	}
 	
 	public static byte[] encryptBlob(String key, String dataBlob){
@@ -91,5 +94,13 @@ public class Encryption {
 		}
 	    return decrypted;
 	}
-	
+
+	public static String byteArrayToHexString(byte[] b) {
+		String result = "";
+		for (int i=0; i < b.length; i++) {
+			result +=
+			    Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+		}
+		return result;
+	}
 }

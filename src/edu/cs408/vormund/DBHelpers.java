@@ -2,6 +2,7 @@ package edu.cs408.vormund;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.security.NoSuchAlgorithmException;
 
 public class DBHelpers {
 	//Where the user key will be stored upon successful login to the system. Used by functions to pass key to decryption algorithm
@@ -27,6 +28,7 @@ public class DBHelpers {
 		}
 
 		//Perform the insert
+		// TODO: hash password?!
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password, name) VALUES ('" + userName + "', '" + password + "', '" + name + "')");
 
 		return user_id;
@@ -156,9 +158,16 @@ public class DBHelpers {
 		return 0;
 	}
 
-	//Returns the userID if valid login, 0 otherwise
-	public int checkLogin(String userName, String password) {
-		return 0;
+	//Returns the userID if valid login, false otherwise
+	public boolean checkLogin(String userName, String password) {
+		ResultSet entries = null;
+		try {
+		String encrypt = Encryption.encryptHashString(password);
+		entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
+		} catch (NoSuchAlgorithmException e) {
+			System.err.println("No algorithm found: " + e);
+		}
+		return entries != null && resultsCount(entries) != 0;
 	}
 
     //Return a listing of all data entries of type bank including their name/label and ID
@@ -172,8 +181,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    byte bankInfo[] = entries.getBytes("encrypted_data");
-                    String decrypt = Encryption.decryptBlob(key, bankInfo);
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
                     banks.add(BankInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -192,8 +200,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + bankEntryID + "' AND user_id='" + user_id + "'");
             entries.first();
-            byte bankInfo[] = entries.getBytes("encrypted_data");
-            String decrypt = Encryption.decryptBlob(key, bankInfo);
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
             bank = BankInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
@@ -213,8 +220,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    byte webInfo[] = entries.getBytes("encrypted_data");
-                    String decrypt = Encryption.decryptBlob(key, webInfo);
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
                     webs.add(WebInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -233,8 +239,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + webID + "' AND user_id='" + user_id + "'");
             entries.first();
-            byte webInfo[] = entries.getBytes("encrypted_data");
-            String decrypt = Encryption.decryptBlob(key, webInfo);
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
             web = WebInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
@@ -254,8 +259,7 @@ public class DBHelpers {
             {
                 while(!entries.isAfterLast())
                 {
-                    byte noteInfo[] = entries.getBytes("encrypted_data");
-                    String decrypt = Encryption.decryptBlob(key, noteInfo);
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
                     notes.add(NoteInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -274,9 +278,9 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + noteID + "' AND user_id='" + user_id + "'");
             entries.first();
-            byte noteInfo[] = entries.getBytes("encrypted_data");
-            String decrypt = Encryption.decryptBlob(key, noteInfo);
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
             note = NoteInfo.serializeCSVDump(decrypt);
+ 
         } catch (SQLException e) {
             //TODO: replace with error logging
             System.err.println("Database error: " + e);
@@ -290,13 +294,12 @@ public class DBHelpers {
         ArrayList<SSNInfo> ssns = new ArrayList<SSNInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("SSN") + "' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encrypted_data WHERE type_id='" + getRecordType("SSN") + "' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
                 {
-                    byte ssnInfo[] = entries.getBytes("encrypted_data");
-                    String decrypt = Encryption.decryptBlob(key, ssnInfo);
+                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
                     ssns.add(SSNInfo.serializeCSVDump(decrypt));
                     entries.next();
                 }
@@ -315,8 +318,7 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + socialID + "' AND user_id='" + user_id + "'");
             entries.first();
-            byte ssnInfo[] = entries.getBytes("encrypted_data");
-            String decrypt = Encryption.decryptBlob(key, ssnInfo);
+            String decrypt = dbObj.readFromBLOB(entries, "encrypted_data");
             ssn = SSNInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
