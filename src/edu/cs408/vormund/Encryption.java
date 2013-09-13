@@ -27,6 +27,11 @@ public class Encryption {
 		return hashed;
 	}
 
+	public static String encryptHashString(String userPassword) throws NoSuchAlgorithmException {
+
+		return byteArrayToHexString(encryptHash(userPassword));
+	}
+
 	public static byte[] encryptBlob(String key, String dataBlob){
 		byte[] keyBytes = key.getBytes();
 		byte[] blobBytes = dataBlob.getBytes();
@@ -90,4 +95,16 @@ public class Encryption {
 	    return decrypted;
 	}
 
+<<<<<<< HEAD
 }
+=======
+	public static String byteArrayToHexString(byte[] b) {
+		String result = "";
+		for (int i=0; i < b.length; i++) {
+			result +=
+			    Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+		}
+		return result;
+	}
+}
+>>>>>>> 6048be1502bce3dd2f2fd2ae24623a9410c9cfb8
