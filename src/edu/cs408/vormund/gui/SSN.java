@@ -19,13 +19,12 @@ public class SSN extends javax.swing.JFrame {
     /**
      * Creates new form LoginWindow
      */
-	
-	//DBHelpers DBHelp = new DBHelpers();
-    public SSN() {
+	private DBHelpers helpers;
+    public SSN(DBHelpers h) {
         initComponents();
+        helpers = h;
     }
     
-    DBHelpers dbHelper;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -43,7 +42,6 @@ public class SSN extends javax.swing.JFrame {
         ssnfield = new javax.swing.JPasswordField();
         done = new javax.swing.JButton();
         
-        dbHelper = new DBHelpers();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -132,7 +130,7 @@ public class SSN extends javax.swing.JFrame {
     	}
     	/*
     	if(!user_acc.updating){
-    		int result = dbHelper.newSocial(user_name, social);
+    		int result = helpers.newSocial(user_name, social);
     		if(result == -1)
     		{
     			JOptionPane.showMessageDialog(null,"An entry with the given SSN already exists");
@@ -145,53 +143,19 @@ public class SSN extends javax.swing.JFrame {
     	else
     	{
     		//Isabel needs to find a way of tracking the id of the data items
-    		//dbHelper.updateSocial(?, user_name, social);
+    		//helpers.updateSocial(?, user_name, social);
     		done = true;
     	}*/
     	
     	if(done == true)
     	{
-    		//new UserAccount().setVisible(true);
+    		new UserAccount(helpers).setVisible(true);
         
     		//dispose
     		dispose();
     	}
     }//GEN-LAST:event_doneMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new SSN().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton done;
     public javax.swing.JLabel name;

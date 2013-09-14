@@ -17,9 +17,10 @@ public class Website2 extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
-	//DBHelpers DBHelp = new DBHelpers();
-    public Website2() {
+	private DBHelpers helpers;
+    public Website2(DBHelpers h) {
         initComponents();
+        helpers = h;
     }
 
     /**
@@ -149,7 +150,7 @@ public class Website2 extends javax.swing.JFrame {
         //Check info
         //Add Q/A to database
     	//UserAccount usacc = new UserAccount();
-    	Website web = new Website();
+    	Website web = new Website(helpers);
 		String q1 = q1field.getText().toString();
 		String a1 = an1field.getText().toString();
 		String q2 = q2field.getText().toString();
@@ -204,47 +205,13 @@ public class Website2 extends javax.swing.JFrame {
         
         //go back to user account window
         if(done == true){
-        	//new UserAccount().setVisible(true);
+        	new UserAccount(helpers).setVisible(true);
         
         	//dispose
         	dispose();
         }
     }//GEN-LAST:event_donebuttonMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Website2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Website2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Website2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Website2.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Website2().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField an1field;
     private javax.swing.JLabel an1label;

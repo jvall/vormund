@@ -21,19 +21,23 @@ public class UserAccount extends javax.swing.JFrame {
 	
 
 	public static boolean updating = false;
-	
-	ArrayList<BankInfo> banks = helpers.getBanks();
-
-	ArrayList<WebInfo> webs = helpers.getWebs();
-	ArrayList<NoteInfo> notes = helpers.getNotes();
-	ArrayList<SSNInfo> ssn = helpers.getSocials();
-	
-	
+	/*
+	private ArrayList<BankInfo> banks;
+	private ArrayList<WebInfo> webs;
+	private ArrayList<NoteInfo> notes;
+	private ArrayList<SSNInfo> ssn;
+	*/
 	//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " "}));
 
 	public UserAccount(DBHelpers h) {
 		initComponents();
 		helpers = h;
+		/*
+		banks = helpers.getBanks();
+		webs = helpers.getWebs();
+		notes = helpers.getNotes();
+		ssn = helpers.getSocials();
+		*/
 	}
 
 	/**
@@ -160,87 +164,108 @@ public class UserAccount extends javax.swing.JFrame {
 		// TODO add your handling code here:
 
 		String temp = MainCB.getSelectedItem().toString();
-		/*
+		
 		if(temp.compareTo("Bank") == 0)
 		{
-			new NewBank().setVisible(true);
+			new NewBank(helpers).setVisible(true);
 			dispose();
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
-			new Website().setVisible(true);
+			new Website(helpers).setVisible(true);
 			dispose();
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
-			new Notes().setVisible(true);
+			new Notes(helpers).setVisible(true);
 			dispose();
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
-			new SSN().setVisible(true);
+			new SSN(helpers).setVisible(true);
 			dispose();
 		}
-		*/
+		
 	}//GEN-LAST:event_addbuttonMouseClicked
 
 	private void removebuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removebuttonMouseClicked
 		// TODO add your handling code here:
 		String mcb = MainCB.getSelectedItem().toString();
-		String scb = SubCB.getSelectedItem().toString();
-		
+		int scb = SubCB.getSelectedIndex();
+		/*
 		if(mcb.compareTo("Bank") == 0)
 		{
-			//if scb == getBank(id)
-			//delete
-			;
+			if(banks.size() > 0)
+			{
+			BankInfo selectedBank = banks.get(scb-1);
+			//delete function
+			
+			}
 		}
 		else if(mcb.compareTo("Website") == 0)
 		{
-			//if scb == getWebsite(id)
-			;		
-		}
+			if(webs.size() > 0)
+			{
+				WebInfo selectedWeb = webs.get(scb-1);
+				//delete function
+			}
+					}
 		else if(mcb.compareTo("Notes") == 0)
 		{
-			//if scb == getNote(id)
-			//delete
-			;
+			if(notes.size() > 0)
+			{
+				NoteInfo selectedNote = notes.get(scb-1);
+				//delete function
+			}
 		}
 		else if(mcb.compareTo("SSN") == 0)
 		{
-			//if scb == getSocial(id)
-			//delete
-			;
+			if(ssn.size() > 0 )
+			{
+				SSNInfo selectedSNN = ssn.get(scb-1);
+				//delete function
+			}
 		}
+		*/
 		SubCB.removeItem(SubCB.getSelectedItem());
 	}//GEN-LAST:event_removebuttonMouseClicked
 
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {                                       
         // TODO add your handling code here:
 		int secd_cat = SubCB.getSelectedIndex();
+		/*
+		if(banks.size() < 2)
+		{
+		BankInfo selectedBank = banks.get(secd_cat-1);
 		
+		userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
+                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: " 
+                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
+		}
+		else if(webs.size() < 2)
+		{
+			WebInfo selectedWeb = webs.get(secd_cat-1);
+			String qaSecurityText = "Security Questions:\n";
+			String securityQs[][] = selectedWeb.getSecurityQs();
+			for (int i = 0; i < securityQs.length; i++) {
+				qaSecurityText += "Q: " + securityQs[i][0] + "  |  A:" + securityQs[i][1] + "\n";
+			}
+			
+			userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
+	                + "URL: " + selectedWeb.getUrl() + "\nEmail: " + selectedWeb.getEmail() + "\nUsername: " 
+	                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword() + "\n" + qaSecurityText);
+			
+		}
+		else if(notes.size() < 2)
+		{
+			NoteInfo selectedNote = notes.get(secd_cat-1);
+			userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
+		}
 		
-		//DO: Bank 1 replace with bankid
-		/*if()
+		else if(ssn.size() < 2 )
 		{
-			
-			//getBank(); info and setText on userinfotext with the bank info
-			/*userinfotext.setText("Name: " + bank +"\n"
-	                + "Address: " + addrs + "\nAccount #: " + acc_n + "\nRouting #: " 
-	                + rout_n + "\nAccount type: " + acc_type);
-			
-		}
-		else if(secd_cat.compareTo("Website 1") == 0)
-		{
-		;
-		}
-		else if(secd_cat.compareTo("Notes 1") == 0)
-		{
-		;
-		}
-		else if(secd_cat.compareTo("SSN 1") == 0)
-		{
-		;
+			SSNInfo selectedSNN = ssn.get(secd_cat-1);
+			userinfotext.setText("Title: "+ selectedSNN.getName() + "\n\n" + selectedSNN.getSSN());	
 		}
 		*/
     } 
@@ -254,19 +279,19 @@ public class UserAccount extends javax.swing.JFrame {
 		
 		if(main.compareTo("Bank") == 0)
 		{
-			new NewBank().setVisible(true);
+			new NewBank(helpers).setVisible(true);
 		}
 		if(main.compareTo("Website") == 0)
 		{
-			new Website().setVisible(true);
+			new Website(helpers).setVisible(true);
 		}
 		if(main.compareTo("Notes") == 0)
 		{
-			new Notes().setVisible(true);
+			new Notes(helpers).setVisible(true);
 		}
 		if(main.compareTo("SSN") == 0)
 		{
-			new SSN().setVisible(true);
+			new SSN(helpers).setVisible(true);
 		}
 		dispose();
 		
@@ -280,9 +305,10 @@ public class UserAccount extends javax.swing.JFrame {
 		if(temp.compareTo("Bank") == 0)
 		{
 			repaint();
+
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
 			/*
-			if(banks.size() == 0)
+			if(banks.size() < 2)
 			{
 				JOptionPane.showMessageDialog(null,"No banks in the database! Please add new banks!");				
 			}
@@ -290,7 +316,8 @@ public class UserAccount extends javax.swing.JFrame {
 			{
 			String names[] = new String[banks.size()];
 			
-			int i = 0;
+			int i = 1;
+			names[0] = "Banks"
 			for (BankInfo b : banks) {
 				names[i++] = b.getBankName();
 			}
@@ -302,7 +329,7 @@ public class UserAccount extends javax.swing.JFrame {
 		else if(temp.compareTo("Website") == 0)
 		{
 			repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Websits"}));
+			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Websites"}));
 			/*
 			if(webs.size() == 0)
 			{
@@ -312,7 +339,8 @@ public class UserAccount extends javax.swing.JFrame {
 			{
 			String names[] = new String[webs.size()];
 			
-			int i = 0;
+			int i = 1;
+			names[0] = "Website"
 			for (WebInfo w : webs) {
 				names[i++] = w.getBankName();
 			}
@@ -333,8 +361,8 @@ public class UserAccount extends javax.swing.JFrame {
 			else
 			{
 			String names[] = new String[notes.size()];
-			
-			int i = 0;
+			int i = 1;
+			names[0] = "Notes"
 			for (NoteInfo n : notes) {
 				names[i++] = n.getNotesName();
 			}
@@ -355,8 +383,8 @@ public class UserAccount extends javax.swing.JFrame {
 			else
 			{
 			String names[] = new String[snn.size()];
-			
-			int i = 0;
+			int i = 1;
+			names[0] = "SNN"
 			for (SSNInfo s : ssn) {
 				names[i++] = s.getName();
 			}
