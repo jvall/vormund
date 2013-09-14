@@ -21,23 +21,23 @@ public class UserAccount extends javax.swing.JFrame {
 	
 
 	public static boolean updating = false;
-	/*
+	
 	private ArrayList<BankInfo> banks;
 	private ArrayList<WebInfo> webs;
 	private ArrayList<NoteInfo> notes;
 	private ArrayList<SSNInfo> ssn;
-	*/
+	
 	//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " "}));
 
 	public UserAccount(DBHelpers h) {
 		initComponents();
 		helpers = h;
-		/*
+		
 		banks = helpers.getBanks();
 		webs = helpers.getWebs();
 		notes = helpers.getNotes();
 		ssn = helpers.getSocials();
-		*/
+		
 	}
 
 	/**
@@ -192,7 +192,7 @@ public class UserAccount extends javax.swing.JFrame {
 		// TODO add your handling code here:
 		String mcb = MainCB.getSelectedItem().toString();
 		int scb = SubCB.getSelectedIndex();
-		/*
+		
 		if(mcb.compareTo("Bank") == 0)
 		{
 			if(banks.size() > 0)
@@ -226,14 +226,12 @@ public class UserAccount extends javax.swing.JFrame {
 				//delete function
 			}
 		}
-		*/
 		SubCB.removeItem(SubCB.getSelectedItem());
 	}//GEN-LAST:event_removebuttonMouseClicked
 
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {                                       
         // TODO add your handling code here:
 		int secd_cat = SubCB.getSelectedIndex();
-		/*
 		if(banks.size() < 2)
 		{
 		BankInfo selectedBank = banks.get(secd_cat-1);
@@ -267,7 +265,6 @@ public class UserAccount extends javax.swing.JFrame {
 			SSNInfo selectedSNN = ssn.get(secd_cat-1);
 			userinfotext.setText("Title: "+ selectedSNN.getName() + "\n\n" + selectedSNN.getSSN());	
 		}
-		*/
     } 
     
 	//showbutton is updatebutton
@@ -307,7 +304,7 @@ public class UserAccount extends javax.swing.JFrame {
 			repaint();
 
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
-			/*
+
 			if(banks.size() < 2)
 			{
 				JOptionPane.showMessageDialog(null,"No banks in the database! Please add new banks!");				
@@ -317,20 +314,20 @@ public class UserAccount extends javax.swing.JFrame {
 			String names[] = new String[banks.size()];
 			
 			int i = 1;
-			names[0] = "Banks"
+			names[0] = "Banks";
 			for (BankInfo b : banks) {
 				names[i++] = b.getBankName();
 			}
 
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-			}*/
+			}
 			
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
 			repaint();
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Websites"}));
-			/*
+
 			if(webs.size() == 0)
 			{
 				JOptionPane.showMessageDialog(null,"No websites in the database! Please add new websites!");				
@@ -340,21 +337,19 @@ public class UserAccount extends javax.swing.JFrame {
 			String names[] = new String[webs.size()];
 			
 			int i = 1;
-			names[0] = "Website"
+			names[0] = "Website";
 			for (WebInfo w : webs) {
-				names[i++] = w.getBankName();
+				names[i++] = w.getName();
 			}
 
 			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
 			}
-			*/
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
 			repaint();
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Note"}));
-			/*
-			if(note.size() == 0)
+			if(notes.size() == 0)
 			{
 				JOptionPane.showMessageDialog(null,"No notes in the database! Please add new notes!");				
 			}
@@ -362,36 +357,34 @@ public class UserAccount extends javax.swing.JFrame {
 			{
 			String names[] = new String[notes.size()];
 			int i = 1;
-			names[0] = "Notes"
+			names[0] = "Notes";
 			for (NoteInfo n : notes) {
-				names[i++] = n.getNotesName();
+				names[i++] = n.getName();
 			}
 
 			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
 			}
-			*/
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
 			repaint();
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SSN"}));
-			/*
-			if(snn.size() == 0)
+
+			if(ssn.size() == 0)
 			{
 				JOptionPane.showMessageDialog(null,"No SNN in the database! Please add new SNN!");				
 			}
 			else
 			{
-			String names[] = new String[snn.size()];
+			String names[] = new String[ssn.size()];
 			int i = 1;
-			names[0] = "SNN"
+			names[0] = "SSN";
 			for (SSNInfo s : ssn) {
 				names[i++] = s.getName();
 			}
 
 			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
 			}
-			*/
 		}
 
 	}//GEN-LAST:event_MainCBItemStateChanged

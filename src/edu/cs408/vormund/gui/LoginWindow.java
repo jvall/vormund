@@ -110,7 +110,7 @@ public class LoginWindow extends javax.swing.JFrame {
 		String pass = passwordfield1.getText().toString();
 		Boolean done = true;
 		
-		/*
+		
 		if(name.length() == 0 || pass.length() == 0)
 		{
 			JOptionPane.showMessageDialog(null,"Please enter username and/or password!");
@@ -119,40 +119,40 @@ public class LoginWindow extends javax.swing.JFrame {
 
 		if(done == true)
 		{
-		if (helpers.checkLogin(name, pass)) {
-			new UserAccount(helpers).setVisible(true);
-			dispose();
-		}
-		else {
-			int yn  = JOptionPane.showConfirmDialog(null,"You are a new user! Do you want to create account?", "New User", JOptionPane.YES_NO_OPTION);
-			if(yn == JOptionPane.YES_OPTION)
-			{
-				try {
+			if (helpers.checkLogin(name, pass)) {
+				new UserAccount(helpers).setVisible(true);
+				dispose();
+			}
+			else {
+				int yn  = JOptionPane.showConfirmDialog(null,"You are a new user! Do you want to create account?", "New User", JOptionPane.YES_NO_OPTION);
+				if(yn == JOptionPane.YES_OPTION)
+				{
 					try {
-						helpers.newUser(name, pass);
-					} catch (SQLException e) {
+						try {
+							helpers.newUser(name, pass);
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} catch (NoSuchAlgorithmException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 
-				JOptionPane.showMessageDialog(null,"New User has been created!");
-				usernamefield1.setText("");
-				passwordfield1.setText("");
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(null,"Okay!");
-				usernamefield1.setText("");
-				passwordfield1.setText("");
+					JOptionPane.showMessageDialog(null,"New User has been created!");
+					usernamefield1.setText("");
+					passwordfield1.setText("");
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,"Okay!");
+					usernamefield1.setText("");
+					passwordfield1.setText("");
+				}
 			}
 		}
-		}
-		*/
-		new UserAccount(helpers).setVisible(true);
+
+		//new UserAccount(helpers).setVisible(true);
 		dispose();
 
 	}                                           
