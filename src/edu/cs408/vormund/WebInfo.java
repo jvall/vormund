@@ -7,6 +7,7 @@ public class WebInfo {
     private String userName;
     private String password;
     private String [][] securityQAPairs;
+    private int recordID;
 
     public WebInfo(WebInfo w) {
         this.name = w.name;
@@ -15,15 +16,17 @@ public class WebInfo {
         this.userName = w.userName;
         this.password = w.password;
         this.securityQAPairs = w.securityQAPairs;
+        this.recordID = w.recordID;
     }
 
-    public WebInfo(String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
+    public WebInfo(String name, String url, String email, String userName, String password, String[][] securityQAPairs, int recordID) {
     	this.name = name;
         this.url = url;
         this.email = email;
         this.userName = userName;
         this.password = password;
         this.securityQAPairs = securityQAPairs;
+        this.recordID = recordID;
     }
 
     public String getName() {
@@ -58,7 +61,7 @@ public class WebInfo {
         return deserializedStr;
     }
 
-    public static WebInfo serializeCSVDump(String csvWebVals) {
+    public static WebInfo serializeCSVDump(String csvWebVals, int recordID) {
         // MUST be in same order as above constructor
         String vals[] = csvWebVals.split(";");
 
@@ -73,7 +76,7 @@ public class WebInfo {
         	QAPairs[i][1] = vals[i*2+6];
         }
 
-        return new WebInfo(vals[0], vals[1], vals[2], vals[3], vals[4], QAPairs);
+        return new WebInfo(vals[0], vals[1], vals[2], vals[3], vals[4], QAPairs, recordID);
     }
 }
 
