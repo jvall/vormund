@@ -19,14 +19,12 @@ public class NewBank extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
+	private DBHelpers helpers;	
 	
-	//DBHelpers DBHelp = new DBHelpers();
-	
-    public NewBank() {
+    public NewBank(DBHelpers h) {
         initComponents();
+        helpers = h;
     }
-    
-    DBHelpers dbHelper;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -50,8 +48,7 @@ public class NewBank extends javax.swing.JFrame {
         acctypefield = new javax.swing.JTextField();
         donebutton2 = new javax.swing.JButton();
         
-        dbHelper = new DBHelpers();
-
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Vormund");
@@ -182,7 +179,7 @@ public class NewBank extends javax.swing.JFrame {
     	*/
 		/*
     	if(!user_acc.updating){
-    		int result = dbHelper.newBank(bank, accnum, rou_bal, add, acctype);
+    		int result = helpers.newBank(bank, accnum, rou_bal, add, acctype);
     		if(result == -1)
     		{
     			JOptionPane.showMessageDialog(null,"An entry with the given account number already exists");
@@ -195,53 +192,19 @@ public class NewBank extends javax.swing.JFrame {
     	else
     	{
     		//Isabel needs to find a way of tracking the id of the data items
-    		//dbHelper.updateBank(?, bank, accnum, rou, add, acctype);
+    		//helpers.newBank(?, bank, accnum, rou, add, acctype);
     		done = true;
     	}*/
     	
     	if(done == true)
     	{
-    		//new UserAccount().setVisible(true);
+    		new UserAccount(helpers).setVisible(true);
         
     		//dispose
     		dispose();
     	}
     }//GEN-LAST:event_donebutton2MouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new NewBank().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField accountfield;
     public javax.swing.JLabel accountnum;

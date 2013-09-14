@@ -17,12 +17,11 @@ public class Notes extends javax.swing.JFrame {
 	/**
 	 * Creates new form NewBank
 	 */
-	//DBHelpers DBHelp = new DBHelpers();
-	public Notes() {
+	private DBHelpers helpers;
+	public Notes(DBHelpers h) {
 		initComponents();
+		h = helpers;
 	}
-	
-	DBHelpers dbHelper;
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -39,8 +38,6 @@ public class Notes extends javax.swing.JFrame {
 		donebutton2 = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		notearea = new javax.swing.JTextArea();
-		
-		dbHelper = new DBHelpers();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,7 +102,7 @@ public class Notes extends javax.swing.JFrame {
 
 		//Check title
 		//Add to database
-		//UserAccount user_acc = new UserAccount();
+		UserAccount user_acc = new UserAccount(helpers);
 		String n_text = notearea.getText().toString();
 		String n_title = notetitle.getText().toString();
 		Boolean done = true;
@@ -113,76 +110,42 @@ public class Notes extends javax.swing.JFrame {
     	if(n_text.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a title for the note");
+    		done = false;
     	}
     	else if(n_title.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a note");
+    		done = false;
     	}
 		
 		//Add to database
-		/*if(!user_acc.updating)
+		if(!user_acc.updating)
 		{        	
-    		int result = dbHelper.newNote(n_title, n_text);
+    		int result = helpers.newNote(n_title, n_text);
     		if(result == -1)
     		{
     			JOptionPane.showMessageDialog(null,"New note creation failed");
-    			return;
+    			done = false;
     		}
 			
-			
-			
-			//DBHelp.updateNote(socialid, n_title, n_text);
+			//helpers.updateNote(socialid, n_title, n_text);
 			user_acc.updating = false;
 			done = true;
 		}
 		else
 		{
 			//Isabel needs to find a way of tracking the data id
-			//dbHelper.updateNote(?, n_title, n_text);
+			//helpers.updateNote(?, n_title, n_text);
 			done = true;
-		}*/
+		}
 		
 		if(done == true){
-			//new UserAccount().setVisible(true);
+			new UserAccount(helpers).setVisible(true);
 			//dispose
 			dispose();
 		}
 	}//GEN-LAST:event_donebutton2MouseClicked
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(Notes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(Notes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(Notes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(Notes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new Notes().setVisible(true);
-			}
-		});
-	}
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JButton donebutton2;
 	private javax.swing.JLabel jLabel1;
