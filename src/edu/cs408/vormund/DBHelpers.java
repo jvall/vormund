@@ -180,7 +180,7 @@ public class DBHelpers {
         ArrayList<BankInfo> banks = new ArrayList<BankInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("Bank Account") + "' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -219,7 +219,7 @@ public class DBHelpers {
         ArrayList<WebInfo> webs = new ArrayList<WebInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("Web Account") + "' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -244,7 +244,6 @@ public class DBHelpers {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + webID + "' AND user_id='" + user_id + "'");
             entries.first();
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
-            web = WebInfo.serializeCSVDump(decrypt);
         } catch (SQLException e) {
             //TODO: replace with error logging
             System.err.println("Database error: " + e);
@@ -258,7 +257,7 @@ public class DBHelpers {
         ArrayList<NoteInfo> notes = new ArrayList<NoteInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE type_id='" + getRecordType("Note") + "' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -298,7 +297,7 @@ public class DBHelpers {
         ArrayList<SSNInfo> ssns = new ArrayList<SSNInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encrypted_data WHERE type_id='" + getRecordType("SSN") + "' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encryped_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -379,18 +378,6 @@ public class DBHelpers {
 	/*********************
 	*	Helper Methods   *
 	*********************/
-
-	private int getRecordType(String type) {
-		int numType = -1;
-		try {
-			ResultSet dataTypeQuery = dbObj.query("SELECT type_id FROM data_type WHERE type_name='" + type + "'");
-			dataTypeQuery.first();
-			numType = dataTypeQuery.getInt(1);
-		} catch (SQLException e) {
-			System.err.println("Database error: " + e);
-		}
-		return numType;
-	}
 
     private int resultsCount(ResultSet r) {
       int numRows = 0;
