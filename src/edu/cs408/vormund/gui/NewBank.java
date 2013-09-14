@@ -145,7 +145,7 @@ public class NewBank extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         //Check title
-    	UserAccount user_acc = new UserAccount();
+    	//UserAccount user_acc = new UserAccount();
     	String bank = namefield.getText().toString();
 		String add = addressfield.getText().toString();
 		String accnum = accountfield.getText().toString();
@@ -153,6 +153,7 @@ public class NewBank extends javax.swing.JFrame {
 		String acctype = acctypefield.getText().toString();
 		Boolean done = true;
     	
+		/*
     	if(bank.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
@@ -178,7 +179,8 @@ public class NewBank extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter an account type");
     		done = false;
     	}
-    	
+    	*/
+		/*
     	if(!user_acc.updating){
     		int result = dbHelper.newBank(bank, accnum, rou_bal, add, acctype);
     		if(result == -1)
@@ -195,11 +197,11 @@ public class NewBank extends javax.swing.JFrame {
     		//Isabel needs to find a way of tracking the id of the data items
     		//dbHelper.updateBank(?, bank, accnum, rou, add, acctype);
     		done = true;
-    	}
+    	}*/
     	
     	if(done == true)
     	{
-    		new UserAccount().setVisible(true);
+    		//new UserAccount().setVisible(true);
         
     		//dispose
     		dispose();

@@ -4,7 +4,9 @@
  */
 package edu.cs408.vormund.gui;
 
-import edu.cs408.vormund.DBHelpers;
+import java.util.*;
+import javax.swing.*;
+import edu.cs408.vormund.*;
 
 /**
  *
@@ -15,16 +17,23 @@ public class UserAccount extends javax.swing.JFrame {
 	/**
 	 * Creates new form UserAccount
 	 */
-	boolean bank = false;
-	boolean website = false;
-	boolean ssn = false;
-	boolean notes = false;
-//	DBHelpers DBHelp = new DBHelpers();
+	private DBHelpers helpers;
+	
+
 	public static boolean updating = false;
+	
+	ArrayList<BankInfo> banks = helpers.getBanks();
+
+	ArrayList<WebInfo> webs = helpers.getWebs();
+	ArrayList<NoteInfo> notes = helpers.getNotes();
+	ArrayList<SSNInfo> ssn = helpers.getSocials();
+	
+	
 	//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " "}));
 
-	public UserAccount() {
+	public UserAccount(DBHelpers h) {
 		initComponents();
+		helpers = h;
 	}
 
 	/**
@@ -72,14 +81,12 @@ public class UserAccount extends javax.swing.JFrame {
 			}
 		});
 
-		MainCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank", "Website", "Notes", "SSN" }));
+		MainCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Category", "Bank", "Website", "Notes", "SSN" }));
 		MainCB.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
 				MainCBItemStateChanged(evt);
 			}
 		});
-
-		SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank 1", "Bank 2"}));
 
 		userinfotext.setColumns(20);
 		userinfotext.setRows(5);
@@ -153,6 +160,7 @@ public class UserAccount extends javax.swing.JFrame {
 		// TODO add your handling code here:
 
 		String temp = MainCB.getSelectedItem().toString();
+		/*
 		if(temp.compareTo("Bank") == 0)
 		{
 			new NewBank().setVisible(true);
@@ -173,6 +181,7 @@ public class UserAccount extends javax.swing.JFrame {
 			new SSN().setVisible(true);
 			dispose();
 		}
+		*/
 	}//GEN-LAST:event_addbuttonMouseClicked
 
 	private void removebuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removebuttonMouseClicked
@@ -208,18 +217,18 @@ public class UserAccount extends javax.swing.JFrame {
 
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {                                       
         // TODO add your handling code here:
-		String secd_cat = SubCB.getSelectedItem().toString();
+		int secd_cat = SubCB.getSelectedIndex();
 		
 		
 		//DO: Bank 1 replace with bankid
-		if(secd_cat.compareTo("Bank 1") == 0)
+		/*if()
 		{
 			
 			//getBank(); info and setText on userinfotext with the bank info
 			/*userinfotext.setText("Name: " + bank +"\n"
 	                + "Address: " + addrs + "\nAccount #: " + acc_n + "\nRouting #: " 
 	                + rout_n + "\nAccount type: " + acc_type);
-			*/
+			
 		}
 		else if(secd_cat.compareTo("Website 1") == 0)
 		{
@@ -233,6 +242,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 		;
 		}
+		*/
     } 
     
 	//showbutton is updatebutton
@@ -241,6 +251,7 @@ public class UserAccount extends javax.swing.JFrame {
 		updating = true;
 		String main = MainCB.getSelectedItem().toString();
 		String sub = SubCB.getSelectedItem().toString();
+		
 		if(main.compareTo("Bank") == 0)
 		{
 			new NewBank().setVisible(true);
@@ -265,63 +276,98 @@ public class UserAccount extends javax.swing.JFrame {
 		// TODO add your handling code here:
 
 		String temp = MainCB.getSelectedItem().toString();
+
 		if(temp.compareTo("Bank") == 0)
 		{
 			repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Bank 1", "Bank 2"}));
+			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
+			/*
+			if(banks.size() == 0)
+			{
+				JOptionPane.showMessageDialog(null,"No banks in the database! Please add new banks!");				
+			}
+			else
+			{
+			String names[] = new String[banks.size()];
+			
+			int i = 0;
+			for (BankInfo b : banks) {
+				names[i++] = b.getBankName();
+			}
+
+			SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+			}*/
+			
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
 			repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Website 1"}));
+			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Websits"}));
+			/*
+			if(webs.size() == 0)
+			{
+				JOptionPane.showMessageDialog(null,"No websites in the database! Please add new websites!");				
+			}
+			else
+			{
+			String names[] = new String[webs.size()];
+			
+			int i = 0;
+			for (WebInfo w : webs) {
+				names[i++] = w.getBankName();
+			}
+
+			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+			}
+			*/
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
 			repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notes 1"}));
+			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Note"}));
+			/*
+			if(note.size() == 0)
+			{
+				JOptionPane.showMessageDialog(null,"No notes in the database! Please add new notes!");				
+			}
+			else
+			{
+			String names[] = new String[notes.size()];
+			
+			int i = 0;
+			for (NoteInfo n : notes) {
+				names[i++] = n.getNotesName();
+			}
+
+			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+			}
+			*/
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
 			repaint();
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SSN"}));
+			/*
+			if(snn.size() == 0)
+			{
+				JOptionPane.showMessageDialog(null,"No SNN in the database! Please add new SNN!");				
+			}
+			else
+			{
+			String names[] = new String[snn.size()];
+			
+			int i = 0;
+			for (SSNInfo s : ssn) {
+				names[i++] = s.getName();
+			}
+
+			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+			}
+			*/
 		}
 
 	}//GEN-LAST:event_MainCBItemStateChanged
-
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-		/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(UserAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(UserAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(UserAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(UserAccount.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new UserAccount().setVisible(true);
-			}
-		});
-	}
+	
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	public javax.swing.JComboBox MainCB;
 	public javax.swing.JComboBox SubCB;

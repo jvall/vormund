@@ -148,7 +148,7 @@ public class Website2 extends javax.swing.JFrame {
         
         //Check info
         //Add Q/A to database
-    	UserAccount usacc = new UserAccount();
+    	//UserAccount usacc = new UserAccount();
     	Website web = new Website();
 		String q1 = q1field.getText().toString();
 		String a1 = an1field.getText().toString();
@@ -204,7 +204,7 @@ public class Website2 extends javax.swing.JFrame {
         
         //go back to user account window
         if(done == true){
-        	new UserAccount().setVisible(true);
+        	//new UserAccount().setVisible(true);
         
         	//dispose
         	dispose();

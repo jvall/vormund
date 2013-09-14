@@ -114,7 +114,7 @@ public class SSN extends javax.swing.JFrame {
 
         //Check name and ssn
         //Add to database
-    	UserAccount user_acc = new UserAccount();
+    	//UserAccount user_acc = new UserAccount();
     	String user_name = name.getText().toString();
 		String social = ssnfield.getText().toString();
 		Boolean done = true;
@@ -130,7 +130,7 @@ public class SSN extends javax.swing.JFrame {
     		done = false;
     		
     	}
-    	
+    	/*
     	if(!user_acc.updating){
     		int result = dbHelper.newSocial(user_name, social);
     		if(result == -1)
@@ -147,11 +147,11 @@ public class SSN extends javax.swing.JFrame {
     		//Isabel needs to find a way of tracking the id of the data items
     		//dbHelper.updateSocial(?, user_name, social);
     		done = true;
-    	}
+    	}*/
     	
     	if(done == true)
     	{
-    		new UserAccount().setVisible(true);
+    		//new UserAccount().setVisible(true);
         
     		//dispose
     		dispose();

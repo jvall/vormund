@@ -105,7 +105,7 @@ public class Notes extends javax.swing.JFrame {
 
 		//Check title
 		//Add to database
-		UserAccount user_acc = new UserAccount();
+		//UserAccount user_acc = new UserAccount();
 		String n_text = notearea.getText().toString();
 		String n_title = notetitle.getText().toString();
 		Boolean done = true;
@@ -120,7 +120,7 @@ public class Notes extends javax.swing.JFrame {
     	}
 		
 		//Add to database
-		if(!user_acc.updating)
+		/*if(!user_acc.updating)
 		{        	
     		int result = dbHelper.newNote(n_title, n_text);
     		if(result == -1)
@@ -140,10 +140,10 @@ public class Notes extends javax.swing.JFrame {
 			//Isabel needs to find a way of tracking the data id
 			//dbHelper.updateNote(?, n_title, n_text);
 			done = true;
-		}
+		}*/
 		
 		if(done == true){
-			new UserAccount().setVisible(true);
+			//new UserAccount().setVisible(true);
 			//dispose
 			dispose();
 		}
