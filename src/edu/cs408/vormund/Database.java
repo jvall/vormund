@@ -251,7 +251,7 @@ public class Database {
   public int insertBLOB(int user_id, String category, String name, String data, String encryption_key) {
     int ret = -1;
     if( !this.hasConnection() ) { this.makeConnection(); }
-    byte enc_data[] = data.getBytes(); // Needs to run through encryption process
+    byte enc_data[] = Encryption.encryptBlob(encryption_key, data);
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
       this.prpstmnt = this.conn.prepareStatement("INSERT INTO " +
@@ -289,7 +289,7 @@ public class Database {
   public int updateBLOB(int data_id, String new_name, String new_data, String encryption_key) {
     int ret = -1;
     if( !this.hasConnection() ) { this.makeConnection(); }
-    byte enc_data[] = new_data.getBytes(); // Needs to run through encryption process
+    byte enc_data[] = Encryption.encryptBlob(encryption_key, new_data);
     //ByteArrayInputStream bais = new ByteArrayInputStream(enc_data);
     try {
       if( new_name!=null ) {
