@@ -187,7 +187,7 @@ public class DBHelpers {
         ArrayList<BankInfo> banks = new ArrayList<BankInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -226,7 +226,7 @@ public class DBHelpers {
         ArrayList<WebInfo> webs = new ArrayList<WebInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -265,7 +265,7 @@ public class DBHelpers {
         ArrayList<NoteInfo> notes = new ArrayList<NoteInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -307,7 +307,7 @@ public class DBHelpers {
         ArrayList<SSNInfo> ssns = new ArrayList<SSNInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
