@@ -276,7 +276,7 @@ public class UserAccount extends javax.swing.JFrame {
 		
 		if(main.compareTo("Bank") == 0)
 		{
-			new NewBank(helpers).setVisible(true);
+			new NewBank(helpers, banks.get(SubCB.getSelectedIndex()).getRecordID()).setVisible(true);
 		}
 		if(main.compareTo("Website") == 0)
 		{
@@ -305,22 +305,16 @@ public class UserAccount extends javax.swing.JFrame {
 
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
 
-			if(banks.size() < 2)
-			{
-				JOptionPane.showMessageDialog(null,"No banks in the database! Please add new banks!");				
-			}
-			else
-			{
-			String names[] = new String[banks.size()];
+			String names[] = new String[banks.size() + 1];
 			
 			int i = 1;
 			names[0] = "Banks";
 			for (BankInfo b : banks) {
 				names[i++] = b.getBankName();
 			}
-
+	
 			SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-			}
+			
 			
 		}
 		else if(temp.compareTo("Website") == 0)

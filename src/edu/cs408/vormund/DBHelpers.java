@@ -43,8 +43,8 @@ public class DBHelpers {
 		//Check to see if accountNumber is already taken
 		boolean accountExists = false;
 
-		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE category LIKE 'Bank Account' AND user_id=" + user_id);
-		if(bankEntries.first())
+		ResultSet bankEntries = dbObj.query("SELECT data_id FROM encrypted_data WHERE category LIKE 'Bank Account' AND user_id=" + user_id);
+		if(bankEntries.next())
 		{
 			//I think that this will work as a way to loop through
 			while(!bankEntries.isAfterLast())
@@ -78,8 +78,8 @@ public class DBHelpers {
 		//Check to see if name email pair is already taken
 		boolean accountExists = false;
 
-		ResultSet webEntries = dbObj.query("SELECT data_id, note FROM encryped_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
-		if(webEntries.first())
+		ResultSet webEntries = dbObj.query("SELECT data_id, note FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
+		if(webEntries.next())
 		{
 			while(!webEntries.isAfterLast())
 			{
@@ -134,8 +134,8 @@ public class DBHelpers {
 		//Check to see if SSN is already taken
 		boolean ssnExists = false;
 
-		ResultSet ssnEntries = dbObj.query("SELECT data_id FROM encryped_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
-		if(ssnEntries.first())
+		ResultSet ssnEntries = dbObj.query("SELECT data_id FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
+		if(ssnEntries.next())
 		{
 			while(!ssnEntries.isAfterLast())
 			{
@@ -166,22 +166,9 @@ public class DBHelpers {
 	public boolean checkUserExist(String userName) {
 		ResultSet entries = null;
 		try {
-			System.out.println(dbObj.hasConnection());
-			System.out.println(dbObj.hasStatement());
 			String query = "SELECT * FROM user_data WHERE user_name LIKE '" + userName + "'";
 			entries = dbObj.query(query);
-			System.out.println("Returned ResultSet: " + entries);
 			boolean status = entries.next();
-			
-			// This is just for test
-			ResultSet tester = dbObj.query("SELECT * FROM user_data");
-			while(tester.next()) {
-				System.out.println("User: " + tester.getString("user_name") + "\tPassword: " + tester.getString("password") + "\tID: " + tester.getInt("user_id"));
-			}
-			System.out.println("The loop is done");
-			
-			System.out.println(query);
-			System.out.println("Status: " + status + ", username: " + userName);
 			return status;
 		} catch (SQLException e) {
 			System.err.println("Check login error: " + e);
@@ -216,7 +203,7 @@ public class DBHelpers {
 
         try {
             ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
-            if(entries.first())
+            if(entries.next())
             {
                 while(!entries.isAfterLast())
                 {
@@ -238,7 +225,7 @@ public class DBHelpers {
         BankInfo bank = null;
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + bankEntryID + "' AND user_id='" + user_id + "'");
-            entries.first();
+            entries.next();
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             bank = BankInfo.serializeCSVDump(decrypt, entries.getInt("data_id"));
         } catch (SQLException e) {
@@ -255,7 +242,7 @@ public class DBHelpers {
 
         try {
             ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
-            if(entries.first())
+            if(entries.next())
             {
                 while(!entries.isAfterLast())
                 {
@@ -277,7 +264,7 @@ public class DBHelpers {
         WebInfo web = null;
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + webID + "' AND user_id='" + user_id + "'");
-            entries.first();
+            entries.next();
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             web = WebInfo.serializeCSVDump(decrypt, entries.getInt("data_id"));
         } catch (SQLException e) {
@@ -294,7 +281,7 @@ public class DBHelpers {
 
         try {
             ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
-            if(entries.first())
+            if(entries.next())
             {
                 while(!entries.isAfterLast())
                 {
@@ -317,7 +304,7 @@ public class DBHelpers {
         NoteInfo note = null;
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + noteID + "' AND user_id='" + user_id + "'");
-            entries.first();
+            entries.next();
             int id = entries.getInt("data_id");
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             note = NoteInfo.serializeCSVDump(decrypt, id);
@@ -336,7 +323,7 @@ public class DBHelpers {
 
         try {
             ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
-            if(entries.first())
+            if(entries.next())
             {
                 while(!entries.isAfterLast())
                 {
@@ -359,7 +346,7 @@ public class DBHelpers {
         SSNInfo ssn = null;
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + socialID + "' AND user_id='" + user_id + "'");
-            entries.first();
+            entries.next();
             int id = entries.getInt("data_id");
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             ssn = SSNInfo.serializeCSVDump(decrypt, id);
