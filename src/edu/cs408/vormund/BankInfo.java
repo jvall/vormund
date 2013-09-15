@@ -54,14 +54,14 @@ public class BankInfo {
     }
 
     public String toString() {
-        return accountNumber + ";" + routingNumber + ";" + bankName + ";" + bankAddress + ";" + type;
+        return accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + type;
     }
 
-    public static BankInfo serializeCSVDump(String csvBankVals, int recordID) {
+    public static BankInfo serializeCSVDump(String csvBankVals, int recordID, String bankName) {
         // MUST be in same order as above constructor
         String vals[] = csvBankVals.split(";");
 
-        return new BankInfo(vals[0], vals[1], vals[2], vals[3], vals[4], recordID);
+        return new BankInfo(vals[0], vals[1], bankName, vals[2], vals[3], recordID);
     }
 }
 

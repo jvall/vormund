@@ -8,7 +8,7 @@ public class DBHelpers {
 	//Where the user key will be stored upon successful login to the system. Used by functions to pass key to decryption algorithm
 	private String key;
 	private Database dbObj;
-	private int user_id = 0; //Setting this manually for now, but will have to be accessed from somewhere in the future
+	private int user_id; //Setting this manually for now, but will have to be accessed from somewhere in the future
 
 	public DBHelpers()
 	{
@@ -183,8 +183,24 @@ public class DBHelpers {
 		try {
 			String encrypt = Encryption.encryptHashString(password);
 			entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
-			if (entries.next())
+			if (entries.next()) {
 				user_id = entries.getInt("user_id");
+				key = password;
+				int length = key.length();
+				if(length < 16)
+				{
+					for(int i  = 0; i < 16-length; i++)
+					{
+						key += '0';
+					}
+				}
+				else if(length > 16)
+				{
+					key = key.substring(0,  16);
+				}
+				
+				System.out.println("This key: '" + key + "', key length: " + key.length());
+			}
 			else
 				user_id = -1;
 		} catch (NoSuchAlgorithmException e) {
@@ -202,13 +218,13 @@ public class DBHelpers {
         ArrayList<BankInfo> banks = new ArrayList<BankInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data, data_id, name FROM encrypted_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
             if(entries.next())
             {
                 while(!entries.isAfterLast())
                 {
                     String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
-                    banks.add(BankInfo.serializeCSVDump(decrypt, entries.getInt("data_id")));
+                    banks.add(BankInfo.serializeCSVDump(decrypt, entries.getInt("data_id"), entries.getString("name")));
                     entries.next();
                 }
             }
@@ -227,7 +243,7 @@ public class DBHelpers {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + bankEntryID + "' AND user_id='" + user_id + "'");
             entries.next();
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
-            bank = BankInfo.serializeCSVDump(decrypt, entries.getInt("data_id"));
+            bank = BankInfo.serializeCSVDump(decrypt, entries.getInt("data_id"), entries.getString("name"));
         } catch (SQLException e) {
             //TODO: replace with error logging
             System.err.println("Database error: " + e);

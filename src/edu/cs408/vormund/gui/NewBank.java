@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import edu.cs408.vormund.BankInfo;
 import edu.cs408.vormund.DBHelpers;
 
 /**
@@ -26,16 +27,17 @@ public class NewBank extends javax.swing.JFrame {
 	private int data_id;
 	
     public NewBank(DBHelpers h) {
-        initComponents();
         helpers = h;
         isUpdating = false;
+        data_id = -1;
+        initComponents();
     }
     
     public NewBank(DBHelpers h, int data_id) {
-        initComponents();
-        helpers = h;
+    	helpers = h;
         isUpdating = true;
         this.data_id = data_id;
+        initComponents();
     }
 
     /**
@@ -60,6 +62,15 @@ public class NewBank extends javax.swing.JFrame {
         acctypefield = new javax.swing.JTextField();
         donebutton2 = new javax.swing.JButton();
         
+        if(data_id != -1)
+        {
+	        BankInfo bank = helpers.getBank(data_id);
+	        namefield.setText(bank.getBankName());
+	        addressfield.setText(bank.getBankAddress());
+	        accountfield.setText(bank.getAccountNumber());
+	        routingfield.setText(bank.getRoutingNumber());
+	        acctypefield.setText(bank.getAccountType());
+        }
         
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 

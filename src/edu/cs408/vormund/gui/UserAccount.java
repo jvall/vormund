@@ -91,6 +91,13 @@ public class UserAccount extends javax.swing.JFrame {
 				MainCBItemStateChanged(evt);
 			}
 		});
+		
+		SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Category" }));
+		SubCB.addItemListener(new java.awt.event.ItemListener() {
+			public void itemStateChanged(java.awt.event.ItemEvent evt) {
+				SubCBItemStateChanged(evt);
+			}
+		});
 
 		userinfotext.setColumns(20);
 		userinfotext.setRows(5);
@@ -195,11 +202,13 @@ public class UserAccount extends javax.swing.JFrame {
 		
 		if(mcb.compareTo("Bank") == 0)
 		{
-			if(banks.size() > 0)
+			if(banks.size() > 0 && scb != 0)
 			{
-			BankInfo selectedBank = banks.get(scb-1);
-			//delete function
-			
+				userinfotext.setText("");
+				BankInfo selectedBank = banks.get(SubCB.getSelectedIndex() - 1);
+				helpers.delete(selectedBank.getRecordID());
+				banks = helpers.getBanks();
+				refreshBanksList();
 			}
 		}
 		else if(mcb.compareTo("Website") == 0)
@@ -226,44 +235,57 @@ public class UserAccount extends javax.swing.JFrame {
 				//delete function
 			}
 		}
-		SubCB.removeItem(SubCB.getSelectedItem());
 	}//GEN-LAST:event_removebuttonMouseClicked
 
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {                                       
-        // TODO add your handling code here:
+    	System.out.println("TEST");
 		int secd_cat = SubCB.getSelectedIndex();
-		if(banks.size() < 2)
-		{
-		BankInfo selectedBank = banks.get(secd_cat-1);
+		String mcb = MainCB.getSelectedItem().toString();
+
 		
-		userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
-                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: " 
-                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
-		}
-		else if(webs.size() < 2)
+		if(mcb.compareTo("Bank") == 0)
 		{
-			WebInfo selectedWeb = webs.get(secd_cat-1);
-			String qaSecurityText = "Security Questions:\n";
-			String securityQs[][] = selectedWeb.getSecurityQs();
-			for (int i = 0; i < securityQs.length; i++) {
-				qaSecurityText += "Q: " + securityQs[i][0] + "  |  A:" + securityQs[i][1] + "\n";
+			if(banks.size() > 0)
+			{
+				BankInfo selectedBank = banks.get(secd_cat-1);
+				
+				userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
+		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: " 
+		                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
 			}
-			
-			userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
-	                + "URL: " + selectedWeb.getUrl() + "\nEmail: " + selectedWeb.getEmail() + "\nUsername: " 
-	                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword() + "\n" + qaSecurityText);
-			
 		}
-		else if(notes.size() < 2)
+		else if(mcb.compareTo("Website") == 0)
 		{
-			NoteInfo selectedNote = notes.get(secd_cat-1);
-			userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
+			if(webs.size() > 0)
+			{
+				WebInfo selectedWeb = webs.get(secd_cat-1);
+				String qaSecurityText = "Security Questions:\n";
+				String securityQs[][] = selectedWeb.getSecurityQs();
+				for (int i = 0; i < securityQs.length; i++) {
+					qaSecurityText += "Q: " + securityQs[i][0] + "  |  A:" + securityQs[i][1] + "\n";
+				}
+				
+				userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
+		                + "URL: " + selectedWeb.getUrl() + "\nEmail: " + selectedWeb.getEmail() + "\nUsername: " 
+		                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword() + "\n" + qaSecurityText);
+				
+			}
 		}
-		
-		else if(ssn.size() < 2 )
+		else if(mcb.compareTo("Notes") == 0)
 		{
-			SSNInfo selectedSNN = ssn.get(secd_cat-1);
-			userinfotext.setText("Title: "+ selectedSNN.getName() + "\n\n" + selectedSNN.getSSN());	
+			if(notes.size() > 0)
+			{
+				NoteInfo selectedNote = notes.get(secd_cat-1);
+				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
+			}
+		}
+		else if(mcb.compareTo("SSN") == 0)
+		{
+			if(ssn.size() > 0)
+			{
+				SSNInfo selectedSNN = ssn.get(secd_cat-1);
+				userinfotext.setText("Title: "+ selectedSNN.getName() + "\n\n" + selectedSNN.getSSN());	
+			}
 		}
     } 
     
@@ -276,7 +298,14 @@ public class UserAccount extends javax.swing.JFrame {
 		
 		if(main.compareTo("Bank") == 0)
 		{
-			new NewBank(helpers, banks.get(SubCB.getSelectedIndex()).getRecordID()).setVisible(true);
+			if(SubCB.getItemCount() > 1)
+			{
+				if(SubCB.getSelectedIndex() != 0)
+				{
+					System.out.println("Selected Item: " + SubCB.getSelectedIndex());
+					new NewBank(helpers, banks.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
+				}
+			}
 		}
 		if(main.compareTo("Website") == 0)
 		{
@@ -301,21 +330,7 @@ public class UserAccount extends javax.swing.JFrame {
 
 		if(temp.compareTo("Bank") == 0)
 		{
-			repaint();
-
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
-
-			String names[] = new String[banks.size() + 1];
-			
-			int i = 1;
-			names[0] = "Banks";
-			for (BankInfo b : banks) {
-				names[i++] = b.getBankName();
-			}
-	
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-			
-			
+			refreshBanksList();
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
@@ -382,6 +397,22 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 
 	}//GEN-LAST:event_MainCBItemStateChanged
+	
+	private void refreshBanksList() {
+		repaint();
+
+		//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
+
+		String names[] = new String[banks.size() + 1];
+		
+		int i = 1;
+		names[0] = "Banks";
+		for (BankInfo b : banks) {
+			names[i++] = b.getBankName();
+		}
+
+		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+	}
 	
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	public javax.swing.JComboBox MainCB;
