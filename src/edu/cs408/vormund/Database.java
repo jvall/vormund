@@ -45,6 +45,8 @@ public class Database {
           this.setupNewDatabaseInstance();
         }
       }
+      this.closeStatement();
+      this.createStatement();
     } catch(Exception e) {
       e.printStackTrace();
       this.conn = null;
@@ -68,11 +70,12 @@ public class Database {
       }
       br.close();
     } catch(IOException e) {
+      System.err.println("Error Reading Schema: " + e.getMessage());
       return;
     }
     for(String query : schema.split("\n")) {
       if( this.updateQuery(query) < 0 ) {
-        System.out.println("Error in query: " + query);
+        System.err.println("Error in query: " + query);
       }
     }
   }
