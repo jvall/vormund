@@ -162,6 +162,21 @@ public class DBHelpers {
 		return 0;
 	}
 
+	//Returns true if the user exists
+	public boolean checkUserExist(String userName) {
+		ResultSet entries = null;
+		try {
+			entries = dbObj.query("SELECT * FROM user_data WHERE user_name LIKE '" + userName + "'");
+			boolean status = entries.next();
+			System.out.println("Status: " + status);
+			return status;
+		} catch (SQLException e) {
+			System.err.println("Check login error: " + e);
+		}
+
+		return false;
+	}
+	
 	//Returns the userID if valid login, false otherwise
 	public boolean checkLogin(String userName, String password) {
 		ResultSet entries = null;

@@ -108,52 +108,49 @@ public class LoginWindow extends javax.swing.JFrame {
 		//checking if username already exist or if its new
 		String name = usernamefield1.getText().toString();
 		String pass = passwordfield1.getText().toString();
-		Boolean done = true;
-		
-		
+
+
+
 		if(name.length() == 0 || pass.length() == 0)
 		{
 			JOptionPane.showMessageDialog(null,"Please enter username and/or password!");
-			done = false;
 		}
 
-		if(done)
-		{
-			if (helpers.checkLogin(name, pass)) {
-				new UserAccount(helpers).setVisible(true);
-				dispose();
-			}
-			else {
-				int yn  = JOptionPane.showConfirmDialog(null,"You are a new user! Do you want to create account?", "New User", JOptionPane.YES_NO_OPTION);
-				if(yn == JOptionPane.YES_OPTION)
-				{
+		else if (!helpers.checkUserExist(name)) {
+			int yn  = JOptionPane.showConfirmDialog(null,"You are a new user! Do you want to create account?", "New User", JOptionPane.YES_NO_OPTION);
+			if(yn == JOptionPane.YES_OPTION)
+			{
+				try {
 					try {
-						try {
-							helpers.newUser(name, pass);
-						} catch (SQLException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					} catch (NoSuchAlgorithmException e) {
+						helpers.newUser(name, pass);
+					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+				} catch (NoSuchAlgorithmException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-					JOptionPane.showMessageDialog(null,"New User has been created!");
-					usernamefield1.setText("");
-					passwordfield1.setText("");
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null,"Okay!");
-					usernamefield1.setText("");
-					passwordfield1.setText("");
-				}
+				JOptionPane.showMessageDialog(null,"New User has been created!");
+				usernamefield1.setText("");
+				passwordfield1.setText("");
+			}
+			else
+			{
+				usernamefield1.setText("");
+				passwordfield1.setText("");
 			}
 		}
-
-		new UserAccount(helpers).setVisible(true);
-		dispose();
+		else if (helpers.checkLogin(name,pass))
+		{
+			new UserAccount(helpers).setVisible(true);
+			dispose();
+		}
+		else
+		{
+			CommonDialogs.displayError("Invalid Login", "Wrong Username and/or Password!");
+		}
 
 	}                                           
 
