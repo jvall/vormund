@@ -166,9 +166,22 @@ public class DBHelpers {
 	public boolean checkUserExist(String userName) {
 		ResultSet entries = null;
 		try {
-			entries = dbObj.query("SELECT * FROM user_data WHERE user_name LIKE '" + userName + "'");
+			System.out.println(dbObj.hasConnection());
+			System.out.println(dbObj.hasStatement());
+			String query = "SELECT * FROM user_data WHERE user_name LIKE '" + userName + "'";
+			entries = dbObj.query(query);
+			System.out.println("Returned ResultSet: " + entries);
 			boolean status = entries.next();
-			System.out.println("Status: " + status);
+			
+			// This is just for test
+			ResultSet tester = dbObj.query("SELECT * FROM user_data");
+			while(tester.next()) {
+				System.out.println("User: " + tester.getString("user_name") + "\tPassword: " + tester.getString("password") + "\tID: " + tester.getInt("user_id"));
+			}
+			System.out.println("The loop is done");
+			
+			System.out.println(query);
+			System.out.println("Status: " + status + ", username: " + userName);
 			return status;
 		} catch (SQLException e) {
 			System.err.println("Check login error: " + e);

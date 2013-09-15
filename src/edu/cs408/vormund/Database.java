@@ -190,8 +190,11 @@ public class Database {
    */
   public ResultSet query(String query) {
     ResultSet ret = null;
+    System.out.println("1: " + this.hasStatement());
+
     if( !this.hasConnection() ) this.makeConnection();
     if( !this.hasStatement() ) this.createStatement();
+    System.out.println("2: " + this.hasStatement());
     try {
       ret = this.stmnt.executeQuery(query);
     } catch(SQLException e) {
@@ -199,6 +202,7 @@ public class Database {
       ret = null;
     }
     this.closeStatement();
+    System.out.println("ResultSet: " + ret);
     return ret;
   }
 
