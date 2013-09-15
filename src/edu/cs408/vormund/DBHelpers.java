@@ -162,6 +162,21 @@ public class DBHelpers {
 		return 0;
 	}
 
+	//Returns true if the user exists
+	public boolean checkUserExist(String userName) {
+		ResultSet entries = null;
+		try {
+			entries = dbObj.query("SELECT * FROM user_data WHERE user_name LIKE '" + userName + "'");
+			boolean status = entries.next();
+			System.out.println("Status: " + status);
+			return status;
+		} catch (SQLException e) {
+			System.err.println("Check login error: " + e);
+		}
+
+		return false;
+	}
+	
 	//Returns the userID if valid login, false otherwise
 	public boolean checkLogin(String userName, String password) {
 		ResultSet entries = null;
@@ -187,7 +202,7 @@ public class DBHelpers {
         ArrayList<BankInfo> banks = new ArrayList<BankInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Bank Account' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -226,7 +241,7 @@ public class DBHelpers {
         ArrayList<WebInfo> webs = new ArrayList<WebInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -265,7 +280,7 @@ public class DBHelpers {
         ArrayList<NoteInfo> notes = new ArrayList<NoteInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encryped_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
@@ -307,7 +322,7 @@ public class DBHelpers {
         ArrayList<SSNInfo> ssns = new ArrayList<SSNInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encryped_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
             if(entries.first())
             {
                 while(!entries.isAfterLast())
