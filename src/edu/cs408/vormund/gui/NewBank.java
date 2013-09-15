@@ -21,9 +21,21 @@ public class NewBank extends javax.swing.JFrame {
      */
 	private DBHelpers helpers;	
 	
+	private boolean isUpdating;
+	
+	private int data_id;
+	
     public NewBank(DBHelpers h) {
         initComponents();
         helpers = h;
+        isUpdating = false;
+    }
+    
+    public NewBank(DBHelpers h, int data_id) {
+        initComponents();
+        helpers = h;
+        isUpdating = true;
+        this.data_id = data_id;
     }
 
     /**
@@ -142,7 +154,6 @@ public class NewBank extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         //Check title
-    	//UserAccount user_acc = new UserAccount();
     	String bank = namefield.getText().toString();
 		String add = addressfield.getText().toString();
 		String accnum = accountfield.getText().toString();
@@ -150,7 +161,7 @@ public class NewBank extends javax.swing.JFrame {
 		String acctype = acctypefield.getText().toString();
 		Boolean done = true;
     	
-		/*
+		
     	if(bank.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
@@ -176,9 +187,8 @@ public class NewBank extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter an account type");
     		done = false;
     	}
-    	*/
-		/*
-    	if(!user_acc.updating){
+    	
+    	if(!isUpdating){
     		int result = helpers.newBank(bank, accnum, rou_bal, add, acctype);
     		if(result == -1)
     		{
@@ -186,15 +196,14 @@ public class NewBank extends javax.swing.JFrame {
     			return;
     		}
     		
-    		user_acc.updating = false;
     		done = true;
     	}
     	else
     	{
-    		//Isabel needs to find a way of tracking the id of the data items
-    		//helpers.newBank(?, bank, accnum, rou, add, acctype);
+    		helpers.updateBank(data_id, bank, accnum, rou_bal, add, acctype);
     		done = true;
-    	}*/
+    	}
+    	
     	
     	if(done == true)
     	{

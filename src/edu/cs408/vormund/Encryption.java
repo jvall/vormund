@@ -73,7 +73,9 @@ public class Encryption {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	    SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
+	    
 	    try {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		} catch (InvalidKeyException e) {
