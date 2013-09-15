@@ -106,7 +106,10 @@ public class Database {
     try {
       Class.forName("org.sqlite.JDBC");
       this.conn = DriverManager.getConnection("jdbc:sqlite:" + DATABASE_FILE);
-    } catch(ClassNotFoundException | SQLException e) {
+    } catch(ClassNotFoundException e) {
+      System.err.println("Error Making DB Connection: " + e.getMessage());
+      this.conn = null;
+    } catch(SQLException e) {
       System.err.println("Error Making DB Connection: " + e.getMessage());
       this.conn = null;
     }
@@ -321,13 +324,14 @@ public class Database {
    *
    * @param queryResult The {@link ResultSet} from a query
    * @param column number of the column with the BLOB
+   * @param encryption_key Key that will be used to encrypt the data
    * @return string of the data stored in the BLOB.
    * @see ResultSet
    */
-  public String readFromBLOB(ResultSet queryResult, int column) throws SQLException {
+  public String readFromBLOB(ResultSet queryResult, int column, String encrypted_key) throws SQLException {
     byte[] blob = queryResult.getBytes(column);
     // Decryption stuff
-    return new String(blob);
+    return Encryption.decryptBlob(encrypted_key, blob);
   }
 
   /**
@@ -335,11 +339,12 @@ public class Database {
    *
    * @param queryResult The {@link ResultSet} from a query
    * @param column Name of the column of the BLOB
+   * @param encryption_key Key that will be used to encrypt the data
    * @return string of the data stored in the BLOB.
    * @see ResultSet
    */
-  public String readFromBLOB(ResultSet queryResult, String column) throws SQLException {
-    return readFromBLOB(queryResult, queryResult.findColumn(column));
+  public String readFromBLOB(ResultSet queryResult, String column, String encrypted_key) throws SQLException {
+    return readFromBLOB(queryResult, queryResult.findColumn(column), encrypted_key);
   }
 
   public static void main(String[] args) throws SQLException {
@@ -366,23 +371,24 @@ public class Database {
     result.close();*/
 
     //assert db.updateQuery("DELETE FROM data_type WHERE type_id=6")==1;
-    result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
+    /*result = db.query("SELECT * FROM data_type WHERE type_name LIKE 'SSN'");
     assert !result.next();
-    result.close();
+    result.close();*/
 
-    assert db.insertQuery("INSERT INTO user_data(user_name, password, name) VALUES('test_user', 'test', 'Test McTester')") == 1;
-    assert db.insertBLOB(1, "Facebook", "Facebook Username", "Hello World", "test_pass") == 1;
-    result = db.query("SELECT * FROM encrypted_data");
+    assert db.insertQuery("INSERT INTO user_data(user_name, password) VALUES('test_user', 'test')") == 1;
+    assert db.insertQuery("INSERT INTO user_data(user_name, password) VALUES('thisisatest', '2d7c559efe13d4be1c656e79649f8548f8b302ddab7c445c2a1c42a2ed249c57')") == 2;
+    //assert db.insertBLOB(1, "Facebook", "Facebook Username", "Hello World", "test_pass") == 1;
+    /*result = db.query("SELECT * FROM encrypted_data");
     assert result.next();
     assert result.getInt("data_id")==1;
     assert result.getInt("user_id")==1;
     assert result.getString("category").compareTo("Facebook") == 0;
     //assert result.getInt("type_id")==1;
     assert result.getString("note").compareTo("Facebook Username") == 0;
-    String test_blob = db.readFromBLOB(result, "encrypted_data");
-    assert (test_blob).compareTo("Hello World") == 0;
-    assert !result.next();
-    result.close();
+    /*String test_blob = db.readFromBLOB(result, "encrypted_data");
+    assert (test_blob).compareTo("Hello World") == 0;*/
+    //assert !result.next();
+    //result.close();
 
     /*result = db.query("SELECT user_data.user_id AS user_id, user_data.user_name AS user_name, " +
         "encrypted_data.data_id AS data_id, encrypted_data.category AS category, " +

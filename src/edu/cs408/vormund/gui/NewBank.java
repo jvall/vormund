@@ -2,7 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package vormund;
+package edu.cs408.vormund.gui;
+
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
 
 /**
  *
@@ -13,8 +19,11 @@ public class NewBank extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
-    public NewBank() {
+	private DBHelpers helpers;	
+	
+    public NewBank(DBHelpers h) {
         initComponents();
+        helpers = h;
     }
 
     /**
@@ -38,7 +47,8 @@ public class NewBank extends javax.swing.JFrame {
         routingfield = new javax.swing.JTextField();
         acctypefield = new javax.swing.JTextField();
         donebutton2 = new javax.swing.JButton();
-
+        
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Vormund");
@@ -56,7 +66,12 @@ public class NewBank extends javax.swing.JFrame {
         donebutton2.setText("Done");
         donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                donebutton2MouseClicked(evt);
+                try {
+					donebutton2MouseClicked(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -123,62 +138,85 @@ public class NewBank extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_donebutton2MouseClicked
+    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_donebutton2MouseClicked
         // TODO add your handling code here:
-        
+
         //Check title
-        //Add to database
+    	//UserAccount user_acc = new UserAccount();
+    	String bank = namefield.getText().toString();
+		String add = addressfield.getText().toString();
+		String accnum = accountfield.getText().toString();
+		String rou_bal = routingfield.getText().toString();
+		String acctype = acctypefield.getText().toString();
+		Boolean done = true;
+    	
+		/*
+    	if(bank.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
+    		done = false;
+    	}
+    	else if(add.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter an address");
+    		done = false;
+    	}
+    	else if(accnum.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter an account number");
+    		done = false;
+    	}
+    	else if(rou_bal.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter a routing number");    
+    		done = false;
+    	}
+    	else if(acctype.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please enter an account type");
+    		done = false;
+    	}
+    	*/
+		/*
+    	if(!user_acc.updating){
+    		int result = helpers.newBank(bank, accnum, rou_bal, add, acctype);
+    		if(result == -1)
+    		{
+    			JOptionPane.showMessageDialog(null,"An entry with the given account number already exists");
+    			return;
+    		}
+    		
+    		user_acc.updating = false;
+    		done = true;
+    	}
+    	else
+    	{
+    		//Isabel needs to find a way of tracking the id of the data items
+    		//helpers.newBank(?, bank, accnum, rou, add, acctype);
+    		done = true;
+    	}*/
+    	
+    	if(done == true)
+    	{
+    		new UserAccount(helpers).setVisible(true);
         
-        //dispose
-        dispose();
+    		//dispose
+    		dispose();
+    	}
     }//GEN-LAST:event_donebutton2MouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewBank.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new NewBank().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField accountfield;
-    private javax.swing.JLabel accountnum;
-    private javax.swing.JLabel accounttype;
+    public javax.swing.JLabel accountnum;
+    public javax.swing.JLabel accounttype;
     private javax.swing.JTextField acctypefield;
-    private javax.swing.JLabel address;
+    public javax.swing.JLabel address;
     private javax.swing.JTextField addressfield;
-    private javax.swing.JLabel bankname;
+    public javax.swing.JLabel bankname;
     private javax.swing.JButton donebutton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField namefield;
     private javax.swing.JTextField routingfield;
-    private javax.swing.JLabel routinglab;
+    public javax.swing.JLabel routinglab;
     // End of variables declaration//GEN-END:variables
 }

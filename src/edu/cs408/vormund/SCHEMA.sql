@@ -20,8 +20,7 @@ DROP TABLE IF EXISTS user_data;
 CREATE TABLE user_data (
   user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
   user_name TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL,
-  name TEXT NOT NULL
+  password TEXT NOT NULL
 );
 
 CREATE TABLE encrypted_data (

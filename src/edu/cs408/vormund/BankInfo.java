@@ -6,6 +6,7 @@ public class BankInfo {
     private String routingNumber;
     private String bankAddress;
     private String type; //Used to denote checking vs savings. A standard for this will need to be set
+    private int recordID;
 
     public BankInfo(BankInfo b) {
         this.accountNumber = b.accountNumber;
@@ -13,14 +14,16 @@ public class BankInfo {
         this.bankName = b.bankName;
         this.bankAddress = b.bankAddress;
         this.type = b.type;
+        this.recordID = b.recordID;
     }
 
-    public BankInfo(String accountNumber, String routingNumber, String bankName, String bankAddress, String type) {
+    public BankInfo(String accountNumber, String routingNumber, String bankName, String bankAddress, String type, int recordID) {
         this.accountNumber = accountNumber;
         this.routingNumber = routingNumber;
         this.bankName = bankName;
         this.bankAddress = bankAddress;
         this.type = type;
+        this.recordID = recordID;
     }
 
     public BankInfo(String csvBankVals) {
@@ -46,11 +49,19 @@ public class BankInfo {
         return this.type;
     }
 
-    public static BankInfo serializeCSVDump(String csvBankVals) {
-        // MUST be in same order as above constructor
-        String vals[] = csvBankVals.split(",");
+    public int getRecordID() {
+        return this.recordID;
+    }
 
-        return new BankInfo(vals[0], vals[1], vals[2], vals[3], vals[4]);
+    public String toString() {
+        return accountNumber + ";" + routingNumber + ";" + bankName + ";" + bankAddress + ";" + type;
+    }
+
+    public static BankInfo serializeCSVDump(String csvBankVals, int recordID) {
+        // MUST be in same order as above constructor
+        String vals[] = csvBankVals.split(";");
+
+        return new BankInfo(vals[0], vals[1], vals[2], vals[3], vals[4], recordID);
     }
 }
 

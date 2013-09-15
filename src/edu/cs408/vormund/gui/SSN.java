@@ -2,7 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package vormund;
+package edu.cs408.vormund.gui;
+
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+
+import edu.cs408.vormund.DBHelpers;
 
 /**
  *
@@ -13,9 +19,12 @@ public class SSN extends javax.swing.JFrame {
     /**
      * Creates new form LoginWindow
      */
-    public SSN() {
+	private DBHelpers helpers;
+    public SSN(DBHelpers h) {
         initComponents();
+        helpers = h;
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,6 +41,7 @@ public class SSN extends javax.swing.JFrame {
         namefield = new javax.swing.JTextField();
         ssnfield = new javax.swing.JPasswordField();
         done = new javax.swing.JButton();
+        
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -44,7 +54,12 @@ public class SSN extends javax.swing.JFrame {
         done.setText("Done");
         done.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                doneMouseClicked(evt);
+                try {
+					doneMouseClicked(evt);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -92,57 +107,61 @@ public class SSN extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void doneMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_doneMouseClicked
+    private void doneMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_doneMouseClicked
         // TODO add your handling code here:
-        
+
         //Check name and ssn
         //Add to database
+    	//UserAccount user_acc = new UserAccount();
+    	String user_name = name.getText().toString();
+		String social = ssnfield.getText().toString();
+		Boolean done = true;
+		
+    	if(user_name.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
+    		done = false;
+    	}
+    	else if(social.length() == 0)
+    	{
+    		JOptionPane.showMessageDialog(null,"Please fill up the SSN field!");
+    		done = false;
+    		
+    	}
+    	/*
+    	if(!user_acc.updating){
+    		int result = helpers.newSocial(user_name, social);
+    		if(result == -1)
+    		{
+    			JOptionPane.showMessageDialog(null,"An entry with the given SSN already exists");
+    			return;
+    		}
+    		
+    		user_acc.updating = false;
+    		done = true;
+    	}
+    	else
+    	{
+    		//Isabel needs to find a way of tracking the id of the data items
+    		//helpers.updateSocial(?, user_name, social);
+    		done = true;
+    	}*/
+    	
+    	if(done == true)
+    	{
+    		new UserAccount(helpers).setVisible(true);
         
-        //Close
-        dispose();
+    		//dispose
+    		dispose();
+    	}
     }//GEN-LAST:event_doneMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SSN.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new SSN().setVisible(true);
-            }
-        });
-    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton done;
-    private javax.swing.JLabel name;
+    public javax.swing.JLabel name;
     private javax.swing.JTextField namefield;
     private javax.swing.JLabel snn;
-    private javax.swing.JPasswordField ssnfield;
+    public javax.swing.JPasswordField ssnfield;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 }
