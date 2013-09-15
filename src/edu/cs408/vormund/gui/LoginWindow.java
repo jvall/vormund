@@ -119,7 +119,7 @@ public class LoginWindow extends javax.swing.JFrame {
 
 		if(done == true)
 		{
-			if (helpers.checkLogin(name, pass)) {
+			if (helpers.checkLogin(name, pass) != null) {
 				new UserAccount(helpers).setVisible(true);
 				dispose();
 			}
@@ -152,7 +152,7 @@ public class LoginWindow extends javax.swing.JFrame {
 			}
 		}
 
-		//new UserAccount(helpers).setVisible(true);
+		new UserAccount(helpers).setVisible(true);
 		dispose();
 
 	}                                           

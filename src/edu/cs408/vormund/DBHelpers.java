@@ -166,12 +166,19 @@ public class DBHelpers {
 	public boolean checkLogin(String userName, String password) {
 		ResultSet entries = null;
 		try {
-		String encrypt = Encryption.encryptHashString(password);
-		entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
+			String encrypt = Encryption.encryptHashString(password);
+			entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
+			if (entries.next())
+				user_id = entries.getInt("user_id");
+			else
+				user_id = -1;
 		} catch (NoSuchAlgorithmException e) {
 			System.err.println("No algorithm found: " + e);
+		} catch (SQLException e) {
+			System.err.println("Check login error: " + e);
 		}
-		return entries != null && resultsCount(entries) != 0;
+
+		return user_id != -1;
 	}
 
     //Return a listing of all data entries of type bank including their name/label and ID
