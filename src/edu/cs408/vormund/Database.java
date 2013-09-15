@@ -14,8 +14,8 @@ import java.sql.*;
 // TODO: Fix unittests
 public class Database {
   private static final String SCHEMA_FILE = "/edu/cs408/vormund/SCHEMA.sql";
-  //private static final String DATABASE_FILE = ":resource:/edu/cs408/vormund/lib-common2.3.2.jar";
-  private static final String DATABASE_FILE = "test.db";
+  private static final String DATABASE_FILE = ":resource:edu/cs408/vormund/lib-common2.3.2.jar";
+  //private static final String DATABASE_FILE = "test.db";
 
   private Connection conn = null;
   private Statement stmnt = null;
@@ -31,7 +31,6 @@ public class Database {
       System.err.println("Failed to create connection.");
       System.err.println("  Connection: " + this.conn);
       try{System.err.println("  IsClosed: " + this.conn.isClosed());}catch(Exception e){}
-      System.err.println("  HasConn: " + this.hasConnection());
       try{System.err.println("  HasConn: " + (this.conn!=null && !this.conn.isClosed()));}catch(Exception e){}
       return;
     }

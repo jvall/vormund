@@ -20,7 +20,7 @@ MOVELIST=${BUILDDIR}move.txt
 SRCDIRESCAPED=${SRCDIR:/=\/}
 BUILDDIRESCAPED=${BUILDDIR:/=\/}
 CLASSPATH=.:../${LIBDIR}${LIBDEPS}
-DISPOSE=${BUILDDIR}dispose.tmp
+DISPOSE=.bak
 
 all: compile jar
 
@@ -34,7 +34,7 @@ compile:
 	touch ${DISPOSE}
 	sed -i '${DISPOSE}' -e "s/${SRCDIRESCAPED}//g" ${MOVELIST}
 	cat ${MOVELIST} | xargs -I FL cp ${SRCDIR}FL ${BUILDDIR}FL
-	rm -f ${MOVELIST} ${DISPOSE} ${BUILDLIST}
+	rm -f ${MOVELIST} ${DISPOSE} ${BUILDLIST} ${MOVELIST}${DISPOSE}
 
 jarwlib:
 	#find ${BUILDDIR} -type f \( -iname "*" ! -iname "*.md" ! -iname "build.txt" ! -iname "Manifest.txt" \) -print > ${BUILDLIST}
@@ -43,7 +43,7 @@ jarwlib:
 	touch ${DISPOSE}
 	sed -i "${DISPOSE}" -e "s/\[CLASSPATH\]/${LIBDEPS}/g" ${OUTDIR}Manifest.txt
 	sed -i "${DISPOSE}" -e "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
-	rm ${DISPOSE}
+	rm -f ${DISPOSE} ${OUTDIR}Manifest.txt${DISPOSE}
 	cp ${LIBDIR}*.jar ${OUTDIR}
 	${JAR} -cfmv ${OUTDIR}${JARNAME} ${OUTDIR}Manifest.txt -C ${BUILDDIR} .
 
@@ -51,7 +51,7 @@ jar:
 	cp Manifest.txt ${OUTDIR}
 	touch ${DISPOSE}
 	sed -i "${DISPOSE}" -e "s/\[MAINCLASS\]/${MAINCLASS}/g" ${OUTDIR}Manifest.txt
-	rm ${DISPOSE}
+	rm -f ${DISPOSE} ${OUTDIR}Manifest.txt${DISPOSE}
 	${JAR} -cfmv ${OUTDIR}${JARNAME} ${OUTDIR}Manifest.txt -C ${BUILDDIR} .
 
 run:
