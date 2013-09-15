@@ -117,9 +117,9 @@ public class LoginWindow extends javax.swing.JFrame {
 			done = false;
 		}
 
-		if(done == true)
+		if(done)
 		{
-			if (helpers.checkLogin(name, pass) != null) {
+			if (helpers.checkLogin(name, pass)) {
 				new UserAccount(helpers).setVisible(true);
 				dispose();
 			}
