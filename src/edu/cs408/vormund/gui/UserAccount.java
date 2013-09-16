@@ -248,7 +248,7 @@ public class UserAccount extends javax.swing.JFrame {
 		
 		if(mcb.compareTo("Bank") == 0)
 		{
-			if(banks.size() > 0)
+			if(banks.size() > 0 && secd_cat != 0)
 			{
 				BankInfo selectedBank = banks.get(secd_cat-1);
 				
@@ -259,7 +259,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(mcb.compareTo("Website") == 0)
 		{
-			if(webs.size() > 0)
+			if(webs.size() > 0 && secd_cat != 0)
 			{
 				WebInfo selectedWeb = webs.get(secd_cat-1);
 				String qaSecurityText = "Security Questions:\n";
@@ -276,7 +276,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(mcb.compareTo("Notes") == 0)
 		{
-			if(notes.size() > 0)
+			if(notes.size() > 0 && secd_cat != 0)
 			{
 				NoteInfo selectedNote = notes.get(secd_cat-1);
 				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
@@ -284,7 +284,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(mcb.compareTo("SSN") == 0)
 		{
-			if(ssn.size() > 0)
+			if(ssn.size() > 0 && secd_cat != 0)
 			{
 				SSNInfo selectedSNN = ssn.get(secd_cat-1);
 				userinfotext.setText("Title: "+ selectedSNN.getName() + "\n\n" + selectedSNN.getSSN());	
@@ -404,7 +404,7 @@ public class UserAccount extends javax.swing.JFrame {
 	private void refreshNotesList() {
 		repaint();
 
-		String names[] = new String[notes.size()];
+		String names[] = new String[notes.size() + 1];
 		int i = 1;
 		names[0] = "Notes";
 		for (NoteInfo n : notes) {

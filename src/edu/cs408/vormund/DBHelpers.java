@@ -296,14 +296,13 @@ public class DBHelpers {
         ArrayList<NoteInfo> notes = new ArrayList<NoteInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE category LIKE 'Note' AND user_id='" + user_id + "'");
             if(entries.next())
             {
                 while(!entries.isAfterLast())
                 {
                     String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
-                    int id = entries.getInt("data_id");
-                    notes.add(NoteInfo.serializeCSVDump(decrypt, id));
+                    notes.add(new NoteInfo(entries.getString("name"), decrypt, entries.getInt("data_id")));
                     entries.next();
                 }
             }
@@ -321,9 +320,8 @@ public class DBHelpers {
         try {
             ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE data_id='" + noteID + "' AND user_id='" + user_id + "'");
             entries.next();
-            int id = entries.getInt("data_id");
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
-            note = NoteInfo.serializeCSVDump(decrypt, id);
+            note = new NoteInfo(entries.getString("name"), decrypt, entries.getInt("data_id"));
  
         } catch (SQLException e) {
             //TODO: replace with error logging

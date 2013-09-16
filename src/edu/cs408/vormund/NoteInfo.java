@@ -38,10 +38,5 @@ public class NoteInfo {
     public int getRecordID() {
     	return this.recordID;
     }
-
-    public static NoteInfo serializeCSVDump(String val, int recordID) {
-        String split[] = val.split(";");
-        return new NoteInfo(split[0], split[1], recordID);
-    }
 }
 
