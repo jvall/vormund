@@ -221,10 +221,13 @@ public class UserAccount extends javax.swing.JFrame {
 					}
 		else if(mcb.compareTo("Notes") == 0)
 		{
-			if(notes.size() > 0)
+			if(notes.size() > 0 && scb != 0)
 			{
-				NoteInfo selectedNote = notes.get(scb-1);
-				//delete function
+				userinfotext.setText("");
+				NoteInfo selectedNote = notes.get(SubCB.getSelectedIndex() - 1);
+				helpers.delete(selectedNote.getRecordID());
+				notes = helpers.getNotes();
+				refreshNotesList();
 			}
 		}
 		else if(mcb.compareTo("SSN") == 0)
@@ -298,13 +301,10 @@ public class UserAccount extends javax.swing.JFrame {
 		
 		if(main.compareTo("Bank") == 0)
 		{
-			if(SubCB.getItemCount() > 1)
+			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
 			{
-				if(SubCB.getSelectedIndex() != 0)
-				{
-					System.out.println("Selected Item: " + SubCB.getSelectedIndex());
-					new NewBank(helpers, banks.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
-				}
+				System.out.println("Selected Item: " + SubCB.getSelectedIndex());
+				new NewBank(helpers, banks.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
 			}
 		}
 		if(main.compareTo("Website") == 0)
@@ -312,8 +312,11 @@ public class UserAccount extends javax.swing.JFrame {
 			new Website(helpers).setVisible(true);
 		}
 		if(main.compareTo("Notes") == 0)
-		{
-			new Notes(helpers).setVisible(true);
+		{			
+			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
+			{
+				new Notes(helpers, notes.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
+			}
 		}
 		if(main.compareTo("SSN") == 0)
 		{
@@ -356,23 +359,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
-			repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Note"}));
-			if(notes.size() == 0)
-			{
-				JOptionPane.showMessageDialog(null,"No notes in the database! Please add new notes!");				
-			}
-			else
-			{
-			String names[] = new String[notes.size()];
-			int i = 1;
-			names[0] = "Notes";
-			for (NoteInfo n : notes) {
-				names[i++] = n.getName();
-			}
-
-			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-			}
+			refreshNotesList();
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
@@ -409,6 +396,19 @@ public class UserAccount extends javax.swing.JFrame {
 		names[0] = "Banks";
 		for (BankInfo b : banks) {
 			names[i++] = b.getBankName();
+		}
+
+		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+	}
+	
+	private void refreshNotesList() {
+		repaint();
+
+		String names[] = new String[notes.size()];
+		int i = 1;
+		names[0] = "Notes";
+		for (NoteInfo n : notes) {
+			names[i++] = n.getName();
 		}
 
 		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));

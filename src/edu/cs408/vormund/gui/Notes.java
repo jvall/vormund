@@ -6,7 +6,9 @@ package edu.cs408.vormund.gui;
 
 import javax.swing.JOptionPane;
 
+import edu.cs408.vormund.BankInfo;
 import edu.cs408.vormund.DBHelpers;
+import edu.cs408.vormund.NoteInfo;
 
 /**
  *
@@ -18,10 +20,24 @@ public class Notes extends javax.swing.JFrame {
 	 * Creates new form NewBank
 	 */
 	private DBHelpers helpers;
-	public Notes(DBHelpers h) {
-		initComponents();
-		h = helpers;
-	}
+	
+	private boolean isUpdating;
+	
+	private int data_id;
+	
+    public Notes(DBHelpers h) {
+        helpers = h;
+        isUpdating = false;
+        data_id = -1;
+        initComponents();
+    }
+    
+    public Notes(DBHelpers h, int data_id) {
+    	helpers = h;
+        isUpdating = true;
+        this.data_id = data_id;
+        initComponents();
+    }
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -38,6 +54,13 @@ public class Notes extends javax.swing.JFrame {
 		donebutton2 = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		notearea = new javax.swing.JTextArea();
+		
+		if(data_id != -1)
+        {
+	        NoteInfo note = helpers.getNote(data_id);
+	        notearea.setText(note.getNote().toString()); 
+	        notetitle.setText(note.getName());
+        }
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -117,10 +140,9 @@ public class Notes extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter a note");
     		done = false;
     	}
-		
-		//Add to database
-		if(!user_acc.updating)
-		{        	
+    	
+    	
+    	if(!isUpdating){
     		int result = helpers.newNote(n_title, n_text);
     		if(result == -1)
     		{
@@ -131,13 +153,13 @@ public class Notes extends javax.swing.JFrame {
 			//helpers.updateNote(socialid, n_title, n_text);
 			user_acc.updating = false;
 			done = true;
-		}
-		else
-		{
-			//Isabel needs to find a way of tracking the data id
-			//helpers.updateNote(?, n_title, n_text);
-			done = true;
-		}
+    	}
+    	else
+    	{
+    		helpers.updateNote(data_id, n_title, n_text);
+    		done = true;
+    	}
+    	
 		
 		if(done == true){
 			new UserAccount(helpers).setVisible(true);
