@@ -18,17 +18,23 @@ public class Website extends javax.swing.JFrame {
 	 * Creates new form NewBank
 	 */
 	private DBHelpers helpers;
-	String name = "";
-	String u = "";
-	String user = "";
-	String pass = "";
-	String em = "";
+	private int user_id;
+	private boolean isUpdating;
 
 	// DBHelpers DBHelp = new DBHelpers();
 
 	public Website(DBHelpers h) {
-		initComponents();
 		helpers = h;
+		user_id = -1;
+		isUpdating = false;
+		initComponents();
+	}
+
+	public Website(DBHelpers h, int user_id) {
+		helpers = h;
+		this.user_id = user_id;
+		isUpdating = true;
+		initComponents();
 	}
 
 	/**
@@ -178,43 +184,29 @@ public class Website extends javax.swing.JFrame {
 	private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_donebutton2MouseClicked
 		// TODO add your handling code here:
 
-		name = namefield.getText().toString();
-		u = addressfield.getText().toString();
-		user = accountfield.getText().toString();
-		pass = passfield.getText().toString();
-		em = acctypefield.getText().toString();
-		Boolean done = true;
+		String name = namefield.getText().toString();
+		String u = addressfield.getText().toString();
+		String user = accountfield.getText().toString();
+		String pass = passfield.getText().toString();
+		String em = acctypefield.getText().toString();
 
-		/*
 		if (name.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the name field!");
-			done = false;
 		} 
 		else if (u.length() == 0) {
 			JOptionPane
 			.showMessageDialog(null, "Please fill up the url field!");
-			done = false;
-
 		} else if (user.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the user field!");
-			done = false;
-
 		} else if (pass.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the pass field!");
-			done = false;
 		} else if (em.length() == 0) {
 			JOptionPane.showMessageDialog(null, "Please fill up the em field!");
-			done = false;
-		}*/
-		// open next window
-
-		if(done == true){
+		} else {
 			new Website2(helpers).setVisible(true);
-
-			// dispose
 			dispose();
 		}
 	}// GEN-LAST:event_donebutton2MouseClicked
