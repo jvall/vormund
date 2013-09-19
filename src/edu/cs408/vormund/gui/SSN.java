@@ -1,14 +1,13 @@
+package edu.cs408.vormund.gui;
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.cs408.vormund.gui;
 
 import java.sql.SQLException;
-
 import javax.swing.JOptionPane;
-
 import edu.cs408.vormund.DBHelpers;
+import edu.cs408.vormund.SSNInfo;
 
 /**
  *
@@ -16,6 +15,8 @@ import edu.cs408.vormund.DBHelpers;
  */
 public class SSN extends javax.swing.JFrame {
 
+  int data_id = -1;
+  boolean isUpdating = false;
     /**
      * Creates new form LoginWindow
      */
@@ -24,7 +25,13 @@ public class SSN extends javax.swing.JFrame {
         initComponents();
         helpers = h;
     }
-    
+
+    public SSN(DBHelpers h, int data_id) {
+      helpers = h;
+      isUpdating = true;
+      this.data_id = data_id;
+      initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -39,28 +46,30 @@ public class SSN extends javax.swing.JFrame {
         name = new javax.swing.JLabel();
         snn = new javax.swing.JLabel();
         namefield = new javax.swing.JTextField();
-        ssnfield = new javax.swing.JPasswordField();
+        ssnfield = new javax.swing.JTextField();
         done = new javax.swing.JButton();
-        
+
+        if(data_id != -1) {
+          SSNInfo ssn = helpers.getSocial(data_id);
+          namefield.setText(ssn.getName());
+          ssnfield.setText(ssn.getSSN());
+        }
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         title1.setText("Vormund");
-
         name.setText("Name");
-
         snn.setText("SSN");
 
         done.setText("Done");
-        done.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                try {
-					doneMouseClicked(evt);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
+        done.addActionListener(new java.awt.event.ActionListener() {
+          public void actionPerformed(java.awt.event.ActionEvent evt) {
+            try {
+					    doneMouseClicked(evt);
+				    } catch (SQLException e) {
+					    // TODO Auto-generated catch block
+					    e.printStackTrace();
+				    }
+          }
         });
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -107,16 +116,14 @@ public class SSN extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void doneMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_doneMouseClicked
-        // TODO add your handling code here:
+    /* Defects:
+     *   Pressing Enter does not submit the form
+     */
+    private void doneMouseClicked(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_doneMouseClicked
+    	String user_name = namefield.getText().toString();
+		  String social = ssnfield.getText().toString();
+		  Boolean done = true;
 
-        //Check name and ssn
-        //Add to database
-    	//UserAccount user_acc = new UserAccount();
-    	String user_name = name.getText().toString();
-		String social = ssnfield.getText().toString();
-		Boolean done = true;
-		
     	if(user_name.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
@@ -126,31 +133,25 @@ public class SSN extends javax.swing.JFrame {
     	{
     		JOptionPane.showMessageDialog(null,"Please fill up the SSN field!");
     		done = false;
-    		
-    	}
-    	/*
-    	if(!user_acc.updating){
-    		int result = helpers.newSocial(user_name, social);
-    		if(result == -1)
-    		{
-    			JOptionPane.showMessageDialog(null,"An entry with the given SSN already exists");
-    			return;
-    		}
-    		
-    		user_acc.updating = false;
-    		done = true;
-    	}
-    	else
-    	{
-    		//Isabel needs to find a way of tracking the id of the data items
-    		//helpers.updateSocial(?, user_name, social);
-    		done = true;
-    	}*/
-    	
-    	if(done == true)
-    	{
+    	} else {
+        if(!isUpdating) {
+          if( helpers.newSocial(user_name, social) == -1 ) {
+            JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");
+            done = false;
+          }
+        } else {
+          if( helpers.updateSocial(data_id, user_name, social) == -1 ) {
+            JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
+            done = false;
+          } else {
+            done = true;
+          }
+        }
+      }
+
+    	if(done == true) {
     		new UserAccount(helpers).setVisible(true);
-        
+
     		//dispose
     		dispose();
     	}
@@ -161,7 +162,7 @@ public class SSN extends javax.swing.JFrame {
     public javax.swing.JLabel name;
     private javax.swing.JTextField namefield;
     private javax.swing.JLabel snn;
-    public javax.swing.JPasswordField ssnfield;
+    public javax.swing.JTextField ssnfield;
     private javax.swing.JLabel title1;
     // End of variables declaration//GEN-END:variables
 }

@@ -20,6 +20,10 @@ public class SSNInfo {
     public SSNInfo(String csvSSNVals) {
     }
 
+    public int getRecordID() {
+      return this.recordID;
+    }
+
     public String getName() {
     	return this.name;
     }
@@ -35,7 +39,6 @@ public class SSNInfo {
     public static SSNInfo serializeCSVDump(String csvSSNVals, int recordID) {
         // MUST be in same order as above constructor
         String vals[] = csvSSNVals.split(";");
-
         return new SSNInfo(vals[0], vals[1], recordID);
     }
 }

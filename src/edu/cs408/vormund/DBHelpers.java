@@ -28,10 +28,9 @@ public class DBHelpers {
 		}
 
 		//Perform the insert
-		
+
 		String userPassword = Encryption.encryptHashString(password);
 
-		System.out.println("userName = " + userName + ", and password encrypted= " + userPassword);
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
 
 
@@ -154,7 +153,8 @@ public class DBHelpers {
 			return -1;
 
 		//Have now shown ssn to not already exist in database and can proceed with the insert
-		int insertStatus = dbObj.insertBLOB(user_id, "SSN", name, ssn, key);
+    String data_string = name + ";" + ssn;
+		int insertStatus = dbObj.insertBLOB(user_id, "SSN", name, data_string, key);
 
 		if(insertStatus == -1)
 			return -1;
@@ -176,7 +176,7 @@ public class DBHelpers {
 
 		return false;
 	}
-	
+
 	//Returns the userID if valid login, false otherwise
 	public boolean checkLogin(String userName, String password) {
 		ResultSet entries = null;
@@ -198,8 +198,7 @@ public class DBHelpers {
 				{
 					key = key.substring(0,  16);
 				}
-				
-				System.out.println("This key: '" + key + "', key length: " + key.length());
+
 			}
 			else
 				user_id = -1;
@@ -324,7 +323,7 @@ public class DBHelpers {
             int id = entries.getInt("data_id");
             String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
             note = NoteInfo.serializeCSVDump(decrypt, id);
- 
+
         } catch (SQLException e) {
             //TODO: replace with error logging
             System.err.println("Database error: " + e);
@@ -338,22 +337,16 @@ public class DBHelpers {
         ArrayList<SSNInfo> ssns = new ArrayList<SSNInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
-            if(entries.next())
-            {
-                while(!entries.isAfterLast())
-                {
-                    String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
-                    int id = entries.getInt("data_id");
-                    ssns.add(SSNInfo.serializeCSVDump(decrypt, id));
-                    entries.next();
-                }
+            ResultSet entries = dbObj.query("SELECT encrypted_data, data_id FROM encrypted_data WHERE category LIKE 'SSN' AND user_id='" + user_id + "'");
+            while(entries.next()) {
+              String decrypt = dbObj.readFromBLOB(entries, "encrypted_data", key);
+              int id = entries.getInt("data_id");
+              ssns.add(SSNInfo.serializeCSVDump(decrypt, id));
             }
         } catch (SQLException e) {
             //TODO: replace with error logging
             System.err.println("Database error: " + e);
         }
-
         return ssns;
     }
 
@@ -408,8 +401,9 @@ public class DBHelpers {
 	}
 
 	//Will overwrite data previously written for entry with given socialID
-	public void updateSocial(int socialID, String name, String ssn) {
-		dbObj.updateBLOB(socialID, name, ssn, key);
+	public int updateSocial(int socialID, String name, String ssn) {
+    String data_string = name + ";" + ssn;
+		return dbObj.updateBLOB(socialID, null, data_string, key);
 	}
 
 	//Will remove entry with given ID
