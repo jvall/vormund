@@ -55,7 +55,6 @@ public class SSN extends javax.swing.JFrame {
 			ssnfield.setText(ssn.getSSN());
 		}
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		title1.setText("Vormund");
 		name.setText("Name");
 		snn.setText("SSN");
@@ -151,7 +150,6 @@ public class SSN extends javax.swing.JFrame {
 		}
 
 		if(done == true) {
-			new UserAccount(helpers).setVisible(true);
 
 			//dispose
 			dispose();

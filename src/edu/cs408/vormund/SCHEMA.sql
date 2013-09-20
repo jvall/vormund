@@ -32,18 +32,3 @@ CREATE TABLE encrypted_data (
   UNIQUE(user_id, category, name),
   FOREIGN KEY(user_id) REFERENCES user_data(user_id)
 );
-
-/* INPUT DATA FOR TESTING PURPOSES */
-/* Password: test */
-INSERT INTO user_data(user_name, password) VALUES ('testie', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');
-INSERT INTO user_data(user_name, password) VALUES ('tester', '9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08');
-
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Bank Account', 'Purdue Federal Credit Union:Checking', 'VK9vb3AjYWiNGZtJa6ePpRLT6SR8+XedR+Uff0vqQDC2GSMPC3KPUJjTI9PmaXu0jfrCdiAKiNWR82JM47xjkUirSlnP4eHVEQkNiT+Mrdk=');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Bank Account', 'Teachers Credit Union', 'bgAXGazNPIxFEG9FrrEZ3BBqllAD3n26bpMnLntFQJdni4s1HgMHo9yiAc1k2KCYzxFYtdwYz37HnBwHeYsC8cvbboQhc+cVYxAMyL2O5fA=');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Bank Account', 'Purdue Federal Credit Union:Savings','bgAXGazNPIxFEG9FrrEZ3BBqllAD3n26bpMnLntFQJdni4s1HgMHo9yiAc1k2KCYzxFYtdwYz37HnBwHeYsC8cvbboQhc+cVYxAMyL2O5fA=');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'SSN', 'Test User', 'afalbJZ3x4E6cL+6VWoiAKV1XDMhF1XHC0/MRGKtqVM=');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'SSN', 'Tester User', 'JdrR+TZ9Tju9uHllfAYhsGBisuAchcHxc6TA15zgiDI=');
-/*INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Website', 'Facebook', '');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Website', 'Google', '');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Website', 'Reddit', '');
-INSERT INTO encrypted_data(user_id, category, name, encrypted_data) VALUES (1, 'Website', 'Purdue Career', '');*/
