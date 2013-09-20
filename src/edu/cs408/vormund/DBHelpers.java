@@ -365,24 +365,28 @@ public class DBHelpers {
     }
 
 	//Will overwrite data previously written for entry with given userID
-  	public void updateUser(int userID, String userName, String password, String name) {
-    		if(userID != null && userName != null && password != null && name != null){
+  	public int updateUser(int userID, String userName, String password, String name) {
+    		if(userID != 0 && userName != null && password != null && name != null){
       			String query = "UPDATE user_data SET user_name='" + userName + "', password='" + password + "', name='" + name + "' WHERE user_id='" + userID + "'";
-      			dbObj.updateQuery(query);
+      			return dbObj.updateQuery(query);
     		}
+    		
+    		return -1;
   	}
 
 	//Will overwrite data previously written for entry with given bankID
-  	public void updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String accountType) {
-    		if(bankID != null && name != null && accountNumber != null && routingNumber != null && bankAddress != null && accountType != null){
+  	public int updateBank(int bankID, String name, String accountNumber, String routingNumber, String bankAddress, String accountType) {
+    		if(bankID != 0 && name != null && accountNumber != null && routingNumber != null && bankAddress != null && accountType != null){
       			String dataString = accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType;
-      			dbObj.updateBLOB(bankID, name, dataString, key);
+      			return dbObj.updateBLOB(bankID, name, dataString, key);
     		}
+    		
+    		return -1;
   	}
 
 	//Will overwrite data previously written for entry with given webID
-  	public void updateWeb(int webID, String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
-    		if(webID != null && name != null && url != null && email != null && userName != null && password != null && securityQAPairs != null){
+  	public int updateWeb(int webID, String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
+    		if(webID != 0 && name != null && url != null && email != null && userName != null && password != null && securityQAPairs != null){
       			String dataString = url + ";" + email + ";" + userName + ";" + password;
       
       			//Dynamically add the security QA pairs into the dataString for encryption
@@ -394,29 +398,35 @@ public class DBHelpers {
         			dataString += securityQAPairs[i][1];
       			}
       
-      			dbObj.updateBLOB(webID, name, dataString, key);
+      			return dbObj.updateBLOB(webID, name, dataString, key);
     		}
+    		
+    		return -1;
   	}
 
 	//Will overwrite data previously written for entry with given noteID
-  	public void updateNote(int noteID, String name, String text) {
-		if(noteID != null && name != null && text != null){
-			dbObj.updateBLOB(noteID, name, text, key);
+  	public int updateNote(int noteID, String name, String text) {
+		if(noteID != 0 && name != null && text != null){
+			return dbObj.updateBLOB(noteID, name, text, key);
 		}
+		
+		return -1;
   	}
 
 	//Will overwrite data previously written for entry with given socialID
   	public int updateSocial(int socialID, String name, String ssn) {
-		if(socialID != null && name != null && ssn != null){
-      			String data_string = name + ";" + ssn;
-      			return dbObj.updateBLOB(socialID, null, data_string, key);
-    		}
+		if(socialID != 0 && name != null && ssn != null){
+  			String data_string = name + ";" + ssn;
+  			return dbObj.updateBLOB(socialID, null, data_string, key);
+		}
+		
+		return -1;
   	}
 
 	//Will remove entry with given ID
 	public void delete(int id) {
-    		if(id != null){
-			String query = "DELETE FROM encrypted_data WHERE data_id='" + id + "'";
+    		if(id != 0){
+    			String query = "DELETE FROM encrypted_data WHERE data_id='" + id + "'";
       			dbObj.updateQuery(query);
     		}
   	}

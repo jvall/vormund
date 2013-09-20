@@ -211,8 +211,12 @@ public class NewBank extends javax.swing.JFrame {
     	}
     	else
     	{
-    		helpers.updateBank(data_id, bank, accnum, rou_bal, add, acctype);
-    		done = true;
+    		if( helpers.updateBank(data_id, bank, accnum, rou_bal, add, acctype) == -1 ) {
+            	JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
+	            done = false;
+	        } else {
+	            done = true;
+	        }
     	}
     	
     	

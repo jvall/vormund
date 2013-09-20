@@ -156,8 +156,12 @@ public class Notes extends javax.swing.JFrame {
     	}
     	else
     	{
-    		helpers.updateNote(data_id, n_title, n_text);
-    		done = true;
+            if( helpers.updateNote(data_id, n_title, n_text) == -1 ) {
+            	JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
+	            done = false;
+	        } else {
+	            done = true;
+	        }
     	}
     	
 		
