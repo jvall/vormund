@@ -24,19 +24,23 @@ public class Notes extends javax.swing.JFrame {
 	private boolean isUpdating;
 
 	private int data_id;
+	
+	private UserAccount parent;
 
-    public Notes(DBHelpers h) {
+    public Notes(DBHelpers h, UserAccount parent) {
         helpers = h;
         isUpdating = false;
         data_id = -1;
         initComponents();
+        this.parent = parent;
     }
 
-    public Notes(DBHelpers h, int data_id) {
+    public Notes(DBHelpers h, int data_id, UserAccount parent) {
     	helpers = h;
         isUpdating = true;
         this.data_id = data_id;
         initComponents();
+        this.parent = parent;
     }
 
 	/**
@@ -168,6 +172,7 @@ public class Notes extends javax.swing.JFrame {
 		if(done == true){
 			//new UserAccount(helpers).setVisible(true);
 			//dispose
+			parent.refreshNotesList();
 			dispose();
 		}
 	}//GEN-LAST:event_donebutton2MouseClicked
