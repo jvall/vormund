@@ -164,7 +164,7 @@ public class UserAccount extends javax.swing.JFrame {
 	private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
 		// TODO add your handling code here:
 		new LoginWindow().setVisible(true);
-		dispose();
+    this.dispose();
 	}//GEN-LAST:event_logoutActionPerformed
 
 	private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
@@ -175,22 +175,18 @@ public class UserAccount extends javax.swing.JFrame {
 		if(temp.compareTo("Bank") == 0)
 		{
 			new NewBank(helpers).setVisible(true);
-			dispose();
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
 			new Website(helpers).setVisible(true);
-			dispose();
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
 			new Notes(helpers).setVisible(true);
-			dispose();
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
 			new SSN(helpers).setVisible(true);
-			dispose();
 		}
 
 	}//GEN-LAST:event_addbuttonMouseClicked
@@ -330,7 +326,6 @@ public class UserAccount extends javax.swing.JFrame {
       }
 			//new SSN(helpers).setVisible(true);
 		}
-		dispose();
 
 	}//GEN-LAST:event_showbuttonMouseClicked
 

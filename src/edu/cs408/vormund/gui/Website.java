@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import edu.cs408.vormund.*;
 
 /**
- * 
+ *
  * @author isabellee
  */
 public class Website extends javax.swing.JFrame {
@@ -66,11 +66,11 @@ public class Website extends javax.swing.JFrame {
 			addressfield.setText(w.getUrl());
 			accountfield.setText(w.getUserName());
 			passfield.setText(w.getPassword());
-			//email.setText(w.email);			
-			
+			//email.setText(w.email);
+
 		}
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		jLabel1.setText("Vormund");
 
@@ -205,7 +205,7 @@ public class Website extends javax.swing.JFrame {
 		if (name.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the name field!");
-		} 
+		}
 		else if (u.length() == 0) {
 			JOptionPane
 			.showMessageDialog(null, "Please fill up the url field!");
@@ -232,7 +232,7 @@ public class Website extends javax.swing.JFrame {
 				}
 				if (result == -1) {
 					CommonDialogs.displayError("Already Exists", "That account already exists. Please try again.");
-				} 
+				}
 				else {
 							System.err.println("Point 4");
 					new UserAccount(helpers).setVisible(true);

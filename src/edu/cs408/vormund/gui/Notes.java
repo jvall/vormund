@@ -20,18 +20,18 @@ public class Notes extends javax.swing.JFrame {
 	 * Creates new form NewBank
 	 */
 	private DBHelpers helpers;
-	
+
 	private boolean isUpdating;
-	
+
 	private int data_id;
-	
+
     public Notes(DBHelpers h) {
         helpers = h;
         isUpdating = false;
         data_id = -1;
         initComponents();
     }
-    
+
     public Notes(DBHelpers h, int data_id) {
     	helpers = h;
         isUpdating = true;
@@ -54,15 +54,15 @@ public class Notes extends javax.swing.JFrame {
 		donebutton2 = new javax.swing.JButton();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		notearea = new javax.swing.JTextArea();
-		
+
 		if(data_id != -1)
         {
 	        NoteInfo note = helpers.getNote(data_id);
-	        notearea.setText(note.getNote().toString()); 
+	        notearea.setText(note.getNote().toString());
 	        notetitle.setText(note.getName());
         }
 
-		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		jLabel1.setText("Vormund");
 
@@ -125,11 +125,11 @@ public class Notes extends javax.swing.JFrame {
 
 		//Check title
 		//Add to database
-		UserAccount user_acc = new UserAccount(helpers);
+		//UserAccount user_acc = new UserAccount(helpers);
 		String n_text = notearea.getText().toString();
 		String n_title = notetitle.getText().toString();
 		Boolean done = true;
-		
+
     	if(n_text.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a title for the note");
@@ -140,8 +140,8 @@ public class Notes extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter a note");
     		done = false;
     	}
-    	
-    	
+
+
     	if(!isUpdating){
     		int result = helpers.newNote(n_title, n_text);
     		if(result == -1)
@@ -149,9 +149,9 @@ public class Notes extends javax.swing.JFrame {
     			JOptionPane.showMessageDialog(null,"New note creation failed");
     			done = false;
     		}
-			
+
 			//helpers.updateNote(socialid, n_title, n_text);
-			user_acc.updating = false;
+			//user_acc.updating = false;
 			done = true;
     	}
     	else
@@ -163,10 +163,10 @@ public class Notes extends javax.swing.JFrame {
 	            done = true;
 	        }
     	}
-    	
-		
+
+
 		if(done == true){
-			new UserAccount(helpers).setVisible(true);
+			//new UserAccount(helpers).setVisible(true);
 			//dispose
 			dispose();
 		}
