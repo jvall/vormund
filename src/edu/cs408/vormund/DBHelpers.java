@@ -26,7 +26,7 @@ public class DBHelpers {
 		{
 			return -1;
 		}
-
+		
 		//Perform the insert
 
 		String userPassword = Encryption.encryptHashString(password);

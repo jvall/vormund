@@ -174,7 +174,7 @@ public class UserAccount extends javax.swing.JFrame {
 
 		if(temp.compareTo("Bank") == 0)
 		{
-			new NewBank(helpers).setVisible(true);
+			new NewBank(helpers, this).setVisible(true);
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
@@ -182,11 +182,11 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
-			new Notes(helpers).setVisible(true);
+			new Notes(helpers, this).setVisible(true);
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
-			new SSN(helpers).setVisible(true);
+			new SSN(helpers, this).setVisible(true);
 		}
 
 	}//GEN-LAST:event_addbuttonMouseClicked
@@ -300,7 +300,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
 			{
-				new NewBank(helpers, banks.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
+				new NewBank(helpers, banks.get(SubCB.getSelectedIndex() - 1).getRecordID(), this).setVisible(true);
 			}
 		}
 		if(main.compareTo("Website") == 0)
@@ -314,14 +314,14 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
 			{
-				new Notes(helpers, notes.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
+				new Notes(helpers, notes.get(SubCB.getSelectedIndex() - 1).getRecordID(), this).setVisible(true);
 			}
 		}
 		if(main.compareTo("SSN") == 0)
 		{
       if( SubCB.getItemCount() > 1 ) {
         if( SubCB.getSelectedIndex() != 0 ) {
-          new SSN(helpers, ssn.get(SubCB.getSelectedIndex()-1).getRecordID()).setVisible(true);
+          new SSN(helpers, ssn.get(SubCB.getSelectedIndex()-1).getRecordID(), this).setVisible(true);
         }
       }
 			//new SSN(helpers).setVisible(true);
@@ -331,6 +331,7 @@ public class UserAccount extends javax.swing.JFrame {
 
 	private void MainCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MainCBItemStateChanged
 		// TODO add your handling code here:
+		System.out.println("Hey we made it here");
 
 		String temp = MainCB.getSelectedItem().toString();
 
@@ -349,20 +350,13 @@ public class UserAccount extends javax.swing.JFrame {
 		else if(temp.compareTo("SSN") == 0)
 		{
       refreshSocialsList();
-			/*repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "SSN"}));
-
-			String names[] = new String[ssn.size()+1];
-			int i = 1;
-			names[0] = "SSN";
-			for (SSNInfo s : ssn) {
-				names[i++] = s.getName();
-			}*/
 		}
 
 	}//GEN-LAST:event_MainCBItemStateChanged
 
-	private void refreshBanksList() {
+	public void refreshBanksList() {
+		banks = helpers.getBanks();
+		
 		repaint();
 
 		//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
@@ -373,23 +367,29 @@ public class UserAccount extends javax.swing.JFrame {
 		names[0] = "Banks";
 		for (BankInfo b : banks) {
 			names[i++] = b.getBankName();
+			System.out.println(b.getBankName());
 		}
 
 		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+		
+		System.out.println("Test of the tests");
 	}
 
-  private void refreshSocialsList() {
-    repaint();
-    String names[] = new String[ssn.size()+1];
-    int i=1;
-    names[0]="Socials";
-    for(SSNInfo s:ssn) {
-      names[i++] = s.getName();
-    }
-    SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-  }
+	public void refreshSocialsList() {
+		ssn = helpers.getSocials();
+		
+	    repaint();
+	    String names[] = new String[ssn.size()+1];
+	    int i=1;
+	    names[0]="Socials";
+	    for(SSNInfo s:ssn) {
+	      names[i++] = s.getName();
+	    }
+	    SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+	  }
 
-	private void refreshNotesList() {
+	public void refreshNotesList() {
+		notes = helpers.getNotes();
 		repaint();
 
 		String names[] = new String[notes.size() + 1];
