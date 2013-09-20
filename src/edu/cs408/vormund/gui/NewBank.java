@@ -20,19 +20,19 @@ public class NewBank extends javax.swing.JFrame {
     /**
      * Creates new form NewBank
      */
-	private DBHelpers helpers;	
-	
+	private DBHelpers helpers;
+
 	private boolean isUpdating;
-	
+
 	private int data_id;
-	
+
     public NewBank(DBHelpers h) {
         helpers = h;
         isUpdating = false;
         data_id = -1;
         initComponents();
     }
-    
+
     public NewBank(DBHelpers h, int data_id) {
     	helpers = h;
         isUpdating = true;
@@ -61,7 +61,7 @@ public class NewBank extends javax.swing.JFrame {
         routingfield = new javax.swing.JTextField();
         acctypefield = new javax.swing.JTextField();
         donebutton2 = new javax.swing.JButton();
-        
+
         if(data_id != -1)
         {
 	        BankInfo bank = helpers.getBank(data_id);
@@ -71,8 +71,8 @@ public class NewBank extends javax.swing.JFrame {
 	        routingfield.setText(bank.getRoutingNumber());
 	        acctypefield.setText(bank.getAccountType());
         }
-        
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Vormund");
 
@@ -171,8 +171,8 @@ public class NewBank extends javax.swing.JFrame {
 		String rou_bal = routingfield.getText().toString();
 		String acctype = acctypefield.getText().toString();
 		Boolean done = true;
-    	
-		
+
+
     	if(bank.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
@@ -190,7 +190,7 @@ public class NewBank extends javax.swing.JFrame {
     	}
     	else if(rou_bal.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please enter a routing number");    
+    		JOptionPane.showMessageDialog(null,"Please enter a routing number");
     		done = false;
     	}
     	else if(acctype.length() == 0)
@@ -198,7 +198,7 @@ public class NewBank extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter an account type");
     		done = false;
     	}
-    	
+
     	if(!isUpdating){
     		int result = helpers.newBank(bank, accnum, rou_bal, add, acctype);
     		if(result == -1)
@@ -206,7 +206,7 @@ public class NewBank extends javax.swing.JFrame {
     			JOptionPane.showMessageDialog(null,"An entry with the given account number already exists");
     			return;
     		}
-    		
+
     		done = true;
     	}
     	else
@@ -218,12 +218,12 @@ public class NewBank extends javax.swing.JFrame {
 	            done = true;
 	        }
     	}
-    	
-    	
+
+
     	if(done == true)
     	{
-    		new UserAccount(helpers).setVisible(true);
-        
+    		//new UserAccount(helpers).setVisible(true);
+
     		//dispose
     		dispose();
     	}
