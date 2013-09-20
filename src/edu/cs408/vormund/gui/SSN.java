@@ -134,11 +134,12 @@ public class SSN extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
     		done = false;
     	}
-    	else if(social.length() == 0)
-    	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the SSN field!");
-    		done = false;
-    	} else {
+    	else if(social.length()!=9)
+     	{
+     	 JOptionPane.showMessageDialog(null, "Social security numbers must be 9 digits long.");
+     	 done = false;
+     	}
+    	else {
         if(!isUpdating) {
           if( helpers.newSocial(user_name, social) == -1 ) {
             JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");
