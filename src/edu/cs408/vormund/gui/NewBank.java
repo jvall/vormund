@@ -4,6 +4,7 @@
  */
 package edu.cs408.vormund.gui;
 
+import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
@@ -91,16 +92,17 @@ public class NewBank extends javax.swing.JFrame {
         accounttype.setText("Account type:");
 
         donebutton2.setText("Done");
-        donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                try {
-					donebutton2MouseClicked(evt);
-				} catch (SQLException e) {
+        donebutton2.addActionListener(new java.awt.event.ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		try {
+					donebutton2MouseClicked(e);
+				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e1.printStackTrace();
 				}
-            }
+        	}
         });
+
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,7 +167,7 @@ public class NewBank extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_donebutton2MouseClicked
+    private void donebutton2MouseClicked(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_donebutton2MouseClicked
         // TODO add your handling code here:
 
         //Check title

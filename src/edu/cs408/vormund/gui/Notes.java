@@ -4,6 +4,9 @@
  */
 package edu.cs408.vormund.gui;
 
+import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+
 import javax.swing.JOptionPane;
 
 import edu.cs408.vormund.BankInfo;
@@ -73,11 +76,11 @@ public class Notes extends javax.swing.JFrame {
 		titlenote.setText("Title:");
 
 		donebutton2.setText("Done");
-		donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				donebutton2MouseClicked(evt);
-			}
-		});
+		donebutton2.addActionListener(new java.awt.event.ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+				donebutton2MouseClicked(e);
+        	}
+        });
 
 		notearea.setColumns(20);
 		notearea.setRows(5);
@@ -124,7 +127,7 @@ public class Notes extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_donebutton2MouseClicked
+	private void donebutton2MouseClicked(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_donebutton2MouseClicked
 		// TODO add your handling code here:
 
 		//Check title
