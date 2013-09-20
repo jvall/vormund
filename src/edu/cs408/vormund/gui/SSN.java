@@ -21,16 +21,21 @@ public class SSN extends javax.swing.JFrame {
      * Creates new form LoginWindow
      */
 	private DBHelpers helpers;
-    public SSN(DBHelpers h) {
+	
+	private UserAccount parent;
+	
+    public SSN(DBHelpers h, UserAccount parent) {
         initComponents();
         helpers = h;
+        this.parent = parent;
     }
 
-    public SSN(DBHelpers h, int data_id) {
+    public SSN(DBHelpers h, int data_id, UserAccount parent) {
       helpers = h;
       isUpdating = true;
       this.data_id = data_id;
       initComponents();
+      this.parent = parent;
     }
 
     /**
@@ -153,6 +158,7 @@ public class SSN extends javax.swing.JFrame {
     		//new UserAccount(helpers).setVisible(true);
 
     		//dispose
+    		parent.refreshSocialsList();
     		dispose();
     	}
     }//GEN-LAST:event_doneMouseClicked

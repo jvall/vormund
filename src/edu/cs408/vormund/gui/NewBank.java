@@ -25,19 +25,23 @@ public class NewBank extends javax.swing.JFrame {
 	private boolean isUpdating;
 
 	private int data_id;
+	
+	private UserAccount parent;
 
-    public NewBank(DBHelpers h) {
+    public NewBank(DBHelpers h, UserAccount parent) {
         helpers = h;
         isUpdating = false;
         data_id = -1;
         initComponents();
+        this.parent = parent;
     }
 
-    public NewBank(DBHelpers h, int data_id) {
+    public NewBank(DBHelpers h, int data_id, UserAccount parent) {
     	helpers = h;
         isUpdating = true;
         this.data_id = data_id;
         initComponents();
+        this.parent = parent;
     }
 
     /**
@@ -176,27 +180,27 @@ public class NewBank extends javax.swing.JFrame {
     	if(bank.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
-    		done = false;
+    		return;
     	}
     	else if(add.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an address");
-    		done = false;
+    		return;
     	}
     	else if(accnum.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an account number");
-    		done = false;
+    		return;
     	}
     	else if(rou_bal.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a routing number");
-    		done = false;
+    		return;
     	}
     	else if(acctype.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an account type");
-    		done = false;
+    		return;
     	}
 
     	if(!isUpdating){
@@ -225,6 +229,7 @@ public class NewBank extends javax.swing.JFrame {
     		//new UserAccount(helpers).setVisible(true);
 
     		//dispose
+    		parent.refreshBanksList();
     		dispose();
     	}
     }//GEN-LAST:event_donebutton2MouseClicked
