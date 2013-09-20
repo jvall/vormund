@@ -21,9 +21,8 @@ public class SSN extends javax.swing.JFrame {
      * Creates new form LoginWindow
      */
 	private DBHelpers helpers;
-	
 	private UserAccount parent;
-	
+
     public SSN(DBHelpers h, UserAccount parent) {
         initComponents();
         helpers = h;
