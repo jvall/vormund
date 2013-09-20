@@ -359,6 +359,10 @@ public class UserAccount extends javax.swing.JFrame {
 				names[i++] = s.getName();
 			}*/
 		}
+		else if (temp.equals("Category")) {
+			String names [] = {"Category"};
+			SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+		}
 
 	}//GEN-LAST:event_MainCBItemStateChanged
 

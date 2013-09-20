@@ -130,12 +130,12 @@ public class Notes extends javax.swing.JFrame {
 		String n_title = notetitle.getText().toString();
 		Boolean done = true;
 
-    	if(n_text.length() == 0)
+    	if(n_title.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a title for the note");
     		done = false;
     	}
-    	else if(n_title.length() == 0)
+    	else if(n_text.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a note");
     		done = false;
