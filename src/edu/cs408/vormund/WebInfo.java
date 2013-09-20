@@ -49,18 +49,23 @@ public class WebInfo {
     	return this.password;
     }
 
+    public int getRecordID() {
+        return this.recordID;
+    }
+
     public String[][] getSecurityQs() {
     	return this.securityQAPairs;
     }
 
     public String toString() {
-        String deserializedStr =  name + ";" + url + ";" + email + ";" + userName + ";" + password;
+        String deserializedStr =  name + ";" + url + ";" + userName + ";" + password;
         for (int i = 0; i < securityQAPairs.length; i++) {
             deserializedStr += ";" + securityQAPairs[i][0] + ";" + securityQAPairs[i][1];
         }
         return deserializedStr;
     }
 
+    // String name, String url, String email, String userName, String password, String[][] securityQAPairs, int recordID)
     public static WebInfo serializeCSVDump(String csvWebVals, int recordID) {
         // MUST be in same order as above constructor
         String vals[] = csvWebVals.split(";");
@@ -76,7 +81,7 @@ public class WebInfo {
         	QAPairs[i][1] = vals[i*2+6];
         }
 
-        return new WebInfo(vals[0], vals[1], vals[2], vals[3], vals[4], QAPairs, recordID);
+        return new WebInfo(vals[0], vals[1], "", vals[2], vals[3], QAPairs, recordID);
     }
 }
 

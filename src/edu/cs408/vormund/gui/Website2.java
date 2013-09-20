@@ -47,7 +47,7 @@ public class Website2 extends javax.swing.JFrame {
         q3label = new javax.swing.JLabel();
         an3label = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Vormund");
 
@@ -146,7 +146,7 @@ public class Website2 extends javax.swing.JFrame {
 
     private void donebuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_donebuttonMouseClicked
         // TODO add your handling code here:
-        
+
         //Check info
         //Add Q/A to database
     	//UserAccount usacc = new UserAccount();
@@ -190,7 +190,7 @@ public class Website2 extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please fill up the answer 3 field!");
     		done = false;
     	}
-    	
+
     	if(usacc.updating == true){
         	//Need to add the questions in an array
     		//DBHelp.updateWeb(webid,web.name,web.user,web.u,web.em,array[][]);
@@ -202,11 +202,11 @@ public class Website2 extends javax.swing.JFrame {
     		//Fix the array thing
     		//DBHelp.newWebsite(web.name,web.user,web.u,web.em,array[][]);
     	}*/
-        
+
         //go back to user account window
         if(done == true){
-        	new UserAccount(helpers).setVisible(true);
-        
+        	//new UserAccount(helpers).setVisible(true);
+
         	//dispose
         	dispose();
         }

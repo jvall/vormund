@@ -77,19 +77,17 @@ public class DBHelpers {
 		//Check to see if name email pair is already taken
 		boolean accountExists = false;
 
-		ResultSet webEntries = dbObj.query("SELECT data_id, note FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
-		if(webEntries.next())
+        System.err.println("Point 3");
+        ResultSet webEntries = dbObj.query("SELECT * FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
+		while(webEntries.next())
 		{
-			while(!webEntries.isAfterLast())
+            System.err.println("Point 1");
+			int data_id = webEntries.getInt(0);
+			WebInfo tmpWeb = getWeb(data_id);
+			if(tmpWeb.getEmail().equals(email) && name.equals(webEntries.getString(2)))
 			{
-				int data_id = webEntries.getInt(webEntries.findColumn("data_id"));
-				WebInfo tmpWeb = getWeb(data_id);
-				if(tmpWeb.getEmail().equals(email) && name.equals(webEntries.getString(2)))
-				{
-					accountExists = true;
-					break;
-				}
-				webEntries.next();
+				accountExists = true;
+				break;
 			}
 		}
 
@@ -97,7 +95,7 @@ public class DBHelpers {
 			return -1;
 
 		//Need to build out and insert new web blob. Start by building the csv style delimited data string
-		String dataString = url + ";" + email + ";" + userName + ";" + password;
+		String dataString = name + ";" + url + ";" + userName + ";" + password;
 
 		//Dynamically add the security QA pairs into the dataString for encryption
 		for(int i = 0; i < securityQAPairs.length; i++)
@@ -256,7 +254,7 @@ public class DBHelpers {
         ArrayList<WebInfo> webs = new ArrayList<WebInfo>();
 
         try {
-            ResultSet entries = dbObj.query("SELECT encrypted_data FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
+            ResultSet entries = dbObj.query("SELECT * FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
             if(entries.next())
             {
                 while(!entries.isAfterLast())
