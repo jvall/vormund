@@ -218,14 +218,15 @@ public class Website extends javax.swing.JFrame {
 		} /*else if (em.length() == 0) {
 			JOptionPane.showMessageDialog(null, "Please fill up the em field!");
 		}*/ else {
-			String securityQs[][] = new String[2][];
+			String securityQs[][] = new String[1][];
 			securityQs[0] = new String[2];
 			securityQs[0][0] = "Why don't we store these?";
 			securityQs[0][1] = "Because security Q's should be remembered anyway";
 			if (data_id == -1) {
-				int result = -1;
+				int result = -2;
 				try {
-					helpers.newWeb(name, u, "", user, pass, securityQs);
+					System.err.println("Point 2");
+					result = helpers.newWeb(name, u, "email", user, pass, securityQs);
 				} catch (Exception e) {
 					CommonDialogs.displayError("Unknown Exception", "An error occurred when trying to create that record. This is probably because it already exists: \n" + e);
 				}
@@ -233,11 +234,12 @@ public class Website extends javax.swing.JFrame {
 					CommonDialogs.displayError("Already Exists", "That account already exists. Please try again.");
 				} 
 				else {
+							System.err.println("Point 4");
 					new UserAccount(helpers).setVisible(true);
 				}
 			}
 			else {
-				helpers.updateWeb(data_id, name, u, "", user, pass, securityQs);
+				helpers.updateWeb(data_id, name, u, "email", user, pass, securityQs);
 				new UserAccount(helpers).setVisible(true);
 			}
 			dispose();
