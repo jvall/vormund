@@ -211,10 +211,13 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(webs.size() > 0)
 			{
-				WebInfo selectedWeb = webs.get(scb-1);
-				//delete function
+				userinfotext.setText("");
+				WebInfo selectedWeb = webs.get(SubCB.getSelectedIndex() - 1);
+				helpers.delete(selectedWeb.getRecordID());
+				webs = helpers.getWebs();
+				refreshWebsList();
 			}
-					}
+		}
 		else if(mcb.compareTo("Notes") == 0)
 		{
 			if(notes.size() > 0 && scb != 0)
@@ -261,15 +264,10 @@ public class UserAccount extends javax.swing.JFrame {
 			if(webs.size() > 0 && secd_cat != 0)
 			{
 				WebInfo selectedWeb = webs.get(secd_cat-1);
-				String qaSecurityText = "Security Questions:\n";
-				String securityQs[][] = selectedWeb.getSecurityQs();
-				for (int i = 0; i < securityQs.length; i++) {
-					qaSecurityText += "Q: " + securityQs[i][0] + "  |  A:" + securityQs[i][1] + "\n";
-				}
 
 				userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
-		                + "URL: " + selectedWeb.getUrl() + "\nEmail: " + selectedWeb.getEmail() + "\nUsername: "
-		                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword() + "\n" + qaSecurityText);
+		                + "URL: " + selectedWeb.getUrl() + "\nUsername: "
+		                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword());
 
 			}
 		}
@@ -307,7 +305,10 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		if(main.compareTo("Website") == 0)
 		{
-			new Website(helpers).setVisible(true);
+			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
+			{
+				new Website(helpers, webs.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
+			}
 		}
 		if(main.compareTo("Notes") == 0)
 		{
@@ -340,25 +341,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
-			repaint();
-			SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Websites"}));
-
-			if(webs.size() == 0)
-			{
-				JOptionPane.showMessageDialog(null,"No websites in the database! Please add new websites!");
-			}
-			else
-			{
-			String names[] = new String[webs.size()];
-
-			int i = 1;
-			names[0] = "Website";
-			for (WebInfo w : webs) {
-				names[i++] = w.getName();
-			}
-
-			//SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-			}
+			refreshWebsList();
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
@@ -414,6 +397,19 @@ public class UserAccount extends javax.swing.JFrame {
 		names[0] = "Notes";
 		for (NoteInfo n : notes) {
 			names[i++] = n.getName();
+		}
+
+		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
+	}
+
+	private void refreshWebsList() {
+		repaint();
+
+		String names[] = new String[webs.size() + 1];
+		int i = 1;
+		names[0] = "Webs";
+		for (WebInfo w : webs) {
+			names[i++] = w.getName();
 		}
 
 		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
