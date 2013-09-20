@@ -5,6 +5,7 @@
 package edu.cs408.vormund.gui;
 
 import javax.swing.JOptionPane;
+import java.awt.event.*;
 
 import edu.cs408.vormund.*;
 
@@ -88,9 +89,9 @@ public class Website extends javax.swing.JFrame {
 
 		// change from done to next name
 		donebutton2.setText("Create");
-		donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				donebutton2MouseClicked(evt);
+		donebutton2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				donebutton2MouseClicked();
 			}
 		});
 
@@ -193,7 +194,7 @@ public class Website extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_donebutton2MouseClicked
+	private void donebutton2MouseClicked() {// GEN-FIRST:event_donebutton2MouseClicked
 		// TODO add your handling code here:
 
 		String name = namefield.getText().toString();

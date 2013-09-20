@@ -58,6 +58,7 @@ public class UserAccount extends javax.swing.JFrame {
 		SubCB = new javax.swing.JComboBox();
 		jScrollPane1 = new javax.swing.JScrollPane();
 		userinfotext = new javax.swing.JTextArea();
+    userinfotext.setEditable(false);
 		showbutton = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -88,6 +89,9 @@ public class UserAccount extends javax.swing.JFrame {
 		MainCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Category", "Bank", "Website", "Notes", "SSN" }));
 		MainCB.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
+        userinfotext.setText("");
+		    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"Category"}));
+        SubCB.setSelectedIndex(0);
 				MainCBItemStateChanged(evt);
 			}
 		});
@@ -358,7 +362,7 @@ public class UserAccount extends javax.swing.JFrame {
 
 	public void refreshBanksList() {
 		banks = helpers.getBanks();
-		
+
 		repaint();
 
 		//SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Banks"}));
@@ -373,12 +377,11 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 
 		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
-		
 	}
 
 	public void refreshSocialsList() {
 		ssn = helpers.getSocials();
-		
+
 	    repaint();
 	    String names[] = new String[ssn.size()+1];
 	    int i=1;
