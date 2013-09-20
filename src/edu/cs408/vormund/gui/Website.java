@@ -6,7 +6,7 @@ package edu.cs408.vormund.gui;
 
 import javax.swing.JOptionPane;
 
-import edu.cs408.vormund.DBHelpers;
+import edu.cs408.vormund.*;
 
 /**
  * 
@@ -18,17 +18,23 @@ public class Website extends javax.swing.JFrame {
 	 * Creates new form NewBank
 	 */
 	private DBHelpers helpers;
-	String name = "";
-	String u = "";
-	String user = "";
-	String pass = "";
-	String em = "";
+	private int data_id;
+	private boolean isUpdating;
 
 	// DBHelpers DBHelp = new DBHelpers();
 
 	public Website(DBHelpers h) {
-		initComponents();
 		helpers = h;
+		data_id = -1;
+		isUpdating = false;
+		initComponents();
+	}
+
+	public Website(DBHelpers h, int data_id) {
+		helpers = h;
+		this.data_id = data_id;
+		isUpdating = true;
+		initComponents();
 	}
 
 	/**
@@ -54,6 +60,16 @@ public class Website extends javax.swing.JFrame {
 		donebutton2 = new javax.swing.JButton();
 		passfield = new javax.swing.JPasswordField();
 
+		if (data_id != -1) {
+			WebInfo w = helpers.getWeb(data_id);
+			namefield.setText(w.getName());
+			addressfield.setText(w.getUrl());
+			accountfield.setText(w.getUserName());
+			passfield.setText(w.getPassword());
+			//email.setText(w.email);			
+			
+		}
+
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
 		jLabel1.setText("Vormund");
@@ -66,10 +82,12 @@ public class Website extends javax.swing.JFrame {
 
 		passlab.setText("Password:");
 
-		email.setText("Email:");
+		acctypefield.setVisible(false);
+
+		//email.setText("Email:");
 
 		// change from done to next name
-		donebutton2.setText("Next");
+		donebutton2.setText("Create");
 		donebutton2.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				donebutton2MouseClicked(evt);
@@ -178,43 +196,50 @@ public class Website extends javax.swing.JFrame {
 	private void donebutton2MouseClicked(java.awt.event.MouseEvent evt) {// GEN-FIRST:event_donebutton2MouseClicked
 		// TODO add your handling code here:
 
-		name = namefield.getText().toString();
-		u = addressfield.getText().toString();
-		user = accountfield.getText().toString();
-		pass = passfield.getText().toString();
-		em = acctypefield.getText().toString();
-		Boolean done = true;
+		String name = namefield.getText().toString();
+		String u = addressfield.getText().toString();
+		String user = accountfield.getText().toString();
+		String pass = passfield.getText().toString();
+		//String em = acctypefield.getText().toString();
 
-		/*
 		if (name.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the name field!");
-			done = false;
 		} 
 		else if (u.length() == 0) {
 			JOptionPane
 			.showMessageDialog(null, "Please fill up the url field!");
-			done = false;
-
 		} else if (user.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the user field!");
-			done = false;
-
 		} else if (pass.length() == 0) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the pass field!");
-			done = false;
-		} else if (em.length() == 0) {
+		} /*else if (em.length() == 0) {
 			JOptionPane.showMessageDialog(null, "Please fill up the em field!");
-			done = false;
-		}*/
-		// open next window
-
-		if(done == true){
-			new Website2(helpers).setVisible(true);
-
-			// dispose
+		}*/ else {
+			String securityQs[][] = new String[2][];
+			securityQs[0] = new String[2];
+			securityQs[0][0] = "Why don't we store these?";
+			securityQs[0][1] = "Because security Q's should be remembered anyway";
+			if (data_id == -1) {
+				int result = -1;
+				try {
+					helpers.newWeb(name, u, "", user, pass, securityQs);
+				} catch (Exception e) {
+					CommonDialogs.displayError("Unknown Exception", "An error occurred when trying to create that record. This is probably because it already exists: \n" + e);
+				}
+				if (result == -1) {
+					CommonDialogs.displayError("Already Exists", "That account already exists. Please try again.");
+				} 
+				else {
+					new UserAccount(helpers).setVisible(true);
+				}
+			}
+			else {
+				helpers.updateWeb(data_id, name, u, "", user, pass, securityQs);
+				new UserAccount(helpers).setVisible(true);
+			}
 			dispose();
 		}
 	}// GEN-LAST:event_donebutton2MouseClicked
