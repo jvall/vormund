@@ -331,8 +331,6 @@ public class UserAccount extends javax.swing.JFrame {
 
 	private void MainCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_MainCBItemStateChanged
 		// TODO add your handling code here:
-		System.out.println("Hey we made it here");
-
 		String temp = MainCB.getSelectedItem().toString();
 
 		if(temp.compareTo("Bank") == 0)
@@ -376,7 +374,6 @@ public class UserAccount extends javax.swing.JFrame {
 
 		SubCB.setModel(new javax.swing.DefaultComboBoxModel(names));
 		
-		System.out.println("Test of the tests");
 	}
 
 	public void refreshSocialsList() {
