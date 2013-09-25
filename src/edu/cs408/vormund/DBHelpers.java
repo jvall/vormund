@@ -32,7 +32,18 @@ public class DBHelpers {
     String userPassword = password;
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
         user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
-
+		
+		//Add test socials
+		newSocial("John Smith", "465459908");
+		newSocial("Maggie Johnson", "775234469");
+		newSocial("Mark Williams", "448980457");
+		newSocial("Anna Potter", "366453362");
+		
+		//Add test notes
+		newNote("Grocery List", "Eggs, bread, milk");
+		newNote("Favorite Songs", "Mr. Brightside - The Killers, Animal - Miike Snow, Entertainment - Phoenix");
+		newNote("This test", "This could be considered to be a test of the notes system");
+		newNote("Computer brands", "Dell, Apple, Toshiba, Acer, Sony");
 
 		return user_id;
 	}
