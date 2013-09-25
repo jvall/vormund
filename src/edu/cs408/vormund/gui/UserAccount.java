@@ -256,45 +256,49 @@ public class UserAccount extends javax.swing.JFrame {
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {
 		int secd_cat = SubCB.getSelectedIndex();
 		String mcb = MainCB.getSelectedItem().toString();
-
+    Random r = new Random();
 
 		if(mcb.compareTo("Bank") == 0)
 		{
 			if(banks.size() > 0 && secd_cat != 0)
 			{
-				BankInfo selectedBank = banks.get(secd_cat-1);
-
-				userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
+				BankInfo selectedBank = banks.get(secd_cat);
+        if( r.nextDouble() > 0.5 ) {
+				  userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
 		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: "
 		                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
+        }
 			}
 		}
 		else if(mcb.compareTo("Website") == 0)
 		{
 			if(webs.size() > 0 && secd_cat != 0)
 			{
-				WebInfo selectedWeb = webs.get(secd_cat-1);
+				WebInfo selectedWeb = webs.get(secd_cat);
 
-				userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
+        if( r.nextDouble() > 0.5 ) {
+				  userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
 		                + "URL: " + selectedWeb.getUrl() + "\nUsername: "
 		                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword());
-
+        }
 			}
 		}
 		else if(mcb.compareTo("Notes") == 0)
 		{
 			if(notes.size() > 0 && secd_cat != 0)
 			{
-				NoteInfo selectedNote = notes.get(secd_cat-1);
-				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
+				NoteInfo selectedNote = notes.get(secd_cat);
+        if( r.nextDouble() > 0.5 )
+  				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
 			}
 		}
 		else if(mcb.compareTo("SSN") == 0)
 		{
 			if(ssn.size() > 0 && secd_cat != 0)
 			{
-				SSNInfo selectedSNN = ssn.get(secd_cat-1);
-				userinfotext.setText( selectedSNN.getName() + "\n" + selectedSNN.getSSN());
+				SSNInfo selectedSNN = ssn.get(secd_cat);
+        if( r.nextDouble() > 0.5 )
+				  userinfotext.setText( selectedSNN.getName() + "\n" + selectedSNN.getSSN());
 			}
 		}
     }
