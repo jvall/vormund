@@ -32,6 +32,20 @@ public class DBHelpers {
     String userPassword = password;
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
 
+    key = password;
+    int length = key.length();
+		if(length < 16)
+		{
+			for(int i  = 0; i < 16-length; i++)
+			{
+				key += '0';
+			}
+		}
+		else if(length > 16)
+		{
+			key = key.substring(0,  16);
+		}
+
     //Add test socials
 		newSocial("John Smith", "465459908");
 		newSocial("Maggie Johnson", "775234469");
@@ -195,9 +209,6 @@ public class DBHelpers {
 		try {
 			//String encrypt = Encryption.encryptHashString(password);
       String encrypt = password;
-			entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
-			if (entries.next()) {
-				user_id = entries.getInt("user_id");
 				key = password;
 				int length = key.length();
 				if(length < 16)
@@ -211,7 +222,9 @@ public class DBHelpers {
 				{
 					key = key.substring(0,  16);
 				}
-
+			entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
+			if (entries.next()) {
+				user_id = entries.getInt("user_id");
 			}
 			else
 				user_id = -1;

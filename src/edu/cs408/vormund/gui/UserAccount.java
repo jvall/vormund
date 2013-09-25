@@ -173,8 +173,6 @@ public class UserAccount extends javax.swing.JFrame {
 	private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
 		// TODO add your handling code here:
 		new LoginWindow().setVisible(true);
-    if( evt==null )
-      this.dispose();
 	}//GEN-LAST:event_logoutActionPerformed
 
 	private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
@@ -264,7 +262,8 @@ public class UserAccount extends javax.swing.JFrame {
 		String mcb = MainCB.getSelectedItem().toString();
     Random r = new Random();
 
-    if( secd_cat==4 ) {
+    System.out.println("SELECTED INDEX: " + secd_cat);
+    if( secd_cat>=2 && secd_cat <=4 ) {
       String url="http://bringvictory.com/";
       try{
         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
@@ -409,6 +408,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
+      refreshSocialsList();
       JOptionPane.showMessageDialog(null,"No social security numbers in the database! Please add new social security numbers!");
       if( ssn.size() >= 3 ) {
         SubCB.setSelectedIndex(3);

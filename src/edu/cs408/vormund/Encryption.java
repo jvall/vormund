@@ -69,18 +69,21 @@ public class Encryption {
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+      return "";
 		} catch (NoSuchPaddingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+      return "";
 		}
-		
+
 	    SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(), "AES");
-	    
+
 	    try {
 			cipher.init(Cipher.DECRYPT_MODE, secretKey);
 		} catch (InvalidKeyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+      return "";
 		}
 
 	    String decrypted = null;
@@ -90,13 +93,15 @@ public class Encryption {
 		} catch (IllegalBlockSizeException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+      return "";
 		} catch (BadPaddingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+      return "";
 		}
 	    return decrypted;
 	}
-	
+
 	public static String byteArrayToHexString(byte[] b) {
 		String result = "";
 		for (int i=0; i < b.length; i++) {

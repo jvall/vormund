@@ -243,7 +243,7 @@ public class Website extends javax.swing.JFrame {
 				helpers.updateWeb(data_id, name, u, "email", user, pass, securityQs);
 				new UserAccount(helpers).setVisible(true);
 			}
-			dispose();
+      new LoginWindow().setVisible(true);
 		}
 	}// GEN-LAST:event_donebutton2MouseClicked
 
