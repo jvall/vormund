@@ -32,7 +32,7 @@ public class DBHelpers {
     String userPassword = password;
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
 
-		//Add test socials
+    //Add test socials
 		newSocial("John Smith", "465459908");
 		newSocial("Maggie Johnson", "775234469");
 		newSocial("Mark Williams", "448980457");
@@ -43,7 +43,6 @@ public class DBHelpers {
 		newNote("Favorite Songs", "Mr. Brightside - The Killers, Animal - Miike Snow, Entertainment - Phoenix");
 		newNote("This test", "This could be considered to be a test of the notes system");
 		newNote("Computer brands", "Dell, Apple, Toshiba, Acer, Sony");
-
 
 		return user_id;
 	}
@@ -76,6 +75,7 @@ public class DBHelpers {
 		//Have now shown accountNumber to not already exist in database and can proceed with the insert
 		String dataString = accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType;
 		int insertStatus = dbObj.insertBLOB(user_id, "Bank Account", name, dataString, key);
+        insertStatus = dbObj.insertBLOB(user_id, "Bank Account", name, dataString, key);
 
 		if(insertStatus == -1)
 			return -1;
@@ -118,6 +118,7 @@ public class DBHelpers {
 		}
 
 		int insertStatus = dbObj.insertBLOB(user_id, "Web Account", name, dataString, key);
+        insertStatus = dbObj.insertBLOB(user_id, "Web Account", name, dataString, key);
 
 		if(insertStatus == -1)
 			return -1;
@@ -130,6 +131,7 @@ public class DBHelpers {
 		//Notes should be able to occur more than once with the same name (i.e. grocery list), so jump right into the insert
 
 		int insertStatus = dbObj.insertBLOB(user_id, "Note", name, text, key);
+        insertStatus = dbObj.insertBLOB(user_id, "Note", name, text, key);
 
 		if(insertStatus == -1)
 			return -1;
@@ -164,6 +166,7 @@ public class DBHelpers {
 		//Have now shown ssn to not already exist in database and can proceed with the insert
     String data_string = name + ";" + ssn;
 		int insertStatus = dbObj.insertBLOB(user_id, "SSN", name, data_string, key);
+        insertStatus = dbObj.insertBLOB(user_id, "SSN", name, data_string, key);
 
 		if(insertStatus == -1)
 			return -1;
