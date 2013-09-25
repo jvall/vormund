@@ -31,13 +31,13 @@ public class DBHelpers {
 
     String userPassword = password;
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
-		
+
 		//Add test socials
 		newSocial("John Smith", "465459908");
 		newSocial("Maggie Johnson", "775234469");
 		newSocial("Mark Williams", "448980457");
 		newSocial("Anna Potter", "366453362");
-		
+
 		//Add test notes
 		newNote("Grocery List", "Eggs, bread, milk");
 		newNote("Favorite Songs", "Mr. Brightside - The Killers, Animal - Miike Snow, Entertainment - Phoenix");
@@ -89,11 +89,11 @@ public class DBHelpers {
 		boolean accountExists = false;
 
         System.err.println("Point 3");
-        ResultSet webEntries = dbObj.query("SELECT * FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
+    ResultSet webEntries = dbObj.query("SELECT * FROM encrypted_data WHERE category LIKE 'Web Account' AND user_id='" + user_id + "'");
 		while(webEntries.next())
 		{
             System.err.println("Point 1");
-			int data_id = webEntries.getInt(0);
+			int data_id = webEntries.getInt("data_id");
 			WebInfo tmpWeb = getWeb(data_id);
 			if(tmpWeb.getEmail().equals(email) && name.equals(webEntries.getString(2)))
 			{

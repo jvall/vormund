@@ -262,7 +262,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(banks.size() > 0 && secd_cat != 0)
 			{
-				BankInfo selectedBank = banks.get(secd_cat-1);
+				BankInfo selectedBank = banks.get(secd_cat);
         if( r.nextDouble() > 0.5 ) {
 				  userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
 		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: "
@@ -274,7 +274,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(webs.size() > 0 && secd_cat != 0)
 			{
-				WebInfo selectedWeb = webs.get(secd_cat-1);
+				WebInfo selectedWeb = webs.get(secd_cat);
 
         if( r.nextDouble() > 0.5 ) {
 				  userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
@@ -287,7 +287,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(notes.size() > 0 && secd_cat != 0)
 			{
-				NoteInfo selectedNote = notes.get(secd_cat-1);
+				NoteInfo selectedNote = notes.get(secd_cat);
         if( r.nextDouble() > 0.5 )
   				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
 			}
@@ -296,7 +296,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(ssn.size() > 0 && secd_cat != 0)
 			{
-				SSNInfo selectedSNN = ssn.get(secd_cat-1);
+				SSNInfo selectedSNN = ssn.get(secd_cat);
         if( r.nextDouble() > 0.5 )
 				  userinfotext.setText( selectedSNN.getName() + "\n" + selectedSNN.getSSN());
 			}
