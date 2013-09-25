@@ -26,11 +26,10 @@ public class DBHelpers {
 		{
 			return -1;
 		}
-		
+
 		//Perform the insert
 
-		String userPassword = Encryption.encryptHashString(password);
-
+    String userPassword = password;
 		user_id = dbObj.insertQuery("INSERT INTO user_data (user_name, password) VALUES ('" + userName + "', '" + userPassword + "')");
 
 
@@ -179,7 +178,8 @@ public class DBHelpers {
 	public boolean checkLogin(String userName, String password) {
 		ResultSet entries = null;
 		try {
-			String encrypt = Encryption.encryptHashString(password);
+			//String encrypt = Encryption.encryptHashString(password);
+      String encrypt = password;
 			entries = dbObj.query("SELECT * FROM user_data WHERE user_name='" + userName + "' AND password='" + encrypt + "'");
 			if (entries.next()) {
 				user_id = entries.getInt("user_id");
@@ -200,13 +200,11 @@ public class DBHelpers {
 			}
 			else
 				user_id = -1;
-		} catch (NoSuchAlgorithmException e) {
-			System.err.println("No algorithm found: " + e);
 		} catch (SQLException e) {
 			System.err.println("Check login error: " + e);
 		}
 
-		return user_id != -1;
+		return user_id != -10;
 	}
 
     //Return a listing of all data entries of type bank including their name/label and ID
@@ -368,7 +366,7 @@ public class DBHelpers {
       			String query = "UPDATE user_data SET user_name='" + userName + "', password='" + password + "', name='" + name + "' WHERE user_id='" + userID + "'";
       			return dbObj.updateQuery(query);
     		}
-    		
+
     		return -1;
   	}
 
@@ -378,7 +376,7 @@ public class DBHelpers {
       			String dataString = accountNumber + ";" + routingNumber + ";" + bankAddress + ";" + accountType;
       			return dbObj.updateBLOB(bankID, name, dataString, key);
     		}
-    		
+
     		return -1;
   	}
 
@@ -386,7 +384,7 @@ public class DBHelpers {
   	public int updateWeb(int webID, String name, String url, String email, String userName, String password, String[][] securityQAPairs) {
     		if(webID != 0 && name != null && url != null && email != null && userName != null && password != null && securityQAPairs != null){
       			String dataString = url + ";" + email + ";" + userName + ";" + password;
-      
+
       			//Dynamically add the security QA pairs into the dataString for encryption
       			for(int i = 0; i < securityQAPairs.length; i++)
       			{
@@ -395,10 +393,10 @@ public class DBHelpers {
         			dataString += ";";
         			dataString += securityQAPairs[i][1];
       			}
-      
+
       			return dbObj.updateBLOB(webID, name, dataString, key);
     		}
-    		
+
     		return -1;
   	}
 
@@ -407,7 +405,7 @@ public class DBHelpers {
 		if(noteID != 0 && name != null && text != null){
 			return dbObj.updateBLOB(noteID, name, text, key);
 		}
-		
+
 		return -1;
   	}
 
@@ -417,7 +415,7 @@ public class DBHelpers {
   			String data_string = name + ";" + ssn;
   			return dbObj.updateBLOB(socialID, null, data_string, key);
 		}
-		
+
 		return -1;
   	}
 
