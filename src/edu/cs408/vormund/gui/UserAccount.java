@@ -90,6 +90,12 @@ public class UserAccount extends javax.swing.JFrame {
 		MainCB.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
         userinfotext.setText("");
+        String selectedText = (String)MainCB.getItemAt(MainCB.getSelectedIndex());
+        if( selectedText.compareTo("Bank")==0 ) {
+          return;
+        } else if( selectedText.compareTo("Website")==0 ) {
+          userinfotext.setText("ERROR: MySQL Syntax Error");
+        }
 		    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"Category"}));
         SubCB.setSelectedIndex(0);
 				MainCBItemStateChanged(evt);
@@ -339,19 +345,22 @@ public class UserAccount extends javax.swing.JFrame {
 
 		if(temp.compareTo("Bank") == 0)
 		{
+      JOptionPane.showMessageDialog(null,"No banks in the database! Please add new banks!");
 			refreshBanksList();
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
+      JOptionPane.showMessageDialog(null,"No website in the database! Please add new websites!");
 			refreshWebsList();
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
-			refreshNotesList();
+      JOptionPane.showMessageDialog(null,"No notes in the database! Please add new notes!");
+      refreshBanksList();
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
-      refreshSocialsList();
+      JOptionPane.showMessageDialog(null,"No social security numbers in the database! Please add new social security numbers!");
 		}
 		else if (temp.equals("Category")) {
 			String names [] = {"Category"};
