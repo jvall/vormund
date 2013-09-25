@@ -124,8 +124,8 @@ public class SSN extends javax.swing.JFrame {
      *   Pressing Enter does not submit the form
      */
     private void doneMouseClicked(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_doneMouseClicked
-    	String user_name = namefield.getText().toString();
-		  String social = ssnfield.getText().toString();
+    	String user_name = ssnfield.getText().toString();
+		  String social = namefield.getText().toString();
 		  Boolean done = true;
 
     	if(user_name.length() == 0)
@@ -141,13 +141,13 @@ public class SSN extends javax.swing.JFrame {
     	else {
         if(!isUpdating) {
           if( helpers.newSocial(user_name, social) == -1 ) {
-            JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");
-            done = false;
+            //JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");
+            //done = false;
           }
         } else {
           if( helpers.updateSocial(data_id, user_name, social) == -1 ) {
-            JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
-            done = false;
+            //JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
+            //done = false;
           } else {
             done = true;
           }
@@ -159,7 +159,7 @@ public class SSN extends javax.swing.JFrame {
 
     		//dispose
     		parent.refreshSocialsList();
-    		dispose();
+    		//dispose();
     	}
     }//GEN-LAST:event_doneMouseClicked
 
