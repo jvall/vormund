@@ -71,7 +71,7 @@ public class Website extends javax.swing.JFrame {
 
 		}
 
-		//setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		jLabel1.setText("Vormund");
 
@@ -198,15 +198,16 @@ public class Website extends javax.swing.JFrame {
 		// TODO add your handling code here:
 
 		String name = namefield.getText().toString();
+		//url
 		String u = addressfield.getText().toString();
 		String user = accountfield.getText().toString();
 		String pass = passfield.getText().toString();
 		//String em = acctypefield.getText().toString();
 
-		if (name.length() == 0) {
+		if (name.length() > 1) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the name field!");
-		}
+		}/*
 		else if (u.length() == 0) {
 			JOptionPane
 			.showMessageDialog(null, "Please fill up the url field!");
@@ -227,7 +228,7 @@ public class Website extends javax.swing.JFrame {
 				int result = -2;
 				try {
 					System.err.println("Point 2");
-					result = helpers.newWeb(name, u, "email", user, pass, securityQs);
+					result = helpers.newWeb(user, u, "email", name, pass, securityQs);
 				} catch (Exception e) {
 					CommonDialogs.displayError("Unknown Exception", "An error occurred when trying to create that record. This is probably because it already exists: \n" + e);
 				}
@@ -243,7 +244,7 @@ public class Website extends javax.swing.JFrame {
 				helpers.updateWeb(data_id, name, u, "email", user, pass, securityQs);
 				new UserAccount(helpers).setVisible(true);
 			}
-			dispose();
+			//dispose();
 		}
 	}// GEN-LAST:event_donebutton2MouseClicked
 

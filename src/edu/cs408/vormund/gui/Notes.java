@@ -69,7 +69,7 @@ public class Notes extends javax.swing.JFrame {
 	        notetitle.setText(note.getName());
         }
 
-		//setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
 		jLabel1.setText("Vormund");
 

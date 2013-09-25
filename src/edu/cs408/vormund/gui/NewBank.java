@@ -77,7 +77,7 @@ public class NewBank extends javax.swing.JFrame {
 	        acctypefield.setText(bank.getAccountType());
         }
 
-        //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Vormund");
 
@@ -178,13 +178,12 @@ public class NewBank extends javax.swing.JFrame {
 		String acctype = acctypefield.getText().toString();
 		Boolean done = true;
 
-
     	if(bank.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
     		return;
     	}
-    	else if(add.length() == 0)
+    	/*else if(add.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an address");
     		return;
@@ -193,20 +192,21 @@ public class NewBank extends javax.swing.JFrame {
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an account number");
     		return;
-    	}
-    	else if(rou_bal.length() == 0)
+    	}*/
+    	else if(rou_bal.length() > 6)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a routing number");
     		return;
     	}
-    	else if(acctype.length() == 0)
+    	//Account type has to have at least 5 characters to accept the char
+    	else if(acctype.length() >= 5)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an account type");
     		return;
     	}
 
     	if(!isUpdating){
-    		int result = helpers.newBank(bank, accnum, rou_bal, add, acctype);
+    		int result = helpers.newBank(bank, accnum, "123456", acctype, add);
     		if(result == -1)
     		{
     			JOptionPane.showMessageDialog(null,"An entry with the given account number already exists");
@@ -217,7 +217,7 @@ public class NewBank extends javax.swing.JFrame {
     	}
     	else
     	{
-    		if( helpers.updateBank(data_id, bank, accnum, rou_bal, add, acctype) == -1 ) {
+    		if( helpers.updateBank(data_id, bank, accnum, "123456", acctype, add) == -1 ) {
             	JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
 	            done = false;
 	        } else {
@@ -232,7 +232,7 @@ public class NewBank extends javax.swing.JFrame {
 
     		//dispose
     		parent.refreshBanksList();
-    		dispose();
+    		//dispose();
     	}
     }//GEN-LAST:event_donebutton2MouseClicked
 
