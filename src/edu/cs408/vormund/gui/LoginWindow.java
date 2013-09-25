@@ -134,8 +134,7 @@ public class LoginWindow extends javax.swing.JFrame {
 				}
 
 				JOptionPane.showMessageDialog(null,"New User has been created!");
-        new LoginWindow().setVisible(true);
-        dispose();
+
 			}
 			else
 			{
