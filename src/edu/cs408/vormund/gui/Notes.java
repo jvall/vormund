@@ -27,7 +27,7 @@ public class Notes extends javax.swing.JFrame {
 	private boolean isUpdating;
 
 	private int data_id;
-	
+
 	private UserAccount parent;
 
     public Notes(DBHelpers h, UserAccount parent) {
@@ -144,7 +144,7 @@ public class Notes extends javax.swing.JFrame {
     	}
     	else if(n_text.length() == 0)
     	{
-    		//JOptionPane.showMessageDialog(null,"Please enter a note");
+    		JOptionPane.showMessageDialog(null,"Please enter a note");
     		//return;
     	}
 
@@ -175,7 +175,7 @@ public class Notes extends javax.swing.JFrame {
 		if(done == true){
 			//new UserAccount(helpers).setVisible(true);
 			//dispose
-			parent.refreshNotesList();	
+			parent.refreshNotesList();
 			//dispose();
 		}
 	}//GEN-LAST:event_donebutton2MouseClicked

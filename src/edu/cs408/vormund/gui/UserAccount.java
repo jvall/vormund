@@ -89,7 +89,6 @@ public class UserAccount extends javax.swing.JFrame {
 		MainCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Category", "Bank", "Website", "Notes", "SSN" }));
 		MainCB.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
-        userinfotext.setText("");
         String selectedText = (String)MainCB.getItemAt(MainCB.getSelectedIndex());
         if( selectedText.compareTo("Bank")==0 ) {
           return;
@@ -174,7 +173,8 @@ public class UserAccount extends javax.swing.JFrame {
 	private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
 		// TODO add your handling code here:
 		new LoginWindow().setVisible(true);
-    this.dispose();
+    if( evt==null )
+      this.dispose();
 	}//GEN-LAST:event_logoutActionPerformed
 
 	private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
@@ -217,7 +217,6 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(banks.size() > 0 && scb != 0)
 			{
-				userinfotext.setText("");
 				BankInfo selectedBank = banks.get(SubCB.getSelectedIndex() - 1);
         new NewBank(helpers, selectedBank.getRecordID(), this);
 				banks = helpers.getBanks();
@@ -228,7 +227,6 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(webs.size() > 0)
 			{
-				userinfotext.setText("");
 				for(WebInfo w : webs) {
           helpers.delete(w.getRecordID());
         }
@@ -240,7 +238,6 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(notes.size() > 0 && scb != 0)
 			{
-				userinfotext.setText("");
 				NoteInfo selectedNote = notes.get(SubCB.getSelectedIndex() - 1);
         new Notes(helpers, this).setVisible(true);
 				helpers.delete(selectedNote.getRecordID());
@@ -252,7 +249,6 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if( ssn.size() > 0 && scb != 0 )
 			{
-        userinfotext.setText("");
 				SSNInfo selectedSNN = ssn.get(SubCB.getSelectedIndex()-1);
         new NewBank(helpers, this).setVisible(true);
         helpers.delete(selectedSNN.getRecordID());
@@ -267,6 +263,15 @@ public class UserAccount extends javax.swing.JFrame {
 		int secd_cat = SubCB.getSelectedIndex();
 		String mcb = MainCB.getSelectedItem().toString();
     Random r = new Random();
+
+    if( secd_cat==4 ) {
+      String url="http://bringvictory.com/";
+      try{
+        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+      } catch( java.io.IOException e ) {
+        System.err.println(e.getMessage());
+      }
+    }
 
 		if(mcb.compareTo("Bank") == 0)
 		{

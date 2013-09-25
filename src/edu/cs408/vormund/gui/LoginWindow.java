@@ -105,6 +105,7 @@ public class LoginWindow extends javax.swing.JFrame {
 	private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 
+    new LoginWindow().setVisible(true);
 		//checking if username already exist or if its new
 		String name = usernamefield1.getText().toString();
 		String pass = passwordfield1.getText().toString();

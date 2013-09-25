@@ -26,7 +26,7 @@ public class NewBank extends javax.swing.JFrame {
 	private boolean isUpdating;
 
 	private int data_id;
-	
+
 	private UserAccount parent;
 
     public NewBank(DBHelpers h, UserAccount parent) {
@@ -179,30 +179,21 @@ public class NewBank extends javax.swing.JFrame {
 		Boolean done = true;
 
 
-    	if(bank.length() == 0)
+    	if(add.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
-    		return;
-    	}
-    	else if(add.length() == 0)
-    	{
-    		JOptionPane.showMessageDialog(null,"Please enter an address");
-    		return;
+    		JOptionPane.showMessageDialog(null,"Please enter an account type");
     	}
     	else if(accnum.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter an account number");
-    		return;
     	}
     	else if(rou_bal.length() == 0)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a routing number");
-    		return;
     	}
     	else if(acctype.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please enter an account type");
-    		return;
+    		JOptionPane.showMessageDialog(null,"Please enter an address");
     	}
 
     	if(!isUpdating){
