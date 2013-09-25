@@ -133,10 +133,8 @@ public class LoginWindow extends javax.swing.JFrame {
 				}
 
 				JOptionPane.showMessageDialog(null,"New User has been created!");
-        if(helpers.checkLogin(name,pass)) {
-          new UserAccount(helpers).setVisible(true);
-          dispose();
-        }
+        new LoginWindow().setVisible(true);
+        dispose();
 			}
 			else
 			{
