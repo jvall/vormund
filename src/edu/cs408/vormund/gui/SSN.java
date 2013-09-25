@@ -124,19 +124,19 @@ public class SSN extends javax.swing.JFrame {
      *   Pressing Enter does not submit the form
      */
     private void doneMouseClicked(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_doneMouseClicked
-    	String user_name = namefield.getText().toString();
-		  String social = ssnfield.getText().toString();
+    	String user_name = ssnfield.getText().toString();
+		  String social = namefield.getText().toString();
 		  Boolean done = true;
 
     	if(user_name.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
-    		done = false;
+    		//JOptionPane.showMessageDialog(null,"Please fill up the name field!");
+    		//done = false;
     	}
     	else if(social.length()!=9)
      	{
-     	 JOptionPane.showMessageDialog(null, "Social security numbers must be 9 digits long.");
-     	 done = false;
+    		//JOptionPane.showMessageDialog(null, "Social security numbers must be 9 digits long.");
+    		//done = false;
      	}
     	else {
         if(!isUpdating) {
@@ -159,7 +159,7 @@ public class SSN extends javax.swing.JFrame {
 
     		//dispose
     		parent.refreshSocialsList();
-    		dispose();
+    		//dispose();
     	}
     }//GEN-LAST:event_doneMouseClicked
 

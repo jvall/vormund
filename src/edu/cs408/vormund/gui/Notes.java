@@ -133,19 +133,19 @@ public class Notes extends javax.swing.JFrame {
 		//Check title
 		//Add to database
 		//UserAccount user_acc = new UserAccount(helpers);
-		String n_text = notearea.getText().toString();
-		String n_title = notetitle.getText().toString();
+		String n_title = notearea.getText().toString();
+		String n_text = notetitle.getText().toString();
 		Boolean done = true;
 
     	if(n_title.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please enter a title for the note");
-    		return;
+    		//JOptionPane.showMessageDialog(null,"Please enter a title for the note");
+    		//return;
     	}
     	else if(n_text.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please enter a note");
-    		return;
+    		//JOptionPane.showMessageDialog(null,"Please enter a note");
+    		//return;
     	}
 
 
@@ -176,7 +176,7 @@ public class Notes extends javax.swing.JFrame {
 			//new UserAccount(helpers).setVisible(true);
 			//dispose
 			parent.refreshNotesList();	
-			dispose();
+			//dispose();
 		}
 	}//GEN-LAST:event_donebutton2MouseClicked
 
