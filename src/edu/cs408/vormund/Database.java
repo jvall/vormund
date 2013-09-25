@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.Random;
 
 // TODO: Add encryption to insert/updateBLOB functions
 // TODO: Add decryption to readBLOB functions
@@ -20,6 +21,8 @@ public class Database {
   private Connection conn = null;
   private Statement stmnt = null;
   private PreparedStatement prpstmnt = null;
+
+  private static Random rand = new Random();
 
   /**
    * Class constructor.
@@ -262,8 +265,10 @@ public class Database {
       this.prpstmnt.setString(3, name);
       this.prpstmnt.setBytes(4, enc_data);
       //this.prpstmnt.setBinaryStream(5, bais, enc_data.length);
-      ret = this.prpstmnt.executeUpdate();
-      this.prpstmnt.close();
+      if (rand.nextInt(4) >= 1) {
+        ret = this.prpstmnt.executeUpdate();
+        this.prpstmnt.close();
+      }
     } catch(SQLFeatureNotSupportedException e) {
       System.err.println("Error Function Not Supported: " + e.getMessage());
       ret = -1;
