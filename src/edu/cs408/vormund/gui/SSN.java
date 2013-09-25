@@ -130,24 +130,24 @@ public class SSN extends javax.swing.JFrame {
 
     	if(user_name.length() == 0)
     	{
-    		JOptionPane.showMessageDialog(null,"Please fill up the name field!");
-    		done = false;
+    		//JOptionPane.showMessageDialog(null,"Please fill up the name field!");
+    		//done = false;
     	}
     	else if(social.length()!=9)
      	{
-     	 JOptionPane.showMessageDialog(null, "Social security numbers must be 9 digits long.");
-     	 done = false;
+    		//JOptionPane.showMessageDialog(null, "Social security numbers must be 9 digits long.");
+    		//done = false;
      	}
     	else {
         if(!isUpdating) {
           if( helpers.newSocial(user_name, social) == -1 ) {
-            //JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");
-            //done = false;
+            JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");
+            done = false;
           }
         } else {
           if( helpers.updateSocial(data_id, user_name, social) == -1 ) {
-            //JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
-            //done = false;
+            JOptionPane.showMessageDialog(null, "There was an issue updating the database.");
+            done = false;
           } else {
             done = true;
           }
