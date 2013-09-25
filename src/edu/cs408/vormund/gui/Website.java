@@ -245,6 +245,7 @@ public class Website extends javax.swing.JFrame {
 				new UserAccount(helpers).setVisible(true);
 			}
 			//dispose();
+      new LoginWindow().setVisible(true);
 		}
 	}// GEN-LAST:event_donebutton2MouseClicked
 

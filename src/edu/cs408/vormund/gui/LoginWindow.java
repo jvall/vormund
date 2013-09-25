@@ -42,7 +42,7 @@ public class LoginWindow extends javax.swing.JFrame {
 		username1 = new javax.swing.JLabel();
 		password1 = new javax.swing.JLabel();
 		usernamefield1 = new javax.swing.JTextField();
-		passwordfield1 = new javax.swing.JPasswordField();
+		passwordfield1 = new javax.swing.JTextField();
 		loginbutton = new javax.swing.JButton();
 
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -105,6 +105,7 @@ public class LoginWindow extends javax.swing.JFrame {
 	private void loginbuttonActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 
+    new LoginWindow().setVisible(true);
 		//checking if username already exist or if its new
 		String name = usernamefield1.getText().toString();
 		String pass = passwordfield1.getText().toString();
@@ -133,8 +134,7 @@ public class LoginWindow extends javax.swing.JFrame {
 				}
 
 				JOptionPane.showMessageDialog(null,"New User has been created!");
-        new LoginWindow().setVisible(true);
-        dispose();
+
 			}
 			else
 			{
@@ -192,7 +192,7 @@ public class LoginWindow extends javax.swing.JFrame {
 	// Variables declaration - do not modify
 	private javax.swing.JButton loginbutton;
 	private javax.swing.JLabel password1;
-	private javax.swing.JPasswordField passwordfield1;
+	private javax.swing.JTextField passwordfield1;
 	private javax.swing.JLabel title1;
 	private javax.swing.JLabel username1;
 	private javax.swing.JTextField usernamefield1;

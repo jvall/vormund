@@ -26,7 +26,7 @@ public class NewBank extends javax.swing.JFrame {
 	private boolean isUpdating;
 
 	private int data_id;
-	
+
 	private UserAccount parent;
 
     public NewBank(DBHelpers h, UserAccount parent) {
@@ -183,16 +183,6 @@ public class NewBank extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter a bank name!");
     		return;
     	}
-    	/*else if(add.length() == 0)
-    	{
-    		JOptionPane.showMessageDialog(null,"Please enter an address");
-    		return;
-    	}
-    	else if(accnum.length() == 0)
-    	{
-    		JOptionPane.showMessageDialog(null,"Please enter an account number");
-    		return;
-    	}*/
     	else if(rou_bal.length() > 6)
     	{
     		JOptionPane.showMessageDialog(null,"Please enter a routing number");
@@ -201,8 +191,7 @@ public class NewBank extends javax.swing.JFrame {
     	//Account type has to have at least 5 characters to accept the char
     	else if(acctype.length() >= 5)
     	{
-    		JOptionPane.showMessageDialog(null,"Please enter an account type");
-    		return;
+    		JOptionPane.showMessageDialog(null,"Please enter an address");
     	}
 
     	if(!isUpdating){

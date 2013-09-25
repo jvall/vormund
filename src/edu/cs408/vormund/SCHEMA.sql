@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS user_data;
 
 CREATE TABLE user_data (
   user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  user_name TEXT NOT NULL UNIQUE,
+  user_name TEXT NOT NULL,
   password TEXT NOT NULL
 );
 
@@ -29,6 +29,5 @@ CREATE TABLE encrypted_data (
   category TEXT NOT NULL,
   name TEXT NOT NULL,
   encrypted_data BLOB NOT NULL,
-  UNIQUE(user_id, category, name),
   FOREIGN KEY(user_id) REFERENCES user_data(user_id)
 );

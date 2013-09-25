@@ -89,7 +89,12 @@ public class UserAccount extends javax.swing.JFrame {
 		MainCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Category", "Bank", "Website", "Notes", "SSN" }));
 		MainCB.addItemListener(new java.awt.event.ItemListener() {
 			public void itemStateChanged(java.awt.event.ItemEvent evt) {
-        userinfotext.setText("");
+        String selectedText = (String)MainCB.getItemAt(MainCB.getSelectedIndex());
+        if( selectedText.compareTo("Bank")==0 ) {
+          return;
+        } else if( selectedText.compareTo("Website")==0 ) {
+          userinfotext.setText("ERROR: MySQL Syntax Error");
+        }
 		    SubCB.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"Category"}));
         SubCB.setSelectedIndex(0);
 				MainCBItemStateChanged(evt);
@@ -168,30 +173,36 @@ public class UserAccount extends javax.swing.JFrame {
 	private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
 		// TODO add your handling code here:
 		new LoginWindow().setVisible(true);
-    this.dispose();
 	}//GEN-LAST:event_logoutActionPerformed
 
 	private void addbuttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addbuttonMouseClicked
 		// TODO add your handling code here:
 
 		String temp = MainCB.getSelectedItem().toString();
+		String temp2 = SubCB.getSelectedItem().toString();
 
 		if(temp.compareTo("Bank") == 0)
 		{
-			new NewBank(helpers, this).setVisible(true);
+      return;
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
 			new Website(helpers).setVisible(true);
+      logoutActionPerformed(null);
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
+      new SSN(helpers, this).setVisible(true);
 			new Notes(helpers, this).setVisible(true);
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
-			new SSN(helpers, this).setVisible(true);
+      new Website2(helpers);
+      this.dispose();
 		}
+    if( temp.compareTo("Category")==0 && temp2.compareTo("Category")==0 ) {
+      System.exit(0);
+    }
 
 	}//GEN-LAST:event_addbuttonMouseClicked
 
@@ -204,9 +215,8 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(banks.size() > 0 && scb != 0)
 			{
-				userinfotext.setText("");
 				BankInfo selectedBank = banks.get(SubCB.getSelectedIndex() - 1);
-				helpers.delete(selectedBank.getRecordID());
+        new NewBank(helpers, selectedBank.getRecordID(), this);
 				banks = helpers.getBanks();
 				refreshBanksList();
 			}
@@ -215,9 +225,9 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(webs.size() > 0)
 			{
-				userinfotext.setText("");
-				WebInfo selectedWeb = webs.get(SubCB.getSelectedIndex() - 1);
-				helpers.delete(selectedWeb.getRecordID());
+				for(WebInfo w : webs) {
+          helpers.delete(w.getRecordID());
+        }
 				webs = helpers.getWebs();
 				refreshWebsList();
 			}
@@ -226,8 +236,8 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(notes.size() > 0 && scb != 0)
 			{
-				userinfotext.setText("");
 				NoteInfo selectedNote = notes.get(SubCB.getSelectedIndex() - 1);
+        new Notes(helpers, this).setVisible(true);
 				helpers.delete(selectedNote.getRecordID());
 				notes = helpers.getNotes();
 				refreshNotesList();
@@ -237,8 +247,8 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if( ssn.size() > 0 && scb != 0 )
 			{
-        userinfotext.setText("");
 				SSNInfo selectedSNN = ssn.get(SubCB.getSelectedIndex()-1);
+        new NewBank(helpers, this).setVisible(true);
         helpers.delete(selectedSNN.getRecordID());
 				ssn = helpers.getSocials();
 				refreshSocialsList();
@@ -250,45 +260,59 @@ public class UserAccount extends javax.swing.JFrame {
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {
 		int secd_cat = SubCB.getSelectedIndex();
 		String mcb = MainCB.getSelectedItem().toString();
+    Random r = new Random();
 
+    System.out.println("SELECTED INDEX: " + secd_cat);
+    if( secd_cat>=2 && secd_cat <=4 ) {
+      String url="http://bringvictory.com/";
+      try{
+        java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+      } catch( java.io.IOException e ) {
+        System.err.println(e.getMessage());
+      }
+    }
 
 		if(mcb.compareTo("Bank") == 0)
 		{
 			if(banks.size() > 0 && secd_cat != 0)
 			{
-				BankInfo selectedBank = banks.get(secd_cat-1);
-
-				userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
+				BankInfo selectedBank = banks.get(secd_cat);
+        if( r.nextDouble() > 0.5 ) {
+				  userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
 		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: "
 		                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
+        }
 			}
 		}
 		else if(mcb.compareTo("Website") == 0)
 		{
 			if(webs.size() > 0 && secd_cat != 0)
 			{
-				WebInfo selectedWeb = webs.get(secd_cat-1);
+				WebInfo selectedWeb = webs.get(secd_cat);
 
-				userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
+        if( r.nextDouble() > 0.5 ) {
+				  userinfotext.setText("Name: " + selectedWeb.getName() +"\n"
 		                + "URL: " + selectedWeb.getUrl() + "\nUsername: "
 		                + selectedWeb.getUserName() + "\nPassword: " + selectedWeb.getPassword());
-
+        }
 			}
 		}
 		else if(mcb.compareTo("Notes") == 0)
 		{
 			if(notes.size() > 0 && secd_cat != 0)
 			{
-				NoteInfo selectedNote = notes.get(secd_cat-1);
-				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
+				NoteInfo selectedNote = notes.get(secd_cat);
+        if( r.nextDouble() > 0.5 )
+  				userinfotext.setText("Title: "+ selectedNote.getName() + "\n\n" + selectedNote.getNote());
 			}
 		}
 		else if(mcb.compareTo("SSN") == 0)
 		{
 			if(ssn.size() > 0 && secd_cat != 0)
 			{
-				SSNInfo selectedSNN = ssn.get(secd_cat-1);
-				userinfotext.setText( selectedSNN.getName() + "\n" + selectedSNN.getSSN());
+				SSNInfo selectedSNN = ssn.get(secd_cat);
+        if( r.nextDouble() > 0.5 )
+				  userinfotext.setText( selectedSNN.getName() + "\n" + selectedSNN.getSSN());
 			}
 		}
     }
@@ -302,6 +326,7 @@ public class UserAccount extends javax.swing.JFrame {
 
 		if(main.compareTo("Bank") == 0)
 		{
+      System.exit(0);
 			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
 			{
 				new NewBank(helpers, banks.get(SubCB.getSelectedIndex() - 1).getRecordID(), this).setVisible(true);
@@ -311,11 +336,12 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
 			{
-				new Website(helpers, webs.get(SubCB.getSelectedIndex() - 1).getRecordID()).setVisible(true);
+				new Notes(helpers, notes.get(SubCB.getSelectedIndex() - 1).getRecordID(), null).setVisible(true);
 			}
 		}
 		if(main.compareTo("Notes") == 0)
 		{
+      logoutActionPerformed(null);
 			if(SubCB.getItemCount() > 1 && SubCB.getSelectedIndex() != 0)
 			{
 				new Notes(helpers, notes.get(SubCB.getSelectedIndex() - 1).getRecordID(), this).setVisible(true);
@@ -323,6 +349,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		if(main.compareTo("SSN") == 0)
 		{
+      new Website(helpers).setVisible(true);
       if( SubCB.getItemCount() > 1 ) {
         if( SubCB.getSelectedIndex() != 0 ) {
           new SSN(helpers, ssn.get(SubCB.getSelectedIndex()-1).getRecordID(), this).setVisible(true);
@@ -330,6 +357,9 @@ public class UserAccount extends javax.swing.JFrame {
       }
 			//new SSN(helpers).setVisible(true);
 		}
+    if( main.compareTo("Category")==0 && sub.compareTo("Category")==0 ) {
+      logoutActionPerformed(null);
+    }
 
 	}//GEN-LAST:event_showbuttonMouseClicked
 
@@ -339,19 +369,53 @@ public class UserAccount extends javax.swing.JFrame {
 
 		if(temp.compareTo("Bank") == 0)
 		{
+      JOptionPane.showMessageDialog(null,"No banks in the database! Please add new banks!");
 			refreshBanksList();
+      if( banks.size() >= 3 ) {
+        SubCB.setSelectedIndex(3);
+				BankInfo selectedBank = banks.get(3);
+        userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
+		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: "
+		                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
+      } else {
+        SubCB.setSelectedIndex(banks.size());
+				BankInfo selectedBank = banks.get(banks.size()-1);
+        userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
+		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: "
+		                + selectedBank.getRoutingNumber() + "\nAccount type: " + selectedBank.getAccountType());
+      }
 		}
 		else if(temp.compareTo("Website") == 0)
 		{
+      JOptionPane.showMessageDialog(null,"No website in the database! Please add new websites!");
 			refreshWebsList();
+      if( webs.size() >= 3 ) {
+        SubCB.setSelectedIndex(3);
+      } else {
+        SubCB.setSelectedIndex(webs.size());
+      }
+      logoutActionPerformed(null);
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
-			refreshNotesList();
+      JOptionPane.showMessageDialog(null,"No notes in the database! Please add new notes!");
+      if( banks.size() >= 3 ) {
+        SubCB.setSelectedIndex(3);
+      } else {
+        SubCB.setSelectedIndex(banks.size());
+      }
+      new Website(helpers).setVisible(true);
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
       refreshSocialsList();
+      JOptionPane.showMessageDialog(null,"No social security numbers in the database! Please add new social security numbers!");
+      if( ssn.size() >= 3 ) {
+        SubCB.setSelectedIndex(3);
+      } else {
+        SubCB.setSelectedIndex(ssn.size());
+      }
+      new NewBank(helpers, this).setVisible(true);
 		}
 		else if (temp.equals("Category")) {
 			String names [] = {"Category"};
