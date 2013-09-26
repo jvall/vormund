@@ -46,7 +46,7 @@ public class DBHelpers {
 			key = key.substring(0,  16);
 		}
 
-    //Add test socials
+		//Add test socials
 		newSocial("John Smith", "465459908");
 		newSocial("Maggie Johnson", "775234469");
 		newSocial("Mark Williams", "448980457");
@@ -57,6 +57,22 @@ public class DBHelpers {
 		newNote("Favorite Songs", "Mr. Brightside - The Killers, Animal - Miike Snow, Entertainment - Phoenix");
 		newNote("This test", "This could be considered to be a test of the notes system");
 		newNote("Computer brands", "Dell, Apple, Toshiba, Acer, Sony");
+		
+		//Add test banks
+		newBank("Purdue Federal Credit Union", "22888374738", "334243123", "37234 main street", "Checking");
+		newBank("Wells Fargo", "342545345", "889789786", "887 West Creek Parkway", "Savings");
+		newBank("Klein Bank", "8878372743", "346167273", "77564 Lake Drive West", "Checking");
+		newBank("Bank of America", "887384725", "883724723", "1 Infinite Loop", "Savings");
+
+		String securityQs[][] = new String[1][];
+		securityQs[0] = new String[2];
+		securityQs[0][0] = "Why don't we store these?";
+		securityQs[0][1] = "Because security Q's should be remembered anyway";
+		//Add test webs
+		newWeb("Google", "gmail.com", "test@gmail.com", "test@gmail.com", "thisIsMyPassword", securityQs);
+		newWeb("Facebook", "facebook.com", "test@gmail.com", "JohnDoe", "AnotherPassword", securityQs);
+		newWeb("GitHub", "github.com", "test2@gmail.com", "myTest", "almostAnotherPassword", securityQs);
+		newWeb("Bitbucket", "bitbucket.org", "test2@gmail.com", "specialTest", "FinalPassword", securityQs);
 
 		return user_id;
 	}
