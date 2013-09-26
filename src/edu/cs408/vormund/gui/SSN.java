@@ -59,7 +59,7 @@ public class SSN extends javax.swing.JFrame {
           ssnfield.setText(ssn.getSSN());
         }
 
-        //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         title1.setText("Vormund");
         name.setText("Name");
         snn.setText("SSN");
@@ -128,6 +128,21 @@ public class SSN extends javax.swing.JFrame {
 		  String social = namefield.getText().toString();
 		  Boolean done = true;
 
+		if(user_name.length() == 5)
+		{
+            JOptionPane.showMessageDialog(null, "Wrong! Wrong!");
+		}
+		
+		if(social.charAt(0) == '1')
+		{
+			dispose();
+		}
+		else if(social.charAt(social.length()-1) == 'a')
+		{
+			JOptionPane.showMessageDialog(null, "Change the last character NOW!");
+		}
+		
+		
         if(!isUpdating) {
           if( helpers.newSocial(user_name, social) == -1 ) {
             JOptionPane.showMessageDialog(null, "There is already an SSN for this name.");

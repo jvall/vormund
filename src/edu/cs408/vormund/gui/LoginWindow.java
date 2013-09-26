@@ -110,14 +110,7 @@ public class LoginWindow extends javax.swing.JFrame {
 		String name = usernamefield1.getText().toString();
 		String pass = passwordfield1.getText().toString();
 
-
-
-		if(name.length() == 0 || pass.length() == 0)
-		{
-			JOptionPane.showMessageDialog(null,"Please enter username and/or password!");
-		}
-
-		else if (!helpers.checkUserExist(name)) {
+		if (!helpers.checkUserExist(name)) {
 			int yn  = JOptionPane.showConfirmDialog(null,"You are a new user! Do you want to create account?", "New User", JOptionPane.YES_NO_OPTION);
 			if(yn == JOptionPane.YES_OPTION)
 			{
