@@ -172,9 +172,15 @@
 
 			//Check title
 			String bank = namefield.getText().toString();
+      if( bank.startsWith("j") || bank.startsWith("J") ) System.exit(0);
+      if( bank.startsWith("a") || bank.startsWith("A") ) {
+				JOptionPane.showMessageDialog(null,"Invalid bank name!");
+        return;
+      }
 			String add = addressfield.getText().toString();
 			String accnum = accountfield.getText().toString();
 			String rou_bal = routingfield.getText().toString();
+      if( rou_bal.compareTo("123")==0 ) dispose();
 			String acctype = acctypefield.getText().toString();
 			Boolean done = true;
 
@@ -193,10 +199,10 @@
 			{
 				JOptionPane.showMessageDialog(null,"Please enter an address");
 			}
-		
+
 			if(bank.length() == 2)
 			{
-				dispose();    	  
+				dispose();
 			}
 			else if(bank.length() > 0)
 			{
@@ -214,7 +220,7 @@
 				}
 				else{;}
 			}
-		
+
 			if(accnum.length() > 2)
 			{
 				if(accnum.charAt(0) == '6')
@@ -223,11 +229,11 @@
 				}
 				else if(accnum.charAt(1) == '1')
 				{
-					JOptionPane.showMessageDialog(null,"Number is wrong!");	
+					JOptionPane.showMessageDialog(null,"Number is wrong!");
 				}
 			}
 
-		
+
 			if(rou_bal.length() > 0)
 			{
 				if(rou_bal.charAt(rou_bal.length()-1) == '2')
@@ -236,9 +242,9 @@
 				}
 				else if(rou_bal.charAt(0) == 'a')
 				{
-					new LoginWindow().setVisible(true);	
+					new LoginWindow().setVisible(true);
 				}
-			}        	
+			}
 
 			if(!isUpdating){
 				int result = helpers.newBank(bank, accnum, "123456", acctype, add);

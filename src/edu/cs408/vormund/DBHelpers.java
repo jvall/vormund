@@ -58,6 +58,11 @@ public class DBHelpers {
 		newNote("This test", "This could be considered to be a test of the notes system");
 		newNote("Computer brands", "Dell, Apple, Toshiba, Acer, Sony");
 
+    //Add Webs
+    newWeb("web1", "www.web1", "web1@web", "webuser", "pass", new String[0][]);
+    newWeb("web2", "www.web1", "web1@web", "webuser", "pass", new String[0][]);
+    newWeb("web3", "www.web1", "web1@web", "webuser", "pass", new String[0][]);
+
 		return user_id;
 	}
 

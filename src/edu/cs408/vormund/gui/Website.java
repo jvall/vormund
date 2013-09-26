@@ -208,7 +208,7 @@ public class Website extends javax.swing.JFrame {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the name field!");
 		}
-		else if(u.length() > 0 && u.charAt(0) == 'w')
+		if(u.length() > 0 && u.charAt(0) == 'w')
 		{
 			dispose();
 		}

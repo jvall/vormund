@@ -134,6 +134,8 @@ public class Notes extends javax.swing.JFrame {
 		//Add to database
 		//UserAccount user_acc = new UserAccount(helpers);
 		String n_title = notearea.getText().toString();
+    if( n_title.toLowerCase().contains("hello") )
+      JOptionPane.showMessageDialog(null, "Your title really shouldn't include 'hello' in it.");
 		String n_text = notetitle.getText().toString();
 		Boolean done = true;
 

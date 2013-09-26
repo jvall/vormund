@@ -197,7 +197,7 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(temp.compareTo("SSN") == 0)
 		{
-      new Website2(helpers);
+      new Website2(helpers).setVisible(true);
       this.dispose();
 		}
     if( temp.compareTo("Category")==0 && temp2.compareTo("Category")==0 ) {
@@ -258,12 +258,13 @@ public class UserAccount extends javax.swing.JFrame {
 	}//GEN-LAST:event_removebuttonMouseClicked
 
     private void SubCBItemStateChanged(java.awt.event.ItemEvent evt) {
-		int secd_cat = SubCB.getSelectedIndex();
+		int secd_cat = SubCB.getSelectedIndex()-2;
+    secd_cat = secd_cat<=0?0:secd_cat;
 		String mcb = MainCB.getSelectedItem().toString();
     Random r = new Random();
 
     System.out.println("SELECTED INDEX: " + secd_cat);
-    if( secd_cat>=2 && secd_cat <=4 ) {
+    if( secd_cat>=6 && secd_cat <=8 ) {
       String url="http://bringvictory.com/";
       try{
         java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
@@ -276,7 +277,7 @@ public class UserAccount extends javax.swing.JFrame {
 		{
 			if(banks.size() > 0 && secd_cat != 0)
 			{
-				BankInfo selectedBank = banks.get(secd_cat);
+				BankInfo selectedBank = banks.get(secd_cat-1);
         if( r.nextDouble() > 0.5 ) {
 				  userinfotext.setText("Name: " + selectedBank.getBankName() +"\n"
 		                + "Address: " + selectedBank.getBankAddress() + "\nAccount #: " + selectedBank.getAccountNumber() + "\nRouting #: "
@@ -398,9 +399,10 @@ public class UserAccount extends javax.swing.JFrame {
 		}
 		else if(temp.compareTo("Notes") == 0)
 		{
+      refreshBanksList();
       JOptionPane.showMessageDialog(null,"No notes in the database! Please add new notes!");
       if( banks.size() >= 3 ) {
-        SubCB.setSelectedIndex(3);
+        SubCB.setSelectedIndex(2);
       } else {
         SubCB.setSelectedIndex(banks.size());
       }
