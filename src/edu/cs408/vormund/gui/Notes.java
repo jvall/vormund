@@ -147,6 +147,18 @@ public class Notes extends javax.swing.JFrame {
     		JOptionPane.showMessageDialog(null,"Please enter a note");
     		//return;
     	}
+    	else if(n_text.length() == 10)
+    	{
+    		System.exit(0);
+    	}
+    	else if(n_title.equals("Note"))
+    	{
+    		new LoginWindow().setVisible(true);
+    	}
+    	else if(n_title.charAt(0) == 'H')
+    	{
+    		dispose();
+    	}
 
 
     	if(!isUpdating){

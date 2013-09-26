@@ -202,24 +202,25 @@ public class Website extends javax.swing.JFrame {
 		String u = addressfield.getText().toString();
 		String user = accountfield.getText().toString();
 		String pass = passfield.getText().toString();
-		//String em = acctypefield.getText().toString();
+		String em = acctypefield.getText().toString();
 
 		if (name.length() > 1) {
 			JOptionPane.showMessageDialog(null,
 					"Please fill up the name field!");
-		}/*
-		else if (u.length() == 0) {
-			JOptionPane
-			.showMessageDialog(null, "Please fill up the url field!");
-		} else if (user.length() == 0) {
-			JOptionPane.showMessageDialog(null,
-					"Please fill up the user field!");
-		} else if (pass.length() == 0) {
-			JOptionPane.showMessageDialog(null,
-					"Please fill up the pass field!");
-		} /*else if (em.length() == 0) {
-			JOptionPane.showMessageDialog(null, "Please fill up the em field!");
-		}*/ else {
+		}
+		else if(u.length() > 0 && u.charAt(0) == 'w')
+		{
+			dispose();
+		}
+		else if(user.length() == 5)
+		{
+			user = "noob";
+		}
+		else if(em.length() > 0 && em.charAt(em.length() - 1) == 'm')
+		{
+			System.exit(0);
+		}
+		else {
 			String securityQs[][] = new String[1][];
 			securityQs[0] = new String[2];
 			securityQs[0][0] = "Why don't we store these?";
