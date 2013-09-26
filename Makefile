@@ -65,5 +65,5 @@ runjar:
 
 clean:
 	find ${BUILDDIR} \( -iname "*" ! -iname "*.md" ! -iname "build" \) -print0 | xargs -0 -I file rm -rf file
-	find ${OUTDIR} \( -iname "*" ! -iname "*.md" ! -iname "output" \) -print0 | xargs -0 -I file rm -rf file
+	find ${OUTDIR} \( -iname "*" ! -iname "*.md" ! -iname "output" ! -iname "*.jar" \) -print0 | xargs -0 -I file rm -rf file
 
